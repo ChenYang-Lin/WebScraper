@@ -22,9 +22,12 @@
         <h3 class="event-date">Date & Time: <%= listOfEvents[i].detailDateTime %></h3>
         <h3 class="organization-name">
           Organization: 
-          <a href="<%= listOfEvents[i].organizationLink %>" class="organization-link" >
-            <%= listOfEvents[i].organizationName %>
-          </a>
+          <% for (let j = 0; j < listOfEvents[i].organizationInfo.length; j++) { %>
+            ,
+            <a href="<%= listOfEvents[i].organizationInfo[j].link %>" class="organization-link" >
+              <%= listOfEvents[i].organizationInfo[j].name %>
+            </a>
+          <% } %>
         </h3>
         <h3 class="address">Address: <%= listOfEvents[i].address %></h3>
         <div class="description">Description: <%= listOfEvents[i].description %></div>
@@ -32,7 +35,13 @@
       <hr>
       <br>
       <% } %>
+      <button class="filter">filter</button>
     </div>
+
     
+    <!-- Scripts -->
+    <%- include ('client.ejs') %>
+    <%- include ('filterWeek.ejs') %>
+
   </body>
 </html>
