@@ -7,30 +7,35 @@ let scrapingList = [
   // "https://www.facebook.com/groups/292737672143068/events",
   // 
   "https://www.facebook.com/gloriousrecovery/events",
-  // "https://www.facebook.com/CCAR4Recovery/events",
-  // "https://www.facebook.com/NewCanaanParentSupportGroup/events",
-  // "https://www.facebook.com/FairfieldCARES/events",
-  // "https://www.facebook.com/kcmakesmusic/events",
-  // "https://www.facebook.com/liberationprograms/events",
+  "https://www.facebook.com/CCAR4Recovery/events",
+  "https://www.facebook.com/NewCanaanParentSupportGroup/events",
+  "https://www.facebook.com/FairfieldCARES/events",
+  "https://www.facebook.com/kcmakesmusic/events",
+  "https://www.facebook.com/liberationprograms/events",
 ];
 
 let scrapEvents = async () => {
-  console.log("running scapEvents function");
+  try {
+    console.log("running scapEvents function");
 
-  const browser = await puppeteer.launch({
-    headless: false,
-  });
-  const page = await browser.newPage();
+    const browser = await puppeteer.launch({
+      headless: false,
+    });
+    const page = await browser.newPage();
 
-  // Login
-  await loginFacebook(page);
-  // Scrapping
-  let scrapingResults = await scrapeFacebookEvents(browser, page);
-  // close browser
-  await browser.close();
+    // Login
+    await loginFacebook(page);
+    // Scrapping
+    let scrapingResults = await scrapeFacebookEvents(browser, page);
+    // close browser
+    await browser.close();
 
-  console.log("completed scapEvents function");
-  return scrapingResults;
+    console.log("completed scapEvents function");
+    return scrapingResults;
+  } catch (error) {
+    console.log(error)
+    return [];
+  }
 };
 
 async function loginFacebook(page) {
@@ -199,12 +204,20 @@ for (let i = 0; i < msg._args.length; ++i)
         // Ticket
 
         // Split detailDateTime
-        let dayOfTheWeek = detailDateTime.split(", ")[0];
-        let month = detailDateTime.split(", ")[1].split(" ")[0];
-        let dayOfTheMonth = detailDateTime.split(", ")[1].split(" ")[1];
-        let year = detailDateTime.split(", ")[2].split(" ")[0];
-        let startTime = detailDateTime.split(", ")[2].split(" ")[2];
-        let am_pm = detailDateTime.split(", ")[2].split(" ")[3];
+        let dayOfTheWeek, month, dayOfTheMonth, year, startTime, am_pm;
+        if (dayOfTheWeek = detailDateTime.split(", ").length === 1) {
+          // let now = new Date();
+          // let dayOfWeek = now.getDay(); 
+          // let numDay = now.getDate();
+        } else {
+          dayOfTheWeek = detailDateTime.split(", ")[0];
+          month = detailDateTime.split(", ")[1].split(" ")[0];
+          dayOfTheMonth = detailDateTime.split(", ")[1].split(" ")[1];
+          year = detailDateTime.split(", ")[2].split(" ")[0];
+          startTime = detailDateTime.split(", ")[2].split(" ")[2];
+          am_pm = detailDateTime.split(", ")[2].split(" ")[3];
+        }
+
 
         let splitTime = { dayOfTheWeek, month, dayOfTheMonth, year, startTime, am_pm };
 
