@@ -1,0 +1,50 @@
+listOfEvents = 
+[
+  {
+    title: "Rev'd up for Recovery, Car and Bike Show",
+    image: 'https://scontent.fijd1-1.fna.fbcdn.net/v/t1.6435-9/p228x119/201313820_529782345050338_7228494069855471054_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=340051&_nc_ohc=rU8pyWcNtJ0AX8SsN3O&_nc_ht=scontent.fijd1-1.fna&oh=e5bb1ea7398dff9fcfb9c7d0eac9bcd3&oe=61703AE3',
+    dateTime: 'SUN, OCT 3 AT 10 AM EDT',
+    organizationName: 'Foundations Recovery Community Center',
+    organizationLink: 'https://www.facebook.com/FoundationsRCC/',
+    linkToOriginalPost: 'https://www.facebook.com/events/198862458781818/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22group%22%7D]%7D',
+    detailDateTime: 'SUNDAY, OCTOBER 3, 2021 AT 10 AM EDT – 4 PM EDT',
+    address: 'Smith St, Nanuet, NY 10954, United States',
+    description: 'September is National Alcohol and Drug Addiction Recovery Month. This year’s theme is Recovery is for Everyone! As part of this national public awareness campaign, RCADD will hold a Car & Bike Show to Rev Up for Recovery on Sunday, October 3, 2021 at Smith St. and Rte. 59 Commuter Parking Lot.\n' +
+      'The event will help educate and support people affected by substance abuse disorders, educate the public that addiction is a treatable disease, and celebrate the lives of those who have gained and sustained recovery. Please support us and Rev Up for Recovery for Rockland County Community persons in recovery, friends, family members and allies of Recovery!'
+  },
+  {
+    title: 'Healing the Habits that Bind - Unpacking the 6 Tenets of YoR: Three 9-week Sessions',
+    image: 'https://scontent.fijd1-1.fna.fbcdn.net/v/t39.30808-6/p75x225/240090564_5017198531642592_8009910532629495335_n.jpg?_nc_cat=102&ccb=1-5&_nc_sid=340051&_nc_ohc=RAO0nSf5WBYAX9dduTQ&_nc_ht=scontent.fijd1-1.fna&oh=e613309229237fa50984e4c94aa59a9d&oe=614D759D',
+    dateTime: 'WED, SEP 22 AT 7 PM EDT',
+    organizationName: 'Yoga Of Recovery',
+    organizationLink: 'https://www.facebook.com/Yogaofrecovery/',
+    linkToOriginalPost: 'https://www.facebook.com/events/356709896188225/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22group%22%7D]%7D',
+    detailDateTime: 'WEDNESDAY, SEPTEMBER 22, 2021 AT 7 PM EDT',
+    address: 'Online Event',
+    description: 'The 6 Tenets of Yoga of Recovery offer a complete reframing of the addiction problem and solution according to the Vedic
+perspective. This allows each of us to see our current involvement in the one addiction process that is alive and well within most of us.\n' +
+      'We discover that right there, in the identification of the problem, lies its natural solution – without any need for stigma or shame. Self destructive behavior is already enough of a heavy burden to overcome.'
+  },
+  {
+    title: 'ONLINE WEEKEND Recovery Support Peer Specialist (RSPS) Certification Training',
+    image: 'https://scontent.fijd1-1.fna.fbcdn.net/v/t1.6435-9/240660505_207856954693248_2352542029552543786_n.jpg?_nc_cat=104&ccb=1-5&_nc_sid=340051&_nc_ohc=zL6tJ-GLBMsAX_2MPwV&_nc_ht=scontent.fijd1-1.fna&oh=8e1171df8e180d9944ca79dd84896dde&oe=616DA92A',
+    dateTime: 'SUN, OCT 17 - OCT 22',
+    organizationName: 'Recovery & Self-Discovery, INC.',
+    organizationLink: 'https://www.facebook.com/RegaladoRecovery/',
+    linkToOriginalPost: 'https://www.facebook.com/events/386668926319935/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22group%22%7D]%7D',
+    detailDateTime: 'OCT 17 AT 10 AM EDT – OCT 22 AT 6 PM EDT',
+    address: 'Online Event',
+    description: 'Regalado Recovery & Self-Discovery, INC'
+  },
+  {
+    title: 'ONLINE WEEKEND Recovery Support Peer Specialist (RSPS) Certification Training',
+    image: 'https://scontent.fijd1-1.fna.fbcdn.net/v/t1.6435-9/240660505_207856954693248_2352542029552543786_n.jpg?_nc_cat=104&ccb=1-5&_nc_sid=340051&_nc_ohc=zL6tJ-GLBMsAX_2MPwV&_nc_ht=scontent.fijd1-1.fna&oh=8e1171df8e180d9944ca79dd84896dde&oe=616DA92A',
+    dateTime: 'SUN, OCT 17 - OCT 22',
+    organizationName: 'Recovery & Self-Discovery, INC.',
+    organizationLink: 'https://www.facebook.com/RegaladoRecovery/',
+    linkToOriginalPost: 'https://www.facebook.com/events/386668926319935/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22group%22%7D]%7D',
+    detailDateTime: 'OCT 17 AT 10 AM EDT – OCT 22 AT 6 PM EDT',
+    address: 'Online Event',
+    description: 'Regalado Recovery & Self-Discovery, INC'
+  }
+]

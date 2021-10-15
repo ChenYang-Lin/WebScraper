@@ -1,0 +1,8 @@
+<script>
+    const listOfEvents = <%- JSON.stringify(listOfEvents) %>;
+    console.log(listOfEvents);
+
+    let filterBtn = document.querySelector("filter");
+
+    filterBtn.addEventListener('click', filterCurrentWeek(listOfEvents));
+</script>
