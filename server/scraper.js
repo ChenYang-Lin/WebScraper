@@ -1,20 +1,11 @@
 require("dotenv").config();
 const puppeteer = require("puppeteer");
 
-let scrapingList = [
-  // "https://www.facebook.com/groups/444744689463060/events",
-  // "https://www.facebook.com/groups/recoveryfriends717/events",
-  // "https://www.facebook.com/groups/292737672143068/events",
-  // 
-  "https://www.facebook.com/gloriousrecovery/events",
-  "https://www.facebook.com/CCAR4Recovery/events",
-  "https://www.facebook.com/NewCanaanParentSupportGroup/events",
-  "https://www.facebook.com/FairfieldCARES/events",
-  "https://www.facebook.com/kcmakesmusic/events",
-  "https://www.facebook.com/liberationprograms/events",
-];
+let scrapingList = [];
+let errorMessages = [];
 
-let scrapEvents = async () => {
+let scrapEvents = async (list) => {
+  scrapingList = list;
   try {
     console.log("running scapEvents function");
 
@@ -58,9 +49,15 @@ async function scrapeFacebookEvents(browser, page) {
 
   // Scrape facebook groups one by one from scrapingList
   for (let i = 0; i < scrapingList.length; i++) {
-    await page.goto(scrapingList[i], {
-      waitUntil: "networkidle0"
-    });
+    try {
+      await page.goto(scrapingList[i] + "/events", {
+        waitUntil: "networkidle0"
+      });
+    } catch (e) {
+      console.log(e);
+      continue;
+    }
+
     // Ineract with the page directly in the page DOM environment
     const basicInfosFromOneGroup = await page.evaluate(async () => {
       let basicResults = [];
