@@ -77,7 +77,7 @@ app.post("/add", (req, res) => {
 })
 
 // listen to port 3000 and start initial scraping immediately
-app.listen(process.env.port || 3000, async () => {
+app.listen(process.env.PORT || 3000, async () => {
   console.log("app is running on port 3000");
   listOfEvents = await scrapEvents(scrapingList);
   // listOfEvents = removeDuplicates(listOfEvents);
@@ -111,4 +111,4 @@ cron.schedule("*/5 * * * *", async () => {
 var http = require("http");
   setInterval(function() {
     http.get("https://cs410-web-scraper.herokuapp.com");
-}, 300000); // every 5 minutes (300000)
+}, 15 * 60 * 1000); // every 15 minutes (900000)
