@@ -86,12 +86,12 @@ app.listen(process.env.port || 3000, async () => {
 });
 
 // Update list of events repeatly by doing new scrapes
-// cron.schedule("*/5 * * * *", async () => {
-//   console.log("running a task every minute");
-//   listOfEvents = await scrapEvents(scrapingList);
-//   console.log(listOfEvents);
-//   console.log(listOfEvents.length);
-// });
+cron.schedule("*/5 * * * *", async () => {
+  console.log("running a task every minute");
+  listOfEvents = await scrapEvents(scrapingList);
+  console.log(listOfEvents);
+  console.log(listOfEvents.length);
+});
 
 // cron.schedule(
 //   "0 1 * * *",
