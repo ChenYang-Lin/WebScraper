@@ -1,3 +1,4 @@
+https://cs410-web-scraper.herokuapp.com/
 # WebScraper
 <h4>Clone Repository</h4>
 navigate to a directory in terminal and type <b>git clone https:<span></span>//github.com/ChenYang-Lin/WebScraper.git</b>
