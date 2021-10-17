@@ -35,6 +35,10 @@
       </div>
     </nav>
 
+    <% if(listOfEvents.length === 0) { %>
+      <h1>no events, try again later</h1>
+    <% } %>
+
     <!-- Event Container -->
     <div class="container bg-white shadow p-3 rounded my-3">
       <div class="row justify-content-center">
