@@ -14,10 +14,10 @@ let scrapingList = [
   // 
   "https://www.facebook.com/gloriousrecovery",
   "https://www.facebook.com/CCAR4Recovery",
-  // "https://www.facebook.com/NewCanaanParentSupportGroup",
-  // "https://www.facebook.com/FairfieldCARES",
-  // "https://www.facebook.com/kcmakesmusic",
-  // "https://www.facebook.com/liberationprograms",
+  "https://www.facebook.com/NewCanaanParentSupportGroup",
+  "https://www.facebook.com/FairfieldCARES",
+  "https://www.facebook.com/kcmakesmusic",
+  "https://www.facebook.com/liberationprograms",
 ];
 
 // Register view engine
@@ -86,8 +86,8 @@ app.listen(process.env.PORT || 3000, async () => {
 });
 
 // Update list of events repeatly by doing new scrapes
-cron.schedule("*/5 * * * *", async () => {
-  console.log("running a task every minute");
+cron.schedule("*/2 * * * *", async () => {
+  console.log("running a task every 2 minutes");
   listOfEvents = await scrapEvents(scrapingList);
   console.log(listOfEvents);
   console.log(listOfEvents.length);
