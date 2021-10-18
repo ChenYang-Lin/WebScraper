@@ -113,6 +113,6 @@ cron.schedule("0 0 0 * * *", async () => {
 // prevent heroku sleep
 var http = require("http");
 setInterval(function () {
-  // http.get("https://cs410-web-scraper.herokuapp.com");
-  http.get("http://localhost:3000");
+  http.get("https://cs410-web-scraper.herokuapp.com");
+  // http.get("http://localhost:3000");
 }, 20 * 60 * 1000); // every 20 minutes

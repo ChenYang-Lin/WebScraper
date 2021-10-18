@@ -22,7 +22,7 @@ listOfEvents =
     detailDateTime: 'WEDNESDAY, SEPTEMBER 22, 2021 AT 7 PM EDT',
     address: 'Online Event',
     description: 'The 6 Tenets of Yoga of Recovery offer a complete reframing of the addiction problem and solution according to the Vedic
-perspective. This allows each of us to see our current involvement in the one addiction process that is alive and well within most of us.\n' +
+perspective.This allows each of us to see our current involvement in the one addiction process that is alive and well within most of us.\n' +
       'We discover that right there, in the identification of the problem, lies its natural solution – without any need for stigma or shame. Self destructive behavior is already enough of a heavy burden to overcome.'
   },
   {
