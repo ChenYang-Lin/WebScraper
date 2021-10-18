@@ -29,18 +29,12 @@ app.use(express.static(__dirname + '/public'));
 
 // Routes
 app.get("/", async (req, res) => {
-  // only render index page when there exist any event on listOfEvents object array.
-  // console.log(listOfEvents.length);
-
-  if (listOfEvents.length === 0) {
-    res.send("no events, try again later");
-  } else {
-    res.render("index", {
-      listOfEvents,
-    });
-  }
+  res.render("index", {
+    listOfEvents,
+  });
 });
-app.get("/admin", async(req, res) => {
+  
+app.get("/admin", async (req, res) => {
   res.render("admin", {
     scrapingList,
   });
@@ -86,6 +80,13 @@ app.listen(process.env.PORT || 3000, async () => {
 });
 
 // Update list of events repeatly by doing new scrapes
+cron.schedule("0 0 */12 * * *", async () => {
+  console.log("running a task every 12 hours");
+  listOfEvents = await scrapEvents(scrapingList);
+  console.log(listOfEvents);
+  console.log(listOfEvents.length);
+});
+
 cron.schedule("*/2 * * * *", async () => {
   console.log("running a task every 2 minutes");
   listOfEvents = await scrapEvents(scrapingList);
@@ -109,6 +110,7 @@ cron.schedule("*/2 * * * *", async () => {
 
 // prevent heroku sleep
 var http = require("http");
-  setInterval(function() {
-    http.get("https://cs410-web-scraper.herokuapp.com");
+setInterval(function() {
+  // http.get("https://cs410-web-scraper.herokuapp.com");
+  http.get("http://localhost:3000");
 }, 15 * 60 * 1000); // every 15 minutes (900000)
