@@ -1,50 +1,220 @@
 listOfEvents = 
 [
   {
-    title: "Rev'd up for Recovery, Car and Bike Show",
-    image: 'https://scontent.fijd1-1.fna.fbcdn.net/v/t1.6435-9/p228x119/201313820_529782345050338_7228494069855471054_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=340051&_nc_ohc=rU8pyWcNtJ0AX8SsN3O&_nc_ht=scontent.fijd1-1.fna&oh=e5bb1ea7398dff9fcfb9c7d0eac9bcd3&oe=61703AE3',
-    dateTime: 'SUN, OCT 3 AT 10 AM EDT',
-    organizationName: 'Foundations Recovery Community Center',
-    organizationLink: 'https://www.facebook.com/FoundationsRCC/',
-    linkToOriginalPost: 'https://www.facebook.com/events/198862458781818/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22group%22%7D]%7D',
-    detailDateTime: 'SUNDAY, OCTOBER 3, 2021 AT 10 AM EDT – 4 PM EDT',
-    address: 'Smith St, Nanuet, NY 10954, United States',
-    description: 'September is National Alcohol and Drug Addiction Recovery Month. This year’s theme is Recovery is for Everyone! As part of this national public awareness campaign, RCADD will hold a Car & Bike Show to Rev Up for Recovery on Sunday, October 3, 2021 at Smith St. and Rte. 59 Commuter Parking Lot.\n' +
-      'The event will help educate and support people affected by substance abuse disorders, educate the public that addiction is a treatable disease, and celebrate the lives of those who have gained and sustained recovery. Please support us and Rev Up for Recovery for Rockland County Community persons in recovery, friends, family members and allies of Recovery!'
+    title: 'Great America Six Flags Fright Fest - IL',
+    image: 'https://scontent.fijd1-1.fna.fbcdn.net/v/t1.6435-9/s417x417/244453444_4853512708012464_3446021625011506568_n.jpg?_nc_cat=101&ccb=1-5&_nc_sid=340051&_nc_ohc=4pjdQ3Xqhh0AX9WKFCi&_nc_ht=scontent.fijd1-1.fna&oh=725ca159106a2ed38afcd7d1a858afed&oe=6192FC8B',
+    dateTime: 'THIS SATURDAY AT 7 AM',
+    linkToOriginalPost: 'https://www.facebook.com/events/931135494488744/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22page%22%7D]%7D',
+    detailDateTime: 'SATURDAY AT 7 AM – 10 PM',
+    address: '1601 1st Ave, Sterling, IL 61081, United States',
+    description: 'Join us, if you dare for a trip to Six Flags Chicago! We will depart from LSSI at 7am and return around 10pm.\n' +
+      'Fright Fest is back and spookier than ever! Dare to enter the Hallow… See More',
+    organizationInfo: [ [Object] ],
+    splitTime: { dayOfTheWeek: true },
+    mapUrl: 'null'
   },
   {
-    title: 'Healing the Habits that Bind - Unpacking the 6 Tenets of YoR: Three 9-week Sessions',
-    image: 'https://scontent.fijd1-1.fna.fbcdn.net/v/t39.30808-6/p75x225/240090564_5017198531642592_8009910532629495335_n.jpg?_nc_cat=102&ccb=1-5&_nc_sid=340051&_nc_ohc=RAO0nSf5WBYAX9dduTQ&_nc_ht=scontent.fijd1-1.fna&oh=e613309229237fa50984e4c94aa59a9d&oe=614D759D',
-    dateTime: 'WED, SEP 22 AT 7 PM EDT',
-    organizationName: 'Yoga Of Recovery',
-    organizationLink: 'https://www.facebook.com/Yogaofrecovery/',
-    linkToOriginalPost: 'https://www.facebook.com/events/356709896188225/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22group%22%7D]%7D',
-    detailDateTime: 'WEDNESDAY, SEPTEMBER 22, 2021 AT 7 PM EDT',
-    address: 'Online Event',
-    description: 'The 6 Tenets of Yoga of Recovery offer a complete reframing of the addiction problem and solution according to the Vedic
-perspective.This allows each of us to see our current involvement in the one addiction process that is alive and well within most of us.\n' +
-      'We discover that right there, in the identification of the problem, lies its natural solution – without any need for stigma or shame. Self destructive behavior is already enough of a heavy burden to overcome.'
+    title: 'Bridgeport Islanders Hockey Game',
+    image: 'https://scontent.fijd1-1.fna.fbcdn.net/v/t1.6435-9/s600x600/244426392_4853382694692132_2955181512834623514_n.jpg?_nc_cat=103&ccb=1-5&_nc_sid=340051&_nc_ohc=90voJ3CHiykAX-Wr3Q9&_nc_ht=scontent.fijd1-1.fna&oh=68e009a82da3cae30ef9567850df439a&oe=61927900',
+    dateTime: 'THIS SATURDAY AT 6 PM',
+    linkToOriginalPost: 'https://www.facebook.com/events/270835988106228/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22page%22%7D]%7D',
+    detailDateTime: 'SATURDAY AT 6 PM – 10 PM',
+    address: 'Webster Bank Arena',
+    description: 'Come and watch your Bridgeport Islanders take on the Springfield Thunderbirds in the 2021-22 season home
+opener! We have purchased awesome tickets, great seats, center ice, with p… See More',
+    organizationInfo: [ [Object] ],
+    splitTime: { dayOfTheWeek: true },
+    mapUrl: 'https://external.fijd1-1.fna.fbcdn.net/static_map.php?v=2019&ccb=4-4&size=400x300&language=en_US&scale=2&zoom=15&marker_list[0]=41.17313254002%2C-73.18734167274'
   },
   {
-    title: 'ONLINE WEEKEND Recovery Support Peer Specialist (RSPS) Certification Training',
-    image: 'https://scontent.fijd1-1.fna.fbcdn.net/v/t1.6435-9/240660505_207856954693248_2352542029552543786_n.jpg?_nc_cat=104&ccb=1-5&_nc_sid=340051&_nc_ohc=zL6tJ-GLBMsAX_2MPwV&_nc_ht=scontent.fijd1-1.fna&oh=8e1171df8e180d9944ca79dd84896dde&oe=616DA92A',
-    dateTime: 'SUN, OCT 17 - OCT 22',
-    organizationName: 'Recovery & Self-Discovery, INC.',
-    organizationLink: 'https://www.facebook.com/RegaladoRecovery/',
-    linkToOriginalPost: 'https://www.facebook.com/events/386668926319935/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22group%22%7D]%7D',
-    detailDateTime: 'OCT 17 AT 10 AM EDT – OCT 22 AT 6 PM EDT',
-    address: 'Online Event',
-    description: 'Regalado Recovery & Self-Discovery, INC'
+    title: 'Glorious Holiday Dance Party',
+    image: 'https://scontent.fijd1-1.fna.fbcdn.net/v/t1.6435-9/p75x225/217640040_2929406243975822_3901294751591419324_n.jpg?_nc_cat=101&ccb=1-5&_nc_sid=340051&_nc_ohc=Kuy37JPOzcMAX8aRMae&_nc_ht=scontent.fijd1-1.fna&oh=56a172946276291902e1cce88ec1dcf8&oe=6191B579',
+    dateTime: 'SAT, DEC 4 AT 6 PM',
+    linkToOriginalPost: 'https://www.facebook.com/events/363991955097942/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22page%22%7D]%7D',
+    detailDateTime: 'SATURDAY, DECEMBER 4, 2021 AT 6 PM – 10 PM',
+    address: 'Free \n \n· Pinewood Lake Association',
+    description: 'This dance party will be like no other and you definitely do not want to miss it. Glorious Recovery is always full of surprises, so get your tickets today!\n' +
+      'More details coming soon ...',
+    organizationInfo: [ [Object] ],
+    splitTime: {
+      dayOfTheWeek: 'SATURDAY',
+      month: 'DECEMBER',
+      dayOfTheMonth: '4',
+      year: '2021',
+      startTime: '6',
+      am_pm: 'PM'
+    },
+    mapUrl: 'https://external.fijd1-1.fna.fbcdn.net/static_map.php?v=2019&ccb=4-4&size=400x300&language=en_US&scale=2&zoom=15&marker_list[0]=41.251553558284%2C-73.173692731891'
   },
   {
-    title: 'ONLINE WEEKEND Recovery Support Peer Specialist (RSPS) Certification Training',
-    image: 'https://scontent.fijd1-1.fna.fbcdn.net/v/t1.6435-9/240660505_207856954693248_2352542029552543786_n.jpg?_nc_cat=104&ccb=1-5&_nc_sid=340051&_nc_ohc=zL6tJ-GLBMsAX_2MPwV&_nc_ht=scontent.fijd1-1.fna&oh=8e1171df8e180d9944ca79dd84896dde&oe=616DA92A',
-    dateTime: 'SUN, OCT 17 - OCT 22',
-    organizationName: 'Recovery & Self-Discovery, INC.',
-    organizationLink: 'https://www.facebook.com/RegaladoRecovery/',
-    linkToOriginalPost: 'https://www.facebook.com/events/386668926319935/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22group%22%7D]%7D',
-    detailDateTime: 'OCT 17 AT 10 AM EDT – OCT 22 AT 6 PM EDT',
+    title: 'Spartan SPRINT',
+    image: 'https://scontent.fijd1-1.fna.fbcdn.net/v/t1.6435-9/s350x350/208444750_4543860495644355_2957161150187243799_n.jpg?_nc_cat=108&_nc_rgb565=1&ccb=1-5&_nc_sid=340051&_nc_ohc=1fY9ZVDeV1YAX8F0sAN&_nc_ht=scontent.fijd1-1.fna&oh=23c6b43d28745fccc8dddf2d173a323f&oe=6191E8B1',
+    dateTime: 'SAT, JUN 11, 2022 AT 2 PM',
+    linkToOriginalPost: 'https://www.facebook.com/events/202121198486593/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22page%22%7D]%7D',
+    detailDateTime: 'SATURDAY, JUNE 11, 2022 AT 2 PM',
+    address: 'Mountain Creek Resort 200 Route 94 Vernon, NJ 07462',
+    description: 'Spartan Sprint is a 5 km, 20 obstacle race that will change your life. This is the signature race type, a fast-paced adventure through rugged terrain built for new and returning ra… See More',
+    organizationInfo: [ [Object] ],
+    splitTime: {
+      dayOfTheWeek: 'SATURDAY',
+      month: 'JUNE',
+      dayOfTheMonth: '11',
+      year: '2022',
+      startTime: '2',
+      am_pm: 'PM'
+    },
+    mapUrl: 'null'
+  },
+  {
+    title: 'Foam Glow 5K Run',
+    image: 'https://scontent.fijd1-1.fna.fbcdn.net/v/t1.6435-9/p75x225/213784022_4586554608041610_66326116792500569_n.jpg?_nc_cat=100&ccb=1-5&_nc_sid=340051&_nc_ohc=AhvJUId2WbIAX_My-uX&_nc_ht=scontent.fijd1-1.fna&oh=13716573f273231e78c62a596af511ca&oe=61923259',
+    dateTime: 'SAT, JUL 23, 2022 AT 6 PM',
+    linkToOriginalPost: 'https://www.facebook.com/events/214747057189654/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22page%22%7D]%7D',
+    detailDateTime: 'SATURDAY, JULY 23, 2022 AT 6 PM',
+    address: 'Pratt and Whitney Stadium at Rentschler Field',
+    description: 'Join us! When you register make sure you select Gloriuos Recovery Team! Here is a link with all the details:\n' +
+      'https://foamglow.com/products/hartford-ct\n' +
+      'For now the registration is… See More',
+    organizationInfo: [ [Object] ],
+    splitTime: {
+      dayOfTheWeek: 'SATURDAY',
+      month: 'JULY',
+      dayOfTheMonth: '23',
+      year: '2022',
+      startTime: '6',
+      am_pm: 'PM'
+    },
+    mapUrl: 'https://external.fijd1-1.fna.fbcdn.net/static_map.php?v=2019&ccb=4-4&size=400x300&language=en_US&scale=2&zoom=15&marker_list[0]=41.759534892149%2C-72.618834972382'
+  },
+  {
+    title: 'WEBINAR: A Community Stroll Down The Multiple Pathways of Recovery',
+    image: 'https://scontent.fijd1-1.fna.fbcdn.net/v/t1.6435-9/p75x225/244768512_10166542836815643_6343554154175777822_n.jpg?_nc_cat=108&ccb=1-5&_nc_sid=340051&_nc_ohc=qvBKAYvrrYAAX9mLXZx&_nc_ht=scontent.fijd1-1.fna&oh=c2cb8c695cea2f7603d9e5c270c3c7c1&oe=61946682',
+    dateTime: 'THU, OCT 28 AT 3 PM',
+    linkToOriginalPost: 'https://www.facebook.com/events/386532703122722/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22page%22%7D]%7D',
+    detailDateTime: 'THURSDAY, OCTOBER 28, 2021 AT 3 PM',
     address: 'Online Event',
-    description: 'Regalado Recovery & Self-Discovery, INC'
+    description: 'Join host Phil Valentine as he provides an overview of why multiple pathways of recovery should not only
+be acknowledged, but celebrated by everyone – individuals, families and com… See More',
+    organizationInfo: [ [Object] ],
+    splitTime: {
+      dayOfTheWeek: 'THURSDAY',
+      month: 'OCTOBER',
+      dayOfTheMonth: '28',
+      year: '2021',
+      startTime: '3',
+      am_pm: 'PM'
+    },
+    mapUrl: 'null'
+  },
+  {
+    title: 'P.E.A.R.L.S. Recovery Storytelling Slam II',
+    image: 'https://scontent.fijd1-1.fna.fbcdn.net/v/t1.6435-9/p75x225/245542782_10166567287000643_6275005145267525531_n.jpg?_nc_cat=107&_nc_rgb565=1&ccb=1-5&_nc_sid=340051&_nc_aid=0&_nc_ohc=7aJ2pqrIxr0AX-gyWc_&_nc_ht=scontent.fijd1-1.fna&oh=0fcac6698d52a1c13f0cb64f45feb0ff&oe=6192DA0B',
+    dateTime: 'FRI, NOV 12 AT 3 PM',
+    linkToOriginalPost: 'https://www.facebook.com/events/246580247438398/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22page%22%7D]%7D',
+    detailDateTime: 'FRIDAY, NOVEMBER 12, 2021 AT 3 PM',
+    address: 'Facebook Live',
+    description: 'Join hosts CCAR Executive Director Phil Valentine and professional story coach Meghann Perry for this fun, creative, virtual open-mic storytelling experience. Eight randomly select… See More',
+    organizationInfo: [ [Object] ],
+    splitTime: {
+      dayOfTheWeek: 'FRIDAY',
+      month: 'NOVEMBER',
+      dayOfTheMonth: '12',
+      year: '2021',
+      startTime: '3',
+      am_pm: 'PM'
+    },
+    mapUrl: 'null'
+  },
+  {
+    title: 'Pathway Session: Family Recovery with Debra Jay',
+    image: 'https://scontent.fijd1-1.fna.fbcdn.net/v/t39.30808-6/p75x225/243653325_1269438903497486_5912807921843680589_n.jpg?_nc_cat=108&_nc_rgb565=1&ccb=1-5&_nc_sid=340051&_nc_ohc=RxlHFfVSj7sAX-LXIHD&_nc_ht=scontent.fijd1-1.fna&oh=5895a29293169bc8feaa9f2b543dceaf&oe=617352B0',
+    dateTime: 'WED, NOV 10 AT 7 PM',
+    linkToOriginalPost: 'https://www.facebook.com/events/384059309785699/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22page%22%7D]%7D',
+    detailDateTime: 'WEDNESDAY, NOVEMBER 10, 2021 AT 7 PM – 8 PM',
+    address: 'Online Event',
+    description: 'Debra Jay is an author, speaker and creator of the Structured Family Recovery Program. She is a strong believer in the unique role that families play in successful long-term recov… See More',
+    organizationInfo: [ [Object] ],
+    splitTime: {
+      dayOfTheWeek: 'WEDNESDAY',
+      month: 'NOVEMBER',
+      dayOfTheMonth: '10',
+      year: '2021',
+      startTime: '7',
+      am_pm: 'PM'
+    },
+    mapUrl: 'null'
+  },
+  {
+    title: 'Pathway Session: Can Acupuncture and Hypnosis Help Recovery?',
+    image: 'https://scontent.fijd1-1.fna.fbcdn.net/v/t39.30808-6/p296x100/243523149_1269400180168025_2656324366444189313_n.jpg?_nc_cat=111&ccb=1-5&_nc_sid=340051&_nc_ohc=N2bmj53lZbsAX8ldUOY&_nc_ht=scontent.fijd1-1.fna&oh=ce85f40c4c3712fb0127bc74dd9dd361&oe=617315E7',
+    dateTime: 'TUE, DEC 14 AT 7 PM',
+    linkToOriginalPost: 'https://www.facebook.com/events/1968036840038405/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22page%22%7D]%7D',
+    detailDateTime: 'TUESDAY, DECEMBER 14, 2021 AT 7 PM – 8 PM',
+    address: "St. Mark's Episcopal Church, New Canaan, CT",
+    description: "We are pleased to host Joe Feuerstein, MD of Stamford Health to discuss acupuncture and hypnotherapy as tools to strengthen recovery. Event location is Morrill Hall, St. Mark's Ep… See More",
+    organizationInfo: [ [Object] ],
+    splitTime: {
+      dayOfTheWeek: 'TUESDAY',
+      month: 'DECEMBER',
+      dayOfTheMonth: '14',
+      year: '2021',
+      startTime: '7',
+      am_pm: 'PM'
+    },
+    mapUrl: 'https://external.fijd1-1.fna.fbcdn.net/static_map.php?v=2019&ccb=4-4&size=400x300&language=en_US&scale=2&zoom=15&marker_list[0]=41.152514806205%2C-73.498199961921'
+  },
+  {
+    title: 'Question, Persuade, Refer',
+    image: 'https://scontent.fijd1-1.fna.fbcdn.net/v/t1.6435-9/p75x225/242843678_6184003541673198_7868820514779043830_n.jpg?_nc_cat=107&ccb=1-5&_nc_sid=340051&_nc_ohc=bsFwPe9k4rsAX_OO3SJ&_nc_oc=AQlgXbVqJeca-ccShi2DVosMDeffmPm5VIuziL5jnpKwC_nzNx2FMo9x18RK-H6N8bc&_nc_ht=scontent.fijd1-1.fna&oh=8ec0adcf29376ad7904eaf8b6ae67ef3&oe=61924135',
+    dateTime: 'THIS THURSDAY AT 6 PM',
+    linkToOriginalPost: 'https://www.facebook.com/events/1501356673572537/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22page%22%7D]%7D',
+    detailDateTime: 'THURSDAY AT 6 PM',
+    address: 'Online Event',
+    description: 'People you know are struggling with their mental health. Join us for a free training to learn about suicidal ideation & to practice the skills you need to help.\n' +
+      'To register go to… See More',
+    organizationInfo: [ [Object], [Object], [Object] ],
+    splitTime: { dayOfTheWeek: true },
+    mapUrl: 'null'
+  },
+  {
+    title: 'Red Ribbon Week',
+    image: 'https://scontent.fijd1-1.fna.fbcdn.net/v/t1.6435-9/s417x417/244122225_4314738031927969_1444090476433767770_n.jpg?_nc_cat=103&_nc_rgb565=1&ccb=1-5&_nc_sid=340051&_nc_ohc=rZoU3MEwvMoAX_8oqoU&_nc_ht=scontent.fijd1-1.fna&oh=f680497a18517c9ca38076b723604310&oe=61919DFC',
+    dateTime: 'THIS SATURDAY AT 8 AM',
+    linkToOriginalPost: 'https://www.facebook.com/events/2709384319368233/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22page%22%7D]%7D',
+    detailDateTime: 'SATURDAY AT 8 AM',
+    address: 'Online Event',
+    description: "Join us for Red Ribbon Week which takes place each year from October 23 through 31st. How will you celebrate the nation's oldest and largest drug prevention program?",
+    organizationInfo: [ [Object] ],
+    splitTime: { dayOfTheWeek: true },
+    mapUrl: 'null'
+  },
+  {
+    title: 'National Prescription Drug Take Back Day',
+    image: 'https://scontent.fijd1-1.fna.fbcdn.net/v/t1.6435-9/p75x225/246453819_3136246713315115_3038384054459824095_n.jpg?_nc_cat=110&ccb=1-5&_nc_sid=340051&_nc_ohc=Oe5Hf6EyyDgAX8dpYRm&_nc_ht=scontent.fijd1-1.fna&oh=0b5b898a3a007c3a07430e0490309dc1&oe=6193D763',
+    dateTime: 'THIS SATURDAY AT 10 AM',
+    linkToOriginalPost: 'https://www.facebook.com/events/672442290397911/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22page%22%7D]%7D',
+    detailDateTime: 'SATURDAY AT 10 AM – 2 PM',
+    address: '100 Reef Rd, Fairfield, CT 06824-5919, United States',
+    description: 'Turn in your unused or expired medications for safe disposal. Safe, anonymous, no questions asked or forms to fill out.\n' +
+      'Drop offs of vaping products and electronic nicotine delive… See More',
+    organizationInfo: [ [Object] ],
+    splitTime: { dayOfTheWeek: true },
+    mapUrl: 'null'
+  },
+  {
+    title: 'Fairfield County Out of the Darkness Community Walk',
+    image: 'https://scontent.fijd1-1.fna.fbcdn.net/v/t1.6435-9/s320x320/148951547_2743545605896044_7661921162417936732_n.jpg?_nc_cat=110&ccb=1-5&_nc_sid=340051&_nc_ohc=Ftqik63M2IoAX_pPUEX&_nc_ht=scontent.fijd1-1.fna&oh=f509da44827f504395f1e64477eddfe2&oe=619252BC',
+    dateTime: 'THIS SUNDAY AT 10 AM',
+    linkToOriginalPost: 'https://www.facebook.com/events/151606906774128/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22page%22%7D]%7D',
+    detailDateTime: 'SUNDAY AT 10 AM – 1 PM',
+    address: 'Fairfield, CT',
+    description: 'Date: 10/24/2021\n' +
+      'Location: Venue TBD\n' +
+      'Registration: 10:00 am\n' +
+      'Event Time: 11:30 am - 1:00 pm\n' +
+      'Our walk date could be subject to change based on the availability of the venue and the… See More',
+    organizationInfo: [ [Object] ],
+    splitTime: { dayOfTheWeek: true },
+    mapUrl: 'https://external.fijd1-1.fna.fbcdn.net/static_map.php?v=2019&ccb=4-4&size=400x300&language=en_US&scale=2&zoom=10&marker_list[0]=41.1411%2C-73.2642'
   }
 ]

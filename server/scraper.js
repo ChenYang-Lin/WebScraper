@@ -10,7 +10,7 @@ let scrapEvents = async (list) => {
     console.log("running scapEvents function");
 
     const browser = await puppeteer.launch({
-      headless: true,
+      headless: false,
       args: [
         "--no-sandbox",
         '--disable-setuid-sandbox',
@@ -76,7 +76,7 @@ async function scrapeFacebookEvents(browser, page) {
           await new Promise(resolve => setTimeout(resolve, 3000));
       }
       // if there is no upcoming events, just return
-      let numberOfEvents
+      let numberOfEvents;
       if (document.querySelectorAll('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > .gm7ombtx').length > 0 || document.querySelectorAll('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > .gh3ezpug').length > 0){
         return basicResults;
       } else {        
