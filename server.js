@@ -87,12 +87,12 @@ cron.schedule("0 0 */12 * * *", async () => {
   console.log(listOfEvents.length);
 });
 
-cron.schedule("*/2 * * * *", async () => {
-  console.log("running a task every 2 minutes");
-  listOfEvents = await scrapEvents(scrapingList);
-  console.log(listOfEvents);
-  console.log(listOfEvents.length);
-});
+// cron.schedule("*/2 * * * *", async () => {
+//   console.log("running a task every 2 minutes");
+//   listOfEvents = await scrapEvents(scrapingList);
+//   console.log(listOfEvents);
+//   console.log(listOfEvents.length);
+// });
 
 // cron.schedule(
 //   "0 1 * * *",
