@@ -10,7 +10,7 @@ let scrapEvents = async (list) => {
     console.log("running scapEvents function");
 
     const browser = await puppeteer.launch({
-      headless: true,
+      headless: false,
       args: [
         "--no-sandbox",
         '--disable-setuid-sandbox',
@@ -63,74 +63,78 @@ async function scrapeFacebookEvents(browser, page) {
       continue;
     }
 
+    let basicInfosFromOneGroup;
     // Ineract with the page directly in the page DOM environment
-    const basicInfosFromOneGroup = await page.evaluate(async () => {
-      let basicResults = [];
-      const UpcomingEventsDiv = ".dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi";
-      let UpcomingEventsElement = document.querySelectorAll(UpcomingEventsDiv)[0];
+    try {
+      basicInfosFromOneGroup = await page.evaluate(async () => {
+        let basicResults = [];
+        const UpcomingEventsDiv = ".dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi";
+        let UpcomingEventsElement = document.querySelectorAll(UpcomingEventsDiv)[0];
 
-      // expand see more
-      const seeMoreBtn = document.querySelector('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > [aria-label="See More"]')
-      if (seeMoreBtn) {
-          await seeMoreBtn.click();    
-          await new Promise(resolve => setTimeout(resolve, 3000));
-      }
-      // if there is no upcoming events, just return
-      let numberOfEvents;
-      if (document.querySelectorAll('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > .gm7ombtx').length > 0 || document.querySelectorAll('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > .gh3ezpug').length > 0){
-        return basicResults;
-      } else {        
-        numberOfEvents = UpcomingEventsElement.children.length;
-      }
-
-      // scrape events one by one from current group event list.
-      for (let j = 1; j < numberOfEvents; j++) {  
-        // loop starts from 1 because first element of div is title => "Upcoming Events" text container
-        let event = UpcomingEventsElement.children[j];
-        let linkToOriginalPost, image, dateTime, title;
-        // The sturcture of Facebook events pages are slightly different, This if statement helps build more consistency.
-        if (event.childElementCount < 2) {
-          linkToOriginalPost = event.children[0].children[0].children[0].getAttribute("href");
-          image = event.children[0].children[0].children[0].children[0].style.backgroundImage.replace("url(\"", "").replace("\")", "");
-          dateTime = event.children[0].children[1].children[0].children[0].children[0].innerText;
-          title = event.children[0].children[1].children[0].children[1].children[0].children[0].children[0].children[0].innerText;
-        } else { // event.childElementCount >= 2
-          // linkToOriginalPost
-          try {
-            linkToOriginalPost = event.children[0].children[0].getAttribute("href");
-            if (linkToOriginalPost.substring(0, 5) !== "https") {
-              linkToOriginalPost = "#";
-            }
-          } catch (error) {
-            linkToOriginalPost = "#"
-          }
-          image = event.children[0].children[0].children[0].children[0].src;
-          let timeTitleAddressDiv = event.children[1].children[0].children[0].children[0].children[0];
-          dateTime = timeTitleAddressDiv.children[0].children[0].innerText;
-          // title
-          try {
-            title = timeTitleAddressDiv.children[1].children[0].children[0].children[0].children[0].innerText;
-          } catch (error) {
-            title = "null";
-          }
+        // expand see more
+        const seeMoreBtn = document.querySelector('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > [aria-label="See More"]')
+        if (seeMoreBtn) {
+            await seeMoreBtn.click();    
+            await new Promise(resolve => setTimeout(resolve, 3000));
+        }
+        // if there is no upcoming events, just return
+        let numberOfEvents;
+        if (document.querySelectorAll('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > .gm7ombtx').length > 0 || document.querySelectorAll('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > .gh3ezpug').length > 0){
+          return basicResults;
+        } else {        
+          numberOfEvents = UpcomingEventsElement.children.length;
         }
 
-        // scrape data based on the structure of Facebook page.
+        // scrape events one by one from current group event list.
+        for (let j = 1; j < numberOfEvents; j++) {  
+          // loop starts from 1 because first element of div is title => "Upcoming Events" text container
+          let event = UpcomingEventsElement.children[j];
+          let linkToOriginalPost, image, dateTime, title;
+          // The sturcture of Facebook events pages are slightly different, This if statement helps build more consistency.
+          if (event.childElementCount < 2) {
+            linkToOriginalPost = event.children[0].children[0].children[0].getAttribute("href");
+            image = event.children[0].children[0].children[0].children[0].style.backgroundImage.replace("url(\"", "").replace("\")", "");
+            dateTime = event.children[0].children[1].children[0].children[0].children[0].innerText;
+            title = event.children[0].children[1].children[0].children[1].children[0].children[0].children[0].children[0].innerText;
+          } else { // event.childElementCount >= 2
+            // linkToOriginalPost
+            try {
+              linkToOriginalPost = event.children[0].children[0].getAttribute("href");
+              if (linkToOriginalPost.substring(0, 5) !== "https") {
+                linkToOriginalPost = "#";
+              }
+            } catch (error) {
+              linkToOriginalPost = "#"
+            }
+            image = event.children[0].children[0].children[0].children[0].src;
+            let timeTitleAddressDiv = event.children[1].children[0].children[0].children[0].children[0];
+            dateTime = timeTitleAddressDiv.children[0].children[0].innerText;
+            // title
+            try {
+              title = timeTitleAddressDiv.children[1].children[0].children[0].children[0].children[0].innerText;
+            } catch (error) {
+              title = "null";
+            }
+          }
 
-        // let organization = event.children[0].children[1].children[1].children[1].children[0];
-        // organizationLink = organization.children[0].getAttribute("href");
-        // organizationName = organization.children[0].children[0].innerText;
-        
-        // singleEvent = { title, image, dateTime, organizationName, organizationLink, linkToOriginalPost };
-        singleEvent = { title, image, dateTime, linkToOriginalPost };
+          // scrape data based on the structure of Facebook page.
 
-        basicResults.push(singleEvent);
-      } // End for loop for current group event list
-      return basicResults;
-    }).catch (error => {
-        console.log("Evaluate Error: " + scrapingList[i].groupURL);
-        console.log(error)
-    })
+          // let organization = event.children[0].children[1].children[1].children[1].children[0];
+          // organizationLink = organization.children[0].getAttribute("href");
+          // organizationName = organization.children[0].children[0].innerText;
+          
+          // singleEvent = { title, image, dateTime, organizationName, organizationLink, linkToOriginalPost };
+          singleEvent = { title, image, dateTime, linkToOriginalPost };
+
+          basicResults.push(singleEvent);
+        } // End for loop for current group event list
+        return basicResults;
+      })
+    } catch (e) {
+      continue;
+      // console.log("Evaluate Error: " + scrapingList[i].groupURL);
+      // console.log(error);
+    }
      // End page.evaluate
 
     let resultsFromOneGroup = await scrapeIndividaulEvents(basicInfosFromOneGroup, browser);

@@ -181,6 +181,7 @@ app.post("/scrape", (req, res) => {
       listOfEvents = await scrapEvents(result);
     })
   } 
+  res.redirect('/admin');
 })
 
 
