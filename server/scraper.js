@@ -10,7 +10,7 @@ let scrapEvents = async (list) => {
     console.log("running scapEvents function");
 
     const browser = await puppeteer.launch({
-      headless: false,
+      headless: true,
       args: [
         "--no-sandbox",
         '--disable-setuid-sandbox',
@@ -54,11 +54,11 @@ async function scrapeFacebookEvents(browser, page) {
   // Scrape facebook groups one by one from scrapingList
   for (let i = 0; i < scrapingList.length; i++) {
     try {
-      await page.goto(scrapingList[i] + "/events", {
+      await page.goto(scrapingList[i].groupURL + "/events", {
         waitUntil: "networkidle0"
       });
     } catch (e) {
-      console.log("Error: " + scrapingList[i]);
+      console.log("Error: " + scrapingList[i].groupURL);
       console.log(e);
       continue;
     }
@@ -128,7 +128,7 @@ async function scrapeFacebookEvents(browser, page) {
       } // End for loop for current group event list
       return basicResults;
     }).catch (error => {
-        console.log("Evaluate Error: " + scrapingList[i]);
+        console.log("Evaluate Error: " + scrapingList[i].groupURL);
         console.log(error)
     })
      // End page.evaluate

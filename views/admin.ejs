@@ -34,12 +34,12 @@
 
     <!-- Content -->
     <div class="container bg-white shadow p-3 rounded my-3">
-            <% for (let i = 0; i < scrapingList.length; i++) { %>
+            <% for (let i = 0; i < result.length; i++) { %>
                 <form class="row justify-content-center" method="POST" action="/edit-remove">
                     <!-- URL -->
                     <div class="col-12">
-                        <input class="url-index" type="text" name="index" value="<%= i %>" readonly></input>
-                        <input class="url text-center" name="url" value="<%= scrapingList[i] %>"></input>
+                        <input class="url-id d-none" type="text" name="id" value="<%= result[i]._id %>" readonly></input>
+                        <input class="url text-center" name="url" value="<%= result[i].groupURL %>"></input>
                     </div>
                     <!-- buttons -->
                     <div class="col-8 col-md-4">
@@ -58,16 +58,13 @@
                   <hr>
                   <br>
                   
-                <!-- <form id="form" method="POST" action="/edit-subscription">
-                    <div class="url"><%= scrapingList[i] %></div>
-                    <input type="text" name="index" value="<%= i %>" readonly>
-                    <input type="text" name="url" value="<%= scrapingList[i] %>" required>
-                    <button id="button">button</button>
-                </form> -->
             <% } %>
             <form class="container text-center" method="POST" action="/add">
               <input class="new-url" name="newUrl"></input>
               <button class="btn btn-dark" name="name" value="add">Add new</button>
+            </form>
+            <form class="container text-center" method="POST" action="/scrape">
+              <button class="btn btn-success" name="name" value="scrape">Scrape (test)</button>
             </form>
     </div>
 

@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const cron = require("node-cron");
 const path = require("path");
+const mongoose = require("mongoose");
+const Subscription = require("./server/models/subscription");
 
 let { scrapEvents } = require("./server/scraper.js");
 let { removeDuplicates } = require("./server/removeDuplicates.js");
@@ -27,6 +29,80 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 
+
+// Mongoose and Mongo sandbox routes
+// Initialize subscription database
+app.get('/init-subscription', (req, res) => {
+  for (let i = 0; i < scrapingList.length; i++) {
+    let subscription = new Subscription({
+      groupURL: scrapingList[i],
+    }); 
+    subscription.save()
+      .then((result) => {
+        res.redirect("/admin");
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
+})
+// app.get('/add-subscription', (req, res) => {
+//   const subscription = new Subscription({
+//     groupURL: "https://www.facebook.com/gloriousrecovery",
+//   });
+
+//   subscription.save()
+//     .then((result) => {
+//       res.send(result);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     })
+// });
+
+// app.get('/all-subscription', (req, res) => {
+//   Subscription.find()
+//     .then((result) => {
+//       res.send(result);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     })
+// })
+
+// app.get('/single-subscription', (req, res) => {
+//   Subscription.findById('61704685a6a79d205db09a8e')
+//     .then((result) => {
+//       res.send(result)
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     })
+// })
+
+// MongoDB database
+// Connect to MondoDB
+let subscriptions = Subscription.find().then((result) => {
+    })
+const dbURI = `mongodb+srv://ChenYang-Lin:${process.env.MongoDB_User_Password}@cluster0.cts13.mongodb.net/${process.env.MongoDB_myFirstDatabase}?retryWrites=true&w=majority`;
+mongoose.connect(dbURI)
+  .then((result) => {
+    app.listen(process.env.PORT || 3000, async () => {
+      console.log("app is running on port 3000");
+      if (listOfEvents.length === 0) {
+        Subscription.find().then(async (result) => {
+          listOfEvents = await scrapEvents(result);
+        })
+        // listOfEvents = await scrapEvents(scrapingList);
+        listOfEvents = removeDuplicates(listOfEvents);
+        console.log(listOfEvents);
+        console.log(listOfEvents.length);
+      }
+    })
+  })
+  .catch((err) => console.log(err));
+
+
 // Routes
 app.get("/", async (req, res) => {
   res.render("index", {
@@ -35,56 +111,97 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/admin", async (req, res) => {
-  res.render("admin", {
-    scrapingList,
-  });
+  Subscription.find().sort({ createdAt: 1 })
+    .then((result) => {
+      // console.log(result);
+      res.render("admin", {
+        result,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+
+  // res.render("admin", {
+  //   scrapingList,
+  // });
 });
 
 app.post("/edit-remove", (req, res) => {
-  const { url, index, name } = req.body;
+  const { url, id, name } = req.body;
   if (name === "edit") {
-    scrapingList[index] = url;
+    Subscription.findByIdAndUpdate(id, { groupURL: url }, (err, result) => {
+      if (err) {
+        res.send(err);
+        // console.log(err);
+      }
+      else {
+        // console.log(result);
+        res.redirect('/admin');
+      }
+    })
   } else if (name === "remove") {
-    if (index > -1) {
-      scrapingList.splice(index, 1);
-    }
+    Subscription.findByIdAndDelete(id, (err, result) => {
+      if (err) {
+        res.send(err);
+      }
+      else {
+        res.redirect('/admin');
+      }
+    });
   } else {
     return;
   }
-
-  res.render("admin", {
-    scrapingList,
-  });
 });
 
 app.post("/add", (req, res) => {
   const { newUrl, name } = req.body;
   if (name === "add") {
-    scrapingList.push(newUrl);
+    let subscription = new Subscription({
+      groupURL: newUrl,
+    });
+    subscription.save()
+    .then((result) => {
+      // res.send(result);
+      res.redirect('/admin');
+    })
+    .catch((err) => {
+      console.log(err);
+    })
   } else {
     return;
   }
 
-  res.render("admin", {
-    scrapingList,
-  });
 });
 
+app.post("/scrape", (req, res) => {
+  const { name } = req.body;
+  if (name === "scrape") {
+    Subscription.find().then(async (result) => {
+      listOfEvents = await scrapEvents(result);
+    })
+  } 
+})
+
+
 // listen to port 3000 and start initial scraping immediately
-app.listen(process.env.PORT || 3000, async () => {
-  console.log("app is running on port 3000");
-  if (listOfEvents.length === 0) {
-    listOfEvents = await scrapEvents(scrapingList);
-    listOfEvents = removeDuplicates(listOfEvents);
-    console.log(listOfEvents);
-    console.log(listOfEvents.length);
-  }
-});
+// app.listen(process.env.PORT || 3000, async () => {
+//   console.log("app is running on port 3000");
+//   if (listOfEvents.length === 0) {
+//     // listOfEvents = await scrapEvents(scrapingList);
+//     // listOfEvents = removeDuplicates(listOfEvents);
+//     // console.log(listOfEvents);
+//     // console.log(listOfEvents.length);
+//   }
+// });
 
 // Update list of events repeatly by doing new scrapes
 cron.schedule("0 0 0 * * *", async () => {
   console.log("running a task every day at 12:00 AM");
-  listOfEvents = await scrapEvents(scrapingList);
+  Subscription.find().then(async (result) => {
+    listOfEvents = await scrapEvents(result);
+  })
+  // listOfEvents = await scrapEvents(scrapingList);
   console.log(listOfEvents);
   console.log(listOfEvents.length);
 });
@@ -111,8 +228,10 @@ cron.schedule("0 0 0 * * *", async () => {
 // );
 
 // prevent heroku sleep
-var http = require("http");
+const https = require('https');
+const { ConsoleMessage } = require("puppeteer");
 setInterval(function () {
-  http.get("https://cs410-web-scraper.herokuapp.com");
-  // http.get("http://localhost:3000");
+  https.get("https://cs410-web-scraper.herokuapp.com", (res) => {
+    console.log("ping every 20 min. to prevent heroku sleep")
+  });
 }, 20 * 60 * 1000); // every 20 minutes
