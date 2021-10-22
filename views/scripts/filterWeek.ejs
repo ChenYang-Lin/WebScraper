@@ -8,11 +8,11 @@
         let start = new Date(now); 
         // start.setDate(numDay - dayOfWeek);
         // let startingDay = ((week > 1) ? 7 - dayOfWeek : 0);
-        start.setDate(numDay + ((week > 0) ? 7 - dayOfWeek : 0) + ((week > 0) ? ((week - 1) * 7) : 0));
+        start.setDate(numDay + 1 + ((week > 0) ? 7 - dayOfWeek : 0) + ((week > 0) ? ((week - 1) * 7) : 0));
         start.setHours(0, 0, 0, 0);
 
         let end = new Date(now);
-        end.setDate(numDay + (7 - dayOfWeek) + (week * 7));
+        end.setDate(numDay + 1 + (7 - dayOfWeek) + (week * 7));
         end.setHours(0, 0, 0, 0);
 
         return [start, end];
@@ -24,13 +24,14 @@
         let newList = listOfEvents.filter((object) => {
             // new Date(year, month, day, hours, minutes, seconds, milliseconds)
             let objectMonth = object.splitTime.month.charAt(0).toUpperCase() + object.splitTime.month.slice(1).toLowerCase();
-            let objectDate = new Date(object.splitTime.year, months.indexOf(objectMonth), object.splitTime.dayOfTheMonth, 0, 0, 0, 0);
+            let objectDate = new Date(object.splitTime.year, months.indexOf(objectMonth), object.splitTime.dayOfTheMonth, object.splitTime.startTime, 0, 0, 0);
+            console.log(objectDate);
             return objectDate >= start && objectDate < end;
         })
-        console.log(newList);
+        // console.log(newList);
     }
 
-    var months = [
+    let months = [
         'January',
         'February',
         'March',

@@ -92,13 +92,13 @@ mongoose.connect(dbURI)
       if (listOfEvents.length === 0) {
         Subscription.find().then(async (result) => {
           listOfEvents = await scrapEvents(result);
+          listOfEvents = removeDuplicates(listOfEvents);
+          console.log(listOfEvents);
+          console.log(listOfEvents.length);
         })
         // listOfEvents = await scrapEvents(scrapingList);
-        listOfEvents = removeDuplicates(listOfEvents);
-        console.log(listOfEvents);
-        console.log(listOfEvents.length);
       }
-    })
+    }) // End app.listen
   })
   .catch((err) => console.log(err));
 

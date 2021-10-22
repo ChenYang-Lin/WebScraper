@@ -1,5 +1,6 @@
 require("dotenv").config();
 const puppeteer = require("puppeteer");
+const { splitTime } = require("./scraperFunctions/splitTime");
 
 let scrapingList = [];
 let errorMessages = [];
@@ -10,6 +11,7 @@ let scrapEvents = async (list) => {
     console.log("running scapEvents function");
 
     const browser = await puppeteer.launch({
+      // headless: false,
       headless: true,
       args: [
         "--no-sandbox",
@@ -164,6 +166,7 @@ for (let i = 0; i < msg._args.length; ++i)
 });
 // for test only ------------------------------------
       // Scrape - ineract with the page directly in the page DOM environment
+      await pageForOriginalPost.exposeFunction("splitTime", splitTime);
       resultsFromOneEvent = await pageForOriginalPost.evaluate(async () => {
         const headingElement = document.querySelector(".k4urcfbm.nqmvxvec").children[0].children[0].children[0].children[0];
         let detailDateTime = headingElement.children[0].children[0].children[0].innerText;
@@ -209,27 +212,23 @@ for (let i = 0; i < msg._args.length; ++i)
 
 
         // Ticket
-
-        // Split detailDateTime
-        let dayOfTheWeek, month, dayOfTheMonth, year, startTime, am_pm;
-        if (dayOfTheWeek = detailDateTime.split(", ").length === 1) {
-          // let now = new Date();
-          // let dayOfWeek = now.getDay(); 
-          // let numDay = now.getDate();
-        } else {
-          dayOfTheWeek = detailDateTime.split(", ")[0];
-          month = detailDateTime.split(", ")[1].split(" ")[0];
-          dayOfTheMonth = detailDateTime.split(", ")[1].split(" ")[1];
-          year = detailDateTime.split(", ")[2].split(" ")[0];
-          startTime = detailDateTime.split(", ")[2].split(" ")[2];
-          am_pm = detailDateTime.split(", ")[2].split(" ")[3];
+        let ticket = false;
+        try {
+          document.querySelectorAll(".d2edcug0.hpfvmrgz.qv66sw1b.c1et5uql.lr9zc1uh.a8c37x1j.keod5gw0.nxhoafnm.aigsh9s9.ns63r2gh.fe6kdd0r.mau55g9w.c8b282yb.iv3no6db.o3w64lxj.b2s5l15y.hnhda86s.oo9gr5id.hzawbc8m").forEach((element) => {
+            if (element.textContent == "Tickets") {
+              ticket = true;
+            }
+          })
+        } catch (e) {
+          console.log(e);
         }
 
 
-        let splitTime = { dayOfTheWeek, month, dayOfTheMonth, year, startTime, am_pm };
+        // Split detailDateTime
+        splitTime = await splitTime(detailDateTime);
 
 
-        return { detailDateTime, address, description, organizationInfo, splitTime, mapUrl };
+        return { detailDateTime, address, description, organizationInfo, splitTime, mapUrl, ticket };
       });
       await pageForOriginalPost.close();
     }

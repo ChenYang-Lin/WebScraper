@@ -52,6 +52,12 @@
               </div>
               <!-- Content -->
               <div class="col-8">
+                <!-- Tickets -->
+                <% if(listOfEvents[i].ticket) { %>
+                  <a href="<%= listOfEvents[i].linkToOriginalPost %>" class="text-decoration-none" >
+                    <h5 class="text-dark bg-warning">Tickets available here (original page)</h5>
+                  </a>
+                <% } %>
                 <!-- Time -->
                 <h4 class="text-danger"><%= listOfEvents[i].detailDateTime %></h4>
                 <!-- Title -->
@@ -62,8 +68,9 @@
                 </h3>
                 <!-- Location -->
                 <h4><%= listOfEvents[i].address %></h4>
-                <div class="d-none d-lg-block">
-                  <!-- Organization -->
+                <!-- <div class="d-none d-lg-block"> -->
+                <div class="d-block">
+                <!-- Organization -->
                   <h5 class="organization-name">
                     Organization: 
                     <% for (let j = 0; j < listOfEvents[i].organizationInfo.length; j++) { %>
@@ -87,11 +94,11 @@
 
 
     <!-- Footer -->
-    <!-- <button class="filter" onclick="filterCurrentWeek(listOfEvents, 0)">filter this week</button>
+    <button class="filter" onclick="filterCurrentWeek(listOfEvents, 0)">filter this week</button>
     <button class="filter" onclick="filterCurrentWeek(listOfEvents, 1)">filter next week</button>
     <button class="filter" onclick="filterCurrentWeek(listOfEvents, 2)">filter 2 week</button>
     <button class="filter" onclick="filterCurrentWeek(listOfEvents, 3)">filter 3 week</button>
-    <button class="filter" onclick="filterCurrentWeek(listOfEvents, 4)">filter 4 week</button> -->
+    <button class="filter" onclick="filterCurrentWeek(listOfEvents, 4)">filter 4 week</button>
 
 
     <!-- Bootstrap script -->
