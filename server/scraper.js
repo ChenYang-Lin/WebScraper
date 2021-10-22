@@ -15,7 +15,7 @@ let scrapEvents = async (list) => {
       headless: true,
       args: [
         "--no-sandbox",
-        '--disable-setuid-sandbox',
+        // '--disable-setuid-sandbox',
       ],
     });
     const page = await browser.newPage();
