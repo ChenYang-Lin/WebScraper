@@ -24,6 +24,10 @@ let scrapEvents = async (list) => {
     });
     const page = await browser.newPage();
 
+    const version = await page.browser().version();
+    console.log("browser version:---------------------------------------------------------------------------")
+    console.log("browser version: " + version)
+
     // Login
     await loginFacebook(page);
     // Scrapping
