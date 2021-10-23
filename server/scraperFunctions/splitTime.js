@@ -13,6 +13,21 @@ const MONTH = [
     'December'
 ];
 
+const MONTH_ABBR = [
+    "JAN",
+    "FEB",
+    "MAR",
+    "APR",
+    "MAY",
+    "JUN",
+    "JUL",
+    "AUG",
+    "SEP",
+    "OCT",
+    "NOV",
+    "DEC",
+]
+
 const DAY = [
     "SUNDAY",
     "MONDAY",
