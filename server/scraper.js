@@ -12,7 +12,7 @@ let scrapEvents = async (list) => {
 
     const browser = await puppeteer.launch({
       // headless: false,
-      headless: true,
+      headless: false,
       args: [
         "--no-sandbox",
         // '--disable-setuid-sandbox',
@@ -152,6 +152,7 @@ async function scrapeFacebookEvents(browser, page) {
 // Scrape more information for events from a group.
 async function scrapeIndividaulEvents(basicInfosFromOneGroup, browser) {
   let resultsFromOneGroup = [];
+  let screenshot;
   // one by one for each event from current group.
   for (let i = 0; i < basicInfosFromOneGroup.length; i++) {
     let resultsFromOneEvent;
@@ -169,6 +170,9 @@ for (let i = 0; i < msg._args.length; ++i)
   console.log(`${i}: ${msg._args[i]}`);
 });
 // for test only ------------------------------------
+      // screenshot
+      screenshot = await pageForOriginalPost.screenshot({ encoding: 'base64' });
+
       // Scrape - ineract with the page directly in the page DOM environment
       await pageForOriginalPost.exposeFunction("splitTime", splitTime);
       resultsFromOneEvent = await pageForOriginalPost.evaluate(async () => {
@@ -239,7 +243,7 @@ for (let i = 0; i < msg._args.length; ++i)
     // Combine "basic" data from group page and "additional" data from original post of the event
     let basicInfoOfCurrEvent = basicInfosFromOneGroup[i];
     let moreInfoOfCurrEvent = resultsFromOneEvent;
-    let infoOfCurrEvent = {...basicInfoOfCurrEvent, ...moreInfoOfCurrEvent}
+    let infoOfCurrEvent = {...basicInfoOfCurrEvent, ...moreInfoOfCurrEvent, screenshot }
     resultsFromOneGroup.push(infoOfCurrEvent);
   } // end for loop - one by one for each event from current group.
   return resultsFromOneGroup;
