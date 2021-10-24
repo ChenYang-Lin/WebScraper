@@ -25,7 +25,7 @@
             console.log(objectDate);
             console.log(object.splitTime);
             console.log(object.splitTime.isUTC);
-            if (!object.splitTime.isUTC) {
+            if (object.splitTime.isUTC) {
                 objectDate = modifyUTF(objectDate);
             }
             return objectDate >= start && objectDate < end;
