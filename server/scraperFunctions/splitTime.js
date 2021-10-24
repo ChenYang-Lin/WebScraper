@@ -123,7 +123,8 @@ let splitTime = (detailDateTime) => {
     } else {
         isUTC = false;
     }
-
+    console.log("UTC--------------------------------------------------")
+    console.log(isUTC);
     let splitTime = { dayOfTheWeek, month, dayOfTheMonth, year, startTime, am_pm, isUTC };
     return splitTime;
 }
