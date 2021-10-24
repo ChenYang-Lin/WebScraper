@@ -209,6 +209,7 @@ pageForOriginalPost.on('console', consoleObj => console.log(consoleObj.text()));
         //     await new Promise(resolve => setTimeout(resolve, 2000));
         //   }
         // })
+        let seeMoreBtn;
         if (detailsElement.lastChild.children[0].children[0].childNodes.length > 2) {
           try {
             seeMoreBtn = detailsElement.lastChild.children[0].children[0].children[0].children[0];
