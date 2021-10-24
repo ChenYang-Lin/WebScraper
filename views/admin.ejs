@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Scraper</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <!-- Bootstrap Icon -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="/style.css" type="text/css">
+</head>
+<body>
+    <!-- Nav bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a href="/" class="navbar-brand">Event Manager</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a href="#" class="nav-link">Add Event</a>
+            </li>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="container bg-white shadow p-3 rounded my-3">
+      <% for (let i = 0; i < result.length; i++) { %>
+          <form class="row justify-content-center" method="POST" action="/edit-remove">
+              <!-- URL -->
+              <div class="col-12">
+                  <input class="url-id d-none" type="text" name="id" value="<%= result[i]._id %>" readonly></input>
+                  <input class="url text-center" name="url" value="<%= result[i].groupURL %>"></input>
+              </div>
+              <!-- buttons -->
+              <div class="col-8 col-md-4">
+                  <div class="container">
+                      <div class="row">
+                          <div class="col-6 text-center">
+                              <button class="btn btn-primary" name="name" value="edit">Edit</button>
+                          </div>
+                          <div class="col-6 text-center">
+                              <button class="btn btn-danger" name="name" value="remove">Remove</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            </form>
+            <hr>
+            <br>
+            
+      <% } %>
+      <form class="container text-center" method="POST" action="/add">
+        <input class="new-url" name="newUrl"></input>
+        <button class="btn btn-dark" name="name" value="add">Add new</button>
+      </form>
+      <form id="scrape-form" class="container text-center border border-dark rounded py-3 my-3" method="POST" action="/admin/scrape">
+        <input type="submit" id="scrape-btn" class="btn btn-dark" value="scrape"></input>
+        <div class="progress mt-2">
+          <input name="progressBar" id="scrape-progress" class="progress-bar bg-primary" role="progressbar" style="width: <%= scrapeProgress %>%" aria-valuemin="0" aria-valuemax="100" value="<%= scrapeProgress %>" readonly></input>
+        </div>
+      </form>            
+    </div>
+
+    <!-- Bootstrap script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <script>
+      let scraping = <%- JSON.stringify(scraping) %>;
+
+      let scrapeProgressBar = $('#scrape-progress');
+      let scrapeBtn = $('#scrape-btn');
+      let updateScrapeTimer;
+      let isAnim = false;
+
+      $(document).ready(() => {
+        // console.log("document is ready")
+        // console.log(scraping);
+        if (scraping) {
+          if (!isAnim) {
+            isAnim = true;
+            updateScrapeTimer = setInterval(updateScrapeProgressBar, 1000);
+            scrapeBtn.prop( "disabled", true );
+            scrapeBtn.css("opacity", "0.2");
+            scrapeBtn.val("scraping...");
+          }
+        } else {
+          scrapeProgressBar.css("width", '100%');
+          scrapeProgressBar.val(100);
+        }
+      })
+
+
+      $("#scrape-form").on("submit", (e) => {
+        if (scraping) {
+          return;
+        }
+        // console.log("pressed");
+        scraping = true;
+        isAnim = true;
+        e.preventDefault();
+
+        let scrapeBtnVal = scrapeBtn.val();
+
+        // initialize progress bar
+        scrapeProgressBar.css("width", '0%');
+        scrapeProgressBar.val(0);
+
+        $.ajax({
+            url: "/admin/scrape",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ scrapeBtnVal }),
+            success: function(res) {
+              console.log(res);
+            },
+            error: (res) => {
+              console.log(err);
+            }
+          })
+        updateScrapeTimer = setInterval(updateScrapeProgressBar, 1000);
+        scrapeBtn.prop( "disabled", true );
+        scrapeBtn.css("opacity", "0.2");
+        scrapeBtn.val("scraping...");
+      })
+
+
+      function updateScrapeProgressBar() {
+        let progressValue = scrapeProgressBar.val();
+        // console.log(progressValue);
+
+        if (scrapeProgressBar.val() >= 100) {
+          // console.log("complete progress bar animation");
+          clearInterval(updateScrapeTimer);
+          scrapeBtn.prop( "disabled", false );
+          scrapeBtn.css("opacity", "1");
+          scrapeBtn.val("scrape");
+          isAnim = false;
+        } else {
+          // console.log("progress bar animation not done yet");
+          $.ajax({
+            url: "/admin/progress",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ progressValue }),
+            success: function(res) {
+              // console.log(res);
+              scrapeProgressBar.css("width", res.scrapeProgress + '%');
+              scrapeProgressBar.val(res.scrapeProgress);
+              scraping = res.scraping;
+            },
+            error: (err) => {
+              console.log(err);
+            }
+          })
+        }
+      } // end updateScrapeProgressBar function
+    
+    </script>
+</body>
+</html>

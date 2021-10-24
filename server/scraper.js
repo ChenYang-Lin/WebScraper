@@ -1,27 +1,40 @@
 require("dotenv").config();
 const puppeteer = require("puppeteer");
+const { splitTime } = require("./scraperFunctions/splitTime");
 
-let scrapingList = [
-  // "https://www.facebook.com/groups/444744689463060/events",
-  // "https://www.facebook.com/groups/recoveryfriends717/events",
-  // "https://www.facebook.com/groups/292737672143068/events",
-  // 
-  "https://www.facebook.com/gloriousrecovery/events",
-  "https://www.facebook.com/CCAR4Recovery/events",
-  "https://www.facebook.com/NewCanaanParentSupportGroup/events",
-  "https://www.facebook.com/FairfieldCARES/events",
-  "https://www.facebook.com/kcmakesmusic/events",
-  "https://www.facebook.com/liberationprograms/events",
-];
+let scrapingList = [];
+let errorMessages = [];
+let scrapeProgress = 0;
+let scrapeIndex = 0;
+let scraping = false;
 
-let scrapEvents = async () => {
+let scrapEvents = async (list) => {
+  if (scraping === true) return;
+  scraping = true;
+  scrapeProgress = 0;
+  scrapeIndex = 0;
+
+  scrapingList = list;
   try {
     console.log("running scapEvents function");
 
     const browser = await puppeteer.launch({
-      headless: false,
+      // headless: false,
+      headless: true,
+      args: [
+        "--no-sandbox",
+        // '--disable-setuid-sandbox',
+      ],
+      defaultViewport: {
+        width: 1920,
+        height: 1080,
+      }
     });
     const page = await browser.newPage();
+
+    // const version = await page.browser().version();
+    // console.log("browser version:---------------------------------------------------------------------------")
+    // console.log("browser version: " + version)
 
     // Login
     await loginFacebook(page);
@@ -31,9 +44,11 @@ let scrapEvents = async () => {
     await browser.close();
 
     console.log("completed scapEvents function");
+    scraping = false;
     return scrapingResults;
   } catch (error) {
-    console.log(error)
+    console.log("Error running scrapEvents function: " + error);
+    scraping = false;
     return [];
   }
 };
@@ -58,80 +73,98 @@ async function scrapeFacebookEvents(browser, page) {
 
   // Scrape facebook groups one by one from scrapingList
   for (let i = 0; i < scrapingList.length; i++) {
-    await page.goto(scrapingList[i], {
-      waitUntil: "networkidle0"
-    });
+    // See if url exist
+    try {
+      await page.goto(scrapingList[i].groupURL + "/events", {
+        waitUntil: "networkidle0"
+      });
+    } catch (e) {
+      console.log("Error: " + scrapingList[i].groupURL);
+      console.log(e);
+      continue;
+    }
+
+    let basicInfosFromOneGroup;
     // Ineract with the page directly in the page DOM environment
-    const basicInfosFromOneGroup = await page.evaluate(async () => {
-      let basicResults = [];
-      const UpcomingEventsDiv = ".dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi";
-      let UpcomingEventsElement = document.querySelectorAll(UpcomingEventsDiv)[0];
+    try {
+      basicInfosFromOneGroup = await page.evaluate(async () => {
+        let basicResults = [];
+        const UpcomingEventsDiv = ".dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi";
+        let UpcomingEventsElement = document.querySelectorAll(UpcomingEventsDiv)[0];
 
-      // expand see more
-      const seeMoreBtn = document.querySelector('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > [aria-label="See More"]')
-      if (seeMoreBtn) {
-          await seeMoreBtn.click();    
-          await new Promise(resolve => setTimeout(resolve, 3000));
-      }
-      // if there is no upcoming events, just return
-      let numberOfEvents
-      if (document.querySelectorAll('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > .gm7ombtx').length > 0 || document.querySelectorAll('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > .gh3ezpug').length > 0){
-        return basicResults;
-      } else {        
-        numberOfEvents = UpcomingEventsElement.children.length;
-      }
-
-      // scrape events one by one from current group event list.
-      for (let j = 1; j < numberOfEvents; j++) {  
-        // loop starts from 1 because first element of div is title => "Upcoming Events" text container
-        let event = UpcomingEventsElement.children[j];
-        let linkToOriginalPost, image, dateTime, title;
-        // The sturcture of Facebook events pages are slightly different, This if statement helps build more consistency.
-        if (event.childElementCount < 2) {
-          linkToOriginalPost = event.children[0].children[0].children[0].getAttribute("href");
-          image = event.children[0].children[0].children[0].children[0].style.backgroundImage.replace("url(\"", "").replace("\")", "");
-          dateTime = event.children[0].children[1].children[0].children[0].children[0].innerText;
-          title = event.children[0].children[1].children[0].children[1].children[0].children[0].children[0].children[0].innerText;
-        } else { // event.childElementCount >= 2
-          // linkToOriginalPost
-          try {
-            linkToOriginalPost = event.children[0].children[0].getAttribute("href");
-            if (linkToOriginalPost.substring(0, 5) !== "https") {
-              linkToOriginalPost = "#";
-            }
-          } catch (error) {
-            linkToOriginalPost = "#"
-          }
-          image = event.children[0].children[0].children[0].children[0].src;
-          let timeTitleAddressDiv = event.children[1].children[0].children[0].children[0].children[0];
-          dateTime = timeTitleAddressDiv.children[0].children[0].innerText;
-          // title
-          try {
-            title = timeTitleAddressDiv.children[1].children[0].children[0].children[0].children[0].innerText;
-          } catch (error) {
-            title = "null";
-          }
+        // expand see more
+        const seeMoreBtn = document.querySelector('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > [aria-label="See More"]')
+        if (seeMoreBtn) {
+            await seeMoreBtn.click();    
+            await new Promise(resolve => setTimeout(resolve, 3000));
+        }
+        // if there is no upcoming events, just return
+        let numberOfEvents;
+        if (document.querySelectorAll('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > .gm7ombtx').length > 0 || document.querySelectorAll('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > .gh3ezpug').length > 0){
+          return basicResults;
+        } else {        
+          numberOfEvents = UpcomingEventsElement.children.length;
         }
 
-        // scrape data based on the structure of Facebook page.
+        // scrape events one by one from current group event list.
+        for (let j = 1; j < numberOfEvents; j++) {  
+          // loop starts from 1 because first element of div is title => "Upcoming Events" text container
+          let event = UpcomingEventsElement.children[j];
+          let linkToOriginalPost, image, dateTime, title;
+          // The sturcture of Facebook events pages are slightly different, This if statement helps build more consistency.
+          if (event.childElementCount < 2) {
+            linkToOriginalPost = event.children[0].children[0].children[0].getAttribute("href");
+            image = event.children[0].children[0].children[0].children[0].style.backgroundImage.replace("url(\"", "").replace("\")", "");
+            dateTime = event.children[0].children[1].children[0].children[0].children[0].innerText;
+            title = event.children[0].children[1].children[0].children[1].children[0].children[0].children[0].children[0].innerText;
+          } else { // event.childElementCount >= 2
+            // linkToOriginalPost
+            try {
+              linkToOriginalPost = event.children[0].children[0].getAttribute("href");
+              if (linkToOriginalPost.substring(0, 5) !== "https") {
+                linkToOriginalPost = "#";
+              }
+            } catch (error) {
+              linkToOriginalPost = "#"
+            }
+            image = event.children[0].children[0].children[0].children[0].src;
+            let timeTitleAddressDiv = event.children[1].children[0].children[0].children[0].children[0];
+            dateTime = timeTitleAddressDiv.children[0].children[0].innerText;
+            // title
+            try {
+              title = timeTitleAddressDiv.children[1].children[0].children[0].children[0].children[0].innerText;
+            } catch (error) {
+              title = "null";
+            }
+          }
 
-        // let organization = event.children[0].children[1].children[1].children[1].children[0];
-        // organizationLink = organization.children[0].getAttribute("href");
-        // organizationName = organization.children[0].children[0].innerText;
-        
-        // singleEvent = { title, image, dateTime, organizationName, organizationLink, linkToOriginalPost };
-        singleEvent = { title, image, dateTime, linkToOriginalPost };
+          // scrape data based on the structure of Facebook page.
 
-        basicResults.push(singleEvent);
-      } // End for loop for current group event list
-      return basicResults;
-    }).catch (error => {
-        console.log(error)
-    })
+          // let organization = event.children[0].children[1].children[1].children[1].children[0];
+          // organizationLink = organization.children[0].getAttribute("href");
+          // organizationName = organization.children[0].children[0].innerText;
+          
+          // singleEvent = { title, image, dateTime, organizationName, organizationLink, linkToOriginalPost };
+          singleEvent = { title, image, dateTime, linkToOriginalPost };
+
+          basicResults.push(singleEvent);
+        } // End for loop for current group event list
+        return basicResults;
+      })
+    } catch (e) {
+      continue;
+      // console.log("Evaluate Error: " + scrapingList[i].groupURL);
+      // console.log(error);
+    }
      // End page.evaluate
 
     let resultsFromOneGroup = await scrapeIndividaulEvents(basicInfosFromOneGroup, browser);
     scrapingResults = scrapingResults.concat(resultsFromOneGroup);
+
+    // Progress bar update
+    scrapeProgress = Math.floor(((i + 1) / scrapingList.length) * 100);
+    scrapeIndex = i + 1;
+    // console.log("progress: " + scrapeProgress);
   } // End for loop for scrapingList
   return scrapingResults;
 }
@@ -139,6 +172,7 @@ async function scrapeFacebookEvents(browser, page) {
 // Scrape more information for events from a group.
 async function scrapeIndividaulEvents(basicInfosFromOneGroup, browser) {
   let resultsFromOneGroup = [];
+  let screenshot;
   // one by one for each event from current group.
   for (let i = 0; i < basicInfosFromOneGroup.length; i++) {
     let resultsFromOneEvent;
@@ -151,12 +185,14 @@ async function scrapeIndividaulEvents(basicInfosFromOneGroup, browser) {
         waitUntil: "networkidle0"
       });
 // for test only ------------------------------------
-      pageForOriginalPost.on('console', msg => {
-for (let i = 0; i < msg._args.length; ++i)
-  console.log(`${i}: ${msg._args[i]}`);
-});
+pageForOriginalPost.on('console', consoleObj => console.log(consoleObj.text()));
 // for test only ------------------------------------
+
+      // screenshot
+      // screenshot = await pageForOriginalPost.screenshot({ encoding: 'base64' });
+
       // Scrape - ineract with the page directly in the page DOM environment
+      await pageForOriginalPost.exposeFunction("splitTime", splitTime);
       resultsFromOneEvent = await pageForOriginalPost.evaluate(async () => {
         const headingElement = document.querySelector(".k4urcfbm.nqmvxvec").children[0].children[0].children[0].children[0];
         let detailDateTime = headingElement.children[0].children[0].children[0].innerText;
@@ -164,12 +200,28 @@ for (let i = 0; i < msg._args.length; ++i)
 
         // description element - if some descriptions are hidden, scraper will click the "see more button" to expand the description
         const detailsElement = document.querySelectorAll(".discj3wi.ihqw7lf3 > .dwo3fsh8")[0].parentNode;
+
+        // document.querySelectorAll(".oajrlxb2.g5ia77u1.qu0x051f.esr5mh6w div[role=button]").forEach(async (seeMoreBtn) => {
+        // document.querySelectorAll(".oajrlxb2.g5ia77u1.qu0x051f.esr5mh6w").forEach(async (seeMoreBtn) => {
+        //   if (seeMoreBtn.textContent == "See More") {
+        //     console.log("see more")
+        //     await pageForOriginalPost.click(seeMoreBtn);
+        //     await new Promise(resolve => setTimeout(resolve, 2000));
+        //   }
+        // })
         let seeMoreBtn;
-        if (detailsElement.lastChild.children[0].children[0].childNodes.length > 2) {
-          seeMoreBtn = detailsElement.lastChild.children[0].children[0].children[0];
-          await seeMoreBtn.click();
-          await new Promise(resolve => setTimeout(resolve, 4000));
+        try {
+          seeMoreBtn = detailsElement.lastChild.children[0].children[0].children[0].children[0];
+          // await seeMoreBtn.click();
+          document.querySelectorAll(".discj3wi.ihqw7lf3 > .dwo3fsh8")[0].parentNode.lastChild.children[0].children[0].children[0].children[0].click();
+          await new Promise(resolve => setTimeout(resolve, 9000));
+        } catch (e) {
+          console.log(e);
         }
+
+        
+        // await new Promise(resolve => setTimeout(resolve, 14000));
+
         let description = detailsElement.lastChild.children[0].children[0].innerText;
 
         // organization 
@@ -202,41 +254,52 @@ for (let i = 0; i < msg._args.length; ++i)
 
 
         // Ticket
-
-        // Split detailDateTime
-        let dayOfTheWeek, month, dayOfTheMonth, year, startTime, am_pm;
-        if (dayOfTheWeek = detailDateTime.split(", ").length === 1) {
-          // let now = new Date();
-          // let dayOfWeek = now.getDay(); 
-          // let numDay = now.getDate();
-        } else {
-          dayOfTheWeek = detailDateTime.split(", ")[0];
-          month = detailDateTime.split(", ")[1].split(" ")[0];
-          dayOfTheMonth = detailDateTime.split(", ")[1].split(" ")[1];
-          year = detailDateTime.split(", ")[2].split(" ")[0];
-          startTime = detailDateTime.split(", ")[2].split(" ")[2];
-          am_pm = detailDateTime.split(", ")[2].split(" ")[3];
+        let ticket = false;
+        try {
+          // document.querySelectorAll(".d2edcug0.hpfvmrgz.qv66sw1b.c1et5uql.lr9zc1uh.a8c37x1j.keod5gw0.nxhoafnm.aigsh9s9.ns63r2gh.fe6kdd0r.mau55g9w.c8b282yb.iv3no6db.o3w64lxj.b2s5l15y.hnhda86s.oo9gr5id.hzawbc8m").forEach((element) => {
+          document.querySelectorAll(".d2edcug0.hpfvmrgz").forEach((element) => {
+            if (element.textContent == "Tickets") {
+              ticket = true;
+            }
+          })
+        } catch (e) {
+          console.log("Catch Error (ticket): " + e);
         }
 
 
-        let splitTime = { dayOfTheWeek, month, dayOfTheMonth, year, startTime, am_pm };
+        // Split detailDateTime
+        splitTime = await splitTime(detailDateTime);
 
 
-        return { detailDateTime, address, description, organizationInfo, splitTime, mapUrl };
+        return { detailDateTime, address, description, organizationInfo, splitTime, mapUrl, ticket };
       });
       await pageForOriginalPost.close();
     }
     // Combine "basic" data from group page and "additional" data from original post of the event
     let basicInfoOfCurrEvent = basicInfosFromOneGroup[i];
     let moreInfoOfCurrEvent = resultsFromOneEvent;
-    let infoOfCurrEvent = {...basicInfoOfCurrEvent, ...moreInfoOfCurrEvent}
+    let infoOfCurrEvent = {...basicInfoOfCurrEvent, ...moreInfoOfCurrEvent }
+    // let infoOfCurrEvent = {...basicInfoOfCurrEvent, ...moreInfoOfCurrEvent, screenshot }
     resultsFromOneGroup.push(infoOfCurrEvent);
+    
+    // Progress bar update
+    let scrapeProgressGroup = (scrapeIndex / scrapingList.length) * 100 
+    let scrapeProgressEvent = (((i + 1) / basicInfosFromOneGroup.length) * 100) * (1 / scrapingList.length);
+    scrapeProgress = Math.floor(scrapeProgressGroup + scrapeProgressEvent);
   } // end for loop - one by one for each event from current group.
   return resultsFromOneGroup;
 }
 
+function getScrapeProgress() {
+  return scrapeProgress;
+}
+
+function getScraping() {
+  return scraping;
+}
+
 // export functions
-module.exports = { scrapEvents };
+module.exports = { scrapEvents, getScraping, getScrapeProgress };
 
 // for testing only, print out any console.log from page.evaluate
 // page.on('console', msg => {

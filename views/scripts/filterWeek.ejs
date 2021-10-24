@@ -1,0 +1,59 @@
+<script>
+
+    let months = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December'
+    ];
+
+    function filterCurrentWeek(listOfEvents, week){
+        let [start, end] = getWeekDates(week);
+
+        let newList = listOfEvents.filter((object) => {
+            // new Date(year, month, day, hours, minutes, seconds, milliseconds)
+            let objectMonth = object.splitTime.month.charAt(0).toUpperCase() + object.splitTime.month.slice(1).toLowerCase();
+            let objectDate = new Date(object.splitTime.year, months.indexOf(objectMonth), object.splitTime.dayOfTheMonth, object.splitTime.startTime, 0, 0, 0);
+            if (object.splitTime.isUTC) {
+                console.log(objectDate);
+                console.log(object.splitTime);
+                let startTime24 = parseInt(object.splitTime.startTime, 10);
+                if (object.splitTime.am_pm === "PM") {
+                    startTime24 += 12;
+                }
+                objectDate = new Date(Date.UTC(object.splitTime.year, months.indexOf(objectMonth), object.splitTime.dayOfTheMonth, startTime24, 0, 0, 0));
+                console.log(objectDate);
+            }
+            return objectDate >= start && objectDate < end;
+        })
+        console.log(newList);
+    }
+
+    function getWeekDates(week) {
+        let now = new Date();
+        let dayOfWeek = now.getDay(); 
+        let numDay = now.getDate();
+
+        let start = new Date(now); 
+        // start.setDate(numDay - dayOfWeek);
+        // let startingDay = ((week > 1) ? 7 - dayOfWeek : 0);
+        start.setDate(numDay  + ((week > 0) ? 7 - dayOfWeek : 0) + ((week > 0) ? ((week - 1) * 7) : 0));
+        start.setHours(0, 0, 0, 0);
+
+        let end = new Date(now);
+        end.setDate(numDay + 1 + (7 - dayOfWeek) + (week * 7));
+        end.setHours(0, 0, 0, 0);
+
+        return [start, end];
+    }
+
+
+</script>
