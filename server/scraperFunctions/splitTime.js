@@ -97,12 +97,12 @@ let splitTime = (detailDateTime) => {
             let str = detailDateTime.split(" ");
             const date = new Date();
 
-            dayOfTheWeek = 
+            dayOfTheWeek = "Monday";
             month = MONTH[MONTH_ABBR.indexOf(str[0])];
             dayOfTheMonth = str[1];
             year = date.getFullYear().toString();
             startTime = str[3];
-            am_pm = str[2];
+            am_pm = str[4];
         }
     } else {
         try {
