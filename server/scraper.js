@@ -200,12 +200,19 @@ pageForOriginalPost.on('console', consoleObj => console.log(consoleObj.text()));
 
         // description element - if some descriptions are hidden, scraper will click the "see more button" to expand the description
         const detailsElement = document.querySelectorAll(".discj3wi.ihqw7lf3 > .dwo3fsh8")[0].parentNode;
-        let seeMoreBtn;
-        if (detailsElement.lastChild.children[0].children[0].childNodes.length > 2) {
-          seeMoreBtn = detailsElement.lastChild.children[0].children[0].children[0];
-          await seeMoreBtn.click();
-          await new Promise(resolve => setTimeout(resolve, 4000));
-        }
+
+        document.querySelectorAll(".oajrlxb2.g5ia77u1.qu0x051f.esr5mh6w").forEach(async (seeMoreBtn) => {
+          if (seeMoreBtn.textContent == "See More") {
+            console.log("see more")
+            await seeMoreBtn.click();
+            await new Promise(resolve => setTimeout(resolve, 2000));
+          }
+        })
+        // if (detailsElement.lastChild.children[0].children[0].childNodes.length > 2) {
+        //   seeMoreBtn = detailsElement.lastChild.children[0].children[0].children[0];
+        //   await seeMoreBtn.click();
+        //   await new Promise(resolve => setTimeout(resolve, 4000));
+        // }
         let description = detailsElement.lastChild.children[0].children[0].innerText;
 
         // organization 

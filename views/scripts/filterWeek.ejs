@@ -22,10 +22,9 @@
             // new Date(year, month, day, hours, minutes, seconds, milliseconds)
             let objectMonth = object.splitTime.month.charAt(0).toUpperCase() + object.splitTime.month.slice(1).toLowerCase();
             let objectDate = new Date(object.splitTime.year, months.indexOf(objectMonth), object.splitTime.dayOfTheMonth, object.splitTime.startTime, 0, 0, 0);
-            if (object.splitTime.isUTC) {
-                // objectDate = modifyUTF(objectDate);
+            if (!object.splitTime.isUTC) {
                 console.log(objectDate);
-                let startTime24 = object.splitTime.startTime;
+                let startTime24 = parseInt(object.splitTime.startTime, 10);
                 if (object.splitTime.am_pm === "PM") {
                     startTime24 += 12;
                 }
@@ -55,22 +54,5 @@
         return [start, end];
     }
 
-    function modifyUTF(objectDate) {
-        
-        console.log(objectDate);
-
-        let localString = objectDate.toLocaleString('en-US', { timeZone: 'America/New_York', hour12: false });
-        // console.log(modifiedDateStr);
-        let modifiedDateStr = localString.split(", ");
-        let mmddyyyy = modifiedDateStr[0].split("/");
-        let hhmmss = modifiedDateStr[1].split(":");
-
-        let modifiedDate = new Date(mmddyyyy[2], mmddyyyy[0] - 1, mmddyyyy[1], hhmmss[0], 0, 0, 0);
-        console.log(mmddyyyy);
-        console.log(hhmmss);
-        console.log("sdflsjdlkfs")
-        console.log(modifiedDate);
-        return modifiedDate;
-    }
 
 </script>
