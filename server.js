@@ -5,7 +5,7 @@ const path = require("path");
 const mongoose = require("mongoose");
 const Subscription = require("./server/models/subscription");
 
-let { scrapEvents } = require("./server/scraper.js");
+let { scrapEvents, getScraping, getScrapeProgress } = require("./server/scraper.js");
 let { removeDuplicates } = require("./server/removeDuplicates.js");
 
 let listOfEvents = [];
@@ -114,8 +114,12 @@ app.get("/admin", async (req, res) => {
   Subscription.find().sort({ createdAt: 1 })
     .then((result) => {
       // console.log(result);
+      let scraping = getScraping();
+      let scrapeProgress = getScrapeProgress();
       res.render("admin", {
         result,
+        scraping,
+        scrapeProgress,
       });
     })
     .catch((err) => {
@@ -174,16 +178,26 @@ app.post("/add", (req, res) => {
 
 });
 
-app.post("/scrape", (req, res) => {
-  const { name } = req.body;
-  if (name === "scrape") {
+app.post("/admin/scrape", (req, res) => {
+  let scraping = getScraping();
+  if (scraping) return;
+
+  if (req.body.scrapeBtnVal === "scrape") {
+    // console.log(req.body);
     Subscription.find().then(async (result) => {
       listOfEvents = await scrapEvents(result);
     })
   } 
-  res.redirect('/admin');
 })
 
+app.post("/admin/progress", (req, res) => {
+  // console.log(req.body);=
+  let scraping = getScraping();
+  let scrapeProgress = getScrapeProgress();
+  res.send({ scrapeProgress, scraping })
+  
+  // res.redirect('/admin');
+})
 
 // listen to port 3000 and start initial scraping immediately
 // app.listen(process.env.PORT || 3000, async () => {
@@ -201,18 +215,20 @@ cron.schedule("0 0 0 * * *", async () => {
   console.log("running a task every day at 12:00 AM");
   Subscription.find().then(async (result) => {
     listOfEvents = await scrapEvents(result);
+    console.log(listOfEvents);
+    console.log(listOfEvents.length);
   })
   // listOfEvents = await scrapEvents(scrapingList);
-  console.log(listOfEvents);
-  console.log(listOfEvents.length);
 });
 
-// cron.schedule("*/2 * * * *", async () => {
-//   console.log("running a task every 2 minutes");
-//   listOfEvents = await scrapEvents(scrapingList);
-//   console.log(listOfEvents);
+// Subscription.find().then(async (result) => {
+//   listOfEvents = await scrapEvents(result);
+//   listOfEvents = removeDuplicates(listOfEvents);
+//   // console.log(listOfEvents);
 //   console.log(listOfEvents.length);
-// });
+// })
+
+
 
 // cron.schedule(
 //   "0 1 * * *",
@@ -230,7 +246,6 @@ cron.schedule("0 0 0 * * *", async () => {
 
 // prevent heroku sleep
 const https = require('https');
-const { ConsoleMessage } = require("puppeteer");
 setInterval(function () {
   https.get("https://cs410-web-scraper.herokuapp.com", (res) => {
     console.log("ping every 20 min. to prevent heroku sleep")

@@ -4,29 +4,37 @@ const { splitTime } = require("./scraperFunctions/splitTime");
 
 let scrapingList = [];
 let errorMessages = [];
+let scrapeProgress = 0;
+let scrapeIndex = 0;
+let scraping = false;
 
 let scrapEvents = async (list) => {
+  if (scraping === true) return;
+  scraping = true;
+  scrapeProgress = 0;
+  scrapeIndex = 0;
+
   scrapingList = list;
   try {
     console.log("running scapEvents function");
 
     const browser = await puppeteer.launch({
-      // headless: false,
-      headless: true,
+      headless: false,
+      // headless: true,
       args: [
         "--no-sandbox",
         // '--disable-setuid-sandbox',
       ],
-      defaultViewport: {
-        width: 1920,
-        height: 1080,
-      }
+      // defaultViewport: {
+      //   width: 1920,
+      //   height: 1080,
+      // }
     });
     const page = await browser.newPage();
 
-    const version = await page.browser().version();
-    console.log("browser version:---------------------------------------------------------------------------")
-    console.log("browser version: " + version)
+    // const version = await page.browser().version();
+    // console.log("browser version:---------------------------------------------------------------------------")
+    // console.log("browser version: " + version)
 
     // Login
     await loginFacebook(page);
@@ -36,9 +44,11 @@ let scrapEvents = async (list) => {
     await browser.close();
 
     console.log("completed scapEvents function");
+    scraping = false;
     return scrapingResults;
   } catch (error) {
-    console.log(error)
+    console.log("Error running scrapEvents function: " + error);
+    scraping = false;
     return [];
   }
 };
@@ -49,8 +59,8 @@ async function loginFacebook(page) {
     waitUntil: "networkidle0",
   });
   // username and password
-  await page.type("#email", process.env.EMAIL, { delay: 30 });
-  await page.type("#pass", process.env.PASSWORD, { delay: 30 });
+  await page.type("#email", process.env.EMAIL3, { delay: 30 });
+  await page.type("#pass", process.env.PASSWORD3, { delay: 30 });
   await page.click("#loginbutton");
 
   // Wait for navigation to finish
@@ -63,6 +73,7 @@ async function scrapeFacebookEvents(browser, page) {
 
   // Scrape facebook groups one by one from scrapingList
   for (let i = 0; i < scrapingList.length; i++) {
+    // See if url exist
     try {
       await page.goto(scrapingList[i].groupURL + "/events", {
         waitUntil: "networkidle0"
@@ -149,6 +160,11 @@ async function scrapeFacebookEvents(browser, page) {
 
     let resultsFromOneGroup = await scrapeIndividaulEvents(basicInfosFromOneGroup, browser);
     scrapingResults = scrapingResults.concat(resultsFromOneGroup);
+
+    // Progress bar update
+    scrapeProgress = Math.floor(((i + 1) / scrapingList.length) * 100);
+    scrapeIndex = i + 1;
+    // console.log("progress: " + scrapeProgress);
   } // End for loop for scrapingList
   return scrapingResults;
 }
@@ -173,7 +189,7 @@ pageForOriginalPost.on('console', consoleObj => console.log(consoleObj.text()));
 // for test only ------------------------------------
 
       // screenshot
-      screenshot = await pageForOriginalPost.screenshot({ encoding: 'base64' });
+      // screenshot = await pageForOriginalPost.screenshot({ encoding: 'base64' });
 
       // Scrape - ineract with the page directly in the page DOM environment
       await pageForOriginalPost.exposeFunction("splitTime", splitTime);
@@ -231,7 +247,7 @@ pageForOriginalPost.on('console', consoleObj => console.log(consoleObj.text()));
             }
           })
         } catch (e) {
-          console.log(e);
+          console.log("Catch Error (ticket): " + e);
         }
 
 
@@ -246,14 +262,28 @@ pageForOriginalPost.on('console', consoleObj => console.log(consoleObj.text()));
     // Combine "basic" data from group page and "additional" data from original post of the event
     let basicInfoOfCurrEvent = basicInfosFromOneGroup[i];
     let moreInfoOfCurrEvent = resultsFromOneEvent;
-    let infoOfCurrEvent = {...basicInfoOfCurrEvent, ...moreInfoOfCurrEvent, screenshot }
+    let infoOfCurrEvent = {...basicInfoOfCurrEvent, ...moreInfoOfCurrEvent }
+    // let infoOfCurrEvent = {...basicInfoOfCurrEvent, ...moreInfoOfCurrEvent, screenshot }
     resultsFromOneGroup.push(infoOfCurrEvent);
+    
+    // Progress bar update
+    let scrapeProgressGroup = (scrapeIndex / scrapingList.length) * 100 
+    let scrapeProgressEvent = (((i + 1) / basicInfosFromOneGroup.length) * 100) * (1 / scrapingList.length);
+    scrapeProgress = Math.floor(scrapeProgressGroup + scrapeProgressEvent);
   } // end for loop - one by one for each event from current group.
   return resultsFromOneGroup;
 }
 
+function getScrapeProgress() {
+  return scrapeProgress;
+}
+
+function getScraping() {
+  return scraping;
+}
+
 // export functions
-module.exports = { scrapEvents };
+module.exports = { scrapEvents, getScraping, getScrapeProgress };
 
 // for testing only, print out any console.log from page.evaluate
 // page.on('console', msg => {
