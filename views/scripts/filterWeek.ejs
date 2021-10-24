@@ -23,8 +23,9 @@
             let objectMonth = object.splitTime.month.charAt(0).toUpperCase() + object.splitTime.month.slice(1).toLowerCase();
             let objectDate = new Date(object.splitTime.year, months.indexOf(objectMonth), object.splitTime.dayOfTheMonth, object.splitTime.startTime, 0, 0, 0);
             console.log(objectDate);
+            console.log(object.splitTime);
             console.log(object.splitTime.isUTC);
-            if (object.splitTime.isUTC) {
+            if (!object.splitTime.isUTC) {
                 objectDate = modifyUTF(objectDate);
             }
             return objectDate >= start && objectDate < end;
@@ -57,7 +58,9 @@
         let mmddyyyy = modifiedDateStr[0].split("/");
         let hhmmss = modifiedDateStr[1].split(":");
 
-        let modifiedDate = new Date(mmddyyyy[2], mmddyyyy[0], mmddyyyy[0], hhmmss[0], 0, 0, 0);
+        let modifiedDate = new Date(mmddyyyy[2], mmddyyyy[0] - 1, mmddyyyy[1], hhmmss[0], 0, 0, 0);
+        console.log(mmddyyyy);
+        console.log(hhmmss);
         console.log("sdflsjdlkfs")
         console.log(modifiedDate);
         return modifiedDate;

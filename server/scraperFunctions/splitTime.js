@@ -124,6 +124,7 @@ let splitTime = (detailDateTime) => {
         isUTC = false;
     }
     console.log("UTC--------------------------------------------------")
+    console.log(detailDateTime);
     console.log(isUTC);
     let splitTime = { dayOfTheWeek, month, dayOfTheMonth, year, startTime, am_pm, isUTC };
     return splitTime;
