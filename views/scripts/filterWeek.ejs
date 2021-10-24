@@ -22,7 +22,8 @@
             // new Date(year, month, day, hours, minutes, seconds, milliseconds)
             let objectMonth = object.splitTime.month.charAt(0).toUpperCase() + object.splitTime.month.slice(1).toLowerCase();
             let objectDate = new Date(object.splitTime.year, months.indexOf(objectMonth), object.splitTime.dayOfTheMonth, object.splitTime.startTime, 0, 0, 0);
-            // console.log(objectDate);
+            console.log(objectDate);
+            console.log(object.splitTime.isUTC);
             if (object.splitTime.isUTC) {
                 objectDate = modifyUTF(objectDate);
             }
@@ -57,8 +58,8 @@
         let hhmmss = modifiedDateStr[1].split(":");
 
         let modifiedDate = new Date(mmddyyyy[2], mmddyyyy[0], mmddyyyy[0], hhmmss[0], 0, 0, 0);
-        // console.log("sdflsjdlkfs")
-        // console.log(modifiedDate);
+        console.log("sdflsjdlkfs")
+        console.log(modifiedDate);
         return modifiedDate;
     }
 
