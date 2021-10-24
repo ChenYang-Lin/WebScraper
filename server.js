@@ -200,17 +200,6 @@ app.post("/admin/progress", (req, res) => {
   // res.redirect('/admin');
 })
 
-// listen to port 3000 and start initial scraping immediately
-// app.listen(process.env.PORT || 3000, async () => {
-//   console.log("app is running on port 3000");
-//   if (listOfEvents.length === 0) {
-//     // listOfEvents = await scrapEvents(scrapingList);
-//     // listOfEvents = removeDuplicates(listOfEvents);
-//     // console.log(listOfEvents);
-//     // console.log(listOfEvents.length);
-//   }
-// });
-
 // Update list of events repeatly by doing new scrapes
 cron.schedule("0 0 0 * * *", async () => {
   console.log("running a task every day at 12:00 AM");
