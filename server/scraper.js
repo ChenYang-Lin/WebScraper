@@ -25,10 +25,10 @@ let scrapEvents = async (list) => {
         "--no-sandbox",
         // '--disable-setuid-sandbox',
       ],
-      // defaultViewport: {
-      //   width: 1920,
-      //   height: 1080,
-      // }
+      defaultViewport: {
+        width: 1920,
+        height: 1080,
+      }
     });
     const page = await browser.newPage();
 
@@ -59,8 +59,8 @@ async function loginFacebook(page) {
     waitUntil: "networkidle0",
   });
   // username and password
-  await page.type("#email", process.env.EMAIL4, { delay: 30 });
-  await page.type("#pass", process.env.PASSWORD4, { delay: 30 });
+  await page.type("#email", process.env.EMAIL, { delay: 30 });
+  await page.type("#pass", process.env.PASSWORD, { delay: 30 });
   await page.click("#loginbutton");
 
   // Wait for navigation to finish
@@ -210,16 +210,18 @@ pageForOriginalPost.on('console', consoleObj => console.log(consoleObj.text()));
         //   }
         // })
         let seeMoreBtn;
-        if (detailsElement.lastChild.children[0].children[0].childNodes.length > 2) {
-          try {
-            seeMoreBtn = detailsElement.lastChild.children[0].children[0].children[0].children[0];
-            await seeMoreBtn.click();
-            await new Promise(resolve => setTimeout(resolve, 4000));
-          } catch (e) {
-            console.log(e);
-          }
-
+        try {
+          seeMoreBtn = detailsElement.lastChild.children[0].children[0].children[0].children[0];
+          // await seeMoreBtn.click();
+          document.querySelectorAll(".discj3wi.ihqw7lf3 > .dwo3fsh8")[0].parentNode.lastChild.children[0].children[0].children[0].children[0].click();
+          await new Promise(resolve => setTimeout(resolve, 9000));
+        } catch (e) {
+          console.log(e);
         }
+
+        
+        // await new Promise(resolve => setTimeout(resolve, 14000));
+
         let description = detailsElement.lastChild.children[0].children[0].innerText;
 
         // organization 
