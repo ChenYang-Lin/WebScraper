@@ -24,6 +24,7 @@
             let objectDate = new Date(object.splitTime.year, months.indexOf(objectMonth), object.splitTime.dayOfTheMonth, object.splitTime.startTime, 0, 0, 0);
             if (object.splitTime.isUTC) {
                 console.log(objectDate);
+                console.log(object.splitTime);
                 let startTime24 = parseInt(object.splitTime.startTime, 10);
                 if (object.splitTime.am_pm === "PM") {
                     startTime24 += 12;
