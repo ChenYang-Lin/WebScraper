@@ -1,5 +1,36 @@
 <script>
 
+    let months = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December'
+    ];
+
+    function filterCurrentWeek(listOfEvents, week){
+        let [start, end] = getWeekDates(week);
+
+        let newList = listOfEvents.filter((object) => {
+            // new Date(year, month, day, hours, minutes, seconds, milliseconds)
+            let objectMonth = object.splitTime.month.charAt(0).toUpperCase() + object.splitTime.month.slice(1).toLowerCase();
+            let objectDate = new Date(object.splitTime.year, months.indexOf(objectMonth), object.splitTime.dayOfTheMonth, object.splitTime.startTime, 0, 0, 0);
+            if (object.splitTime.isUTF === true) {
+                objectDate = modifyUTF(objectDate);
+            }
+            console.log(objectDate);
+            return objectDate >= start && objectDate < end;
+        })
+        console.log(newList);
+    }
+
     function getWeekDates(week) {
         let now = new Date();
         let dayOfWeek = now.getDay(); 
@@ -18,31 +49,15 @@
         return [start, end];
     }
 
-    function filterCurrentWeek(listOfEvents, week){
-        let [start, end] = getWeekDates(week);
+    function modifyUTF(objectDate) {
+        let localString = objectDate.toLocaleString('en-US', { timeZone: 'America/New_York', hour12: false });
+        // console.log(modifiedDateStr);
+        let modifiedDateStr = localString.split(", ");
+        let mmddyyyy = modifiedDateStr[0].split("/");
+        let hhmmss = modifiedDateStr[1].split(":");
 
-        let newList = listOfEvents.filter((object) => {
-            // new Date(year, month, day, hours, minutes, seconds, milliseconds)
-            let objectMonth = object.splitTime.month.charAt(0).toUpperCase() + object.splitTime.month.slice(1).toLowerCase();
-            let objectDate = new Date(object.splitTime.year, months.indexOf(objectMonth), object.splitTime.dayOfTheMonth, object.splitTime.startTime, 0, 0, 0);
-            console.log(objectDate);
-            return objectDate >= start && objectDate < end;
-        })
-        console.log(newList);
+        let modifiedDate = new Date(mmddyyyy[2], mmddyyyy[0], mmddyyyy[0], hhmmss[0], 0, 0, 0);
+        return modifiedDate;
     }
 
-    let months = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December'
-    ];
 </script>

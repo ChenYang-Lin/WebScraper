@@ -19,8 +19,8 @@ let scrapEvents = async (list) => {
     console.log("running scapEvents function");
 
     const browser = await puppeteer.launch({
-      // headless: false,
-      headless: true,
+      headless: false,
+      // headless: true,
       args: [
         "--no-sandbox",
         // '--disable-setuid-sandbox',
@@ -59,8 +59,8 @@ async function loginFacebook(page) {
     waitUntil: "networkidle0",
   });
   // username and password
-  await page.type("#email", process.env.EMAIL3, { delay: 30 });
-  await page.type("#pass", process.env.PASSWORD3, { delay: 30 });
+  await page.type("#email", process.env.EMAIL, { delay: 30 });
+  await page.type("#pass", process.env.PASSWORD, { delay: 30 });
   await page.click("#loginbutton");
 
   // Wait for navigation to finish

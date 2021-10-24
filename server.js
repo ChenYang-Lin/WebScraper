@@ -45,6 +45,7 @@ app.get('/init-subscription', (req, res) => {
         console.log(err);
       })
   }
+  res.redirect('/admin');
 })
 // app.get('/add-subscription', (req, res) => {
 //   const subscription = new Subscription({

@@ -95,6 +95,9 @@
             scrapeBtn.css("opacity", "0.2");
             scrapeBtn.val("scraping...");
           }
+        } else {
+          scrapeProgressBar.css("width", '100%');
+          scrapeProgressBar.val(100);
         }
       })
 

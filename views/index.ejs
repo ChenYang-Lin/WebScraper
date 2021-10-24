@@ -68,8 +68,11 @@
                 </h3>
                 <!-- Location -->
                 <h4><%= listOfEvents[i].address %></h4>
-                <!-- <div class="d-none d-lg-block"> -->
-                <div class="d-block">
+                <!-- Extra Info -->
+                <a class="button" onclick="$('#extra-info').toggle();">
+                  <i class="fa fa-level-down"></i>
+                </a>
+                <div id="extra-info">
                 <!-- Organization -->
                   <h5 class="organization-name">
                     Organization: 
@@ -83,6 +86,7 @@
                   <!-- Description -->
                   <p>Description: <%= listOfEvents[i].description %></p>
                 </div>
+                <!-- End Extra Info -->
               </div>
             </div>
           </div>
