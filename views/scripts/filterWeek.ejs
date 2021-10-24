@@ -25,7 +25,11 @@
             if (object.splitTime.isUTC) {
                 // objectDate = modifyUTF(objectDate);
                 console.log(objectDate);
-                objectDate = new Date(Date.UTC(object.splitTime.year, months.indexOf(objectMonth), object.splitTime.dayOfTheMonth, object.splitTime.startTime, 0, 0, 0));
+                let startTime24 = object.splitTime.startTime;
+                if (object.splitTime.am_pm === "PM") {
+                    startTime24 += 12;
+                }
+                objectDate = new Date(Date.UTC(object.splitTime.year, months.indexOf(objectMonth), object.splitTime.dayOfTheMonth, startTime24, 0, 0, 0));
                 console.log(objectDate);
             }
             return objectDate >= start && objectDate < end;
