@@ -187,6 +187,7 @@ app.post("/admin/scrape", (req, res) => {
     // console.log(req.body);
     Subscription.find().then(async (result) => {
       listOfEvents = await scrapEvents(result);
+      listOfEvents = removeDuplicates(listOfEvents);
     })
   } 
 })
@@ -205,6 +206,7 @@ cron.schedule("0 0 0 * * *", async () => {
   console.log("running a task every day at 12:00 AM");
   Subscription.find().then(async (result) => {
     listOfEvents = await scrapEvents(result);
+    listOfEvents = removeDuplicates(listOfEvents);
     console.log(listOfEvents);
     console.log(listOfEvents.length);
   })

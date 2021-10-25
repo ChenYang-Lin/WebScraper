@@ -19,8 +19,8 @@ let scrapEvents = async (list) => {
     console.log("running scapEvents function");
 
     const browser = await puppeteer.launch({
-      // headless: false,
-      headless: true,
+      headless: false,
+      // headless: true,
       args: [
         "--no-sandbox",
         // '--disable-setuid-sandbox',
@@ -209,12 +209,14 @@ pageForOriginalPost.on('console', consoleObj => console.log(consoleObj.text()));
         //     await new Promise(resolve => setTimeout(resolve, 2000));
         //   }
         // })
-        let seeMoreBtn;
+        // See more button for description
         try {
-          seeMoreBtn = detailsElement.lastChild.children[0].children[0].children[0].children[0];
-          // await seeMoreBtn.click();
-          document.querySelectorAll(".discj3wi.ihqw7lf3 > .dwo3fsh8")[0].parentNode.lastChild.children[0].children[0].children[0].children[0].click();
-          await new Promise(resolve => setTimeout(resolve, 9000));
+          if (document.querySelectorAll(".discj3wi.ihqw7lf3 > .dwo3fsh8")[0].parentNode.lastChild.children[0].children[0].children.length > 1) {
+            document.querySelectorAll(".discj3wi.ihqw7lf3 > .dwo3fsh8")[0].parentNode.lastChild.children[0].children[0].children[1].children[0].click();
+          } else {
+            document.querySelectorAll(".discj3wi.ihqw7lf3 > .dwo3fsh8")[0].parentNode.lastChild.children[0].children[0].children[0].children[0].click();
+          }
+          await new Promise(resolve => setTimeout(resolve, 4000));
         } catch (e) {
           console.log(e);
         }
@@ -255,11 +257,15 @@ pageForOriginalPost.on('console', consoleObj => console.log(consoleObj.text()));
 
         // Ticket
         let ticket = false;
+        let ticketLink;
         try {
           // document.querySelectorAll(".d2edcug0.hpfvmrgz.qv66sw1b.c1et5uql.lr9zc1uh.a8c37x1j.keod5gw0.nxhoafnm.aigsh9s9.ns63r2gh.fe6kdd0r.mau55g9w.c8b282yb.iv3no6db.o3w64lxj.b2s5l15y.hnhda86s.oo9gr5id.hzawbc8m").forEach((element) => {
           document.querySelectorAll(".d2edcug0.hpfvmrgz").forEach((element) => {
             if (element.textContent == "Tickets") {
               ticket = true;
+              // let ticketDiv = element.parentNode.parentNode.parentNode.parentNode.parentNode;
+              // ticketLink = ticketDiv.children[1].children[0].getAttribute("href");
+              // console.log(ticketLink);
             }
           })
         } catch (e) {
@@ -271,7 +277,7 @@ pageForOriginalPost.on('console', consoleObj => console.log(consoleObj.text()));
         splitTime = await splitTime(detailDateTime);
 
 
-        return { detailDateTime, address, description, organizationInfo, splitTime, mapUrl, ticket };
+        return { detailDateTime, address, description, organizationInfo, splitTime, mapUrl, ticket, ticketLink };
       });
       await pageForOriginalPost.close();
     }
