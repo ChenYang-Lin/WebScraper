@@ -77,8 +77,15 @@ async function scrapeFacebookEvents(browser, page) {
   // Scrape facebook groups one by one from scrapingList
   for (let i = 0; i < scrapingList.length; i++) {
     // See if url exist
+    let eventsURL;
+    if (scrapingList[i].groupURL.slice(-1) === "/") {
+      eventsURL = "events";
+    } else {
+      eventsURL = "/events";
+    }
+
     try {
-      await page.goto(scrapingList[i].groupURL + "/events", {
+      await page.goto(scrapingList[i].groupURL + eventsURL, {
         waitUntil: "networkidle0",
         // Remove the timeout
         timeout: 0,

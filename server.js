@@ -92,7 +92,7 @@ mongoose.connect(dbURI)
         Subscription.find().then(async (result) => {
           listOfEvents = await scrapEvents(result);
           listOfEvents = removeDuplicates(listOfEvents);
-          // console.log(listOfEvents);
+          console.log(listOfEvents);
           console.log(listOfEvents.length);
         })
         // listOfEvents = await scrapEvents(scrapingList);
