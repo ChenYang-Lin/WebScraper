@@ -25,16 +25,19 @@ let scrapEvents = async (list) => {
         "--no-sandbox",
         // '--disable-setuid-sandbox',
       ],
-      defaultViewport: {
-        width: 1920,
-        height: 1080,
-      }
+      // defaultViewport: {
+      //   width: 1920,
+      //   height: 1080,
+      // }
     });
     const page = await browser.newPage();
 
     // const version = await page.browser().version();
     // console.log("browser version:---------------------------------------------------------------------------")
     // console.log("browser version: " + version)
+
+    // Configure the navigation timeout
+    await page.setDefaultNavigationTimeout(0);
 
     // Login
     await loginFacebook(page);
@@ -76,13 +79,18 @@ async function scrapeFacebookEvents(browser, page) {
     // See if url exist
     try {
       await page.goto(scrapingList[i].groupURL + "/events", {
-        waitUntil: "networkidle0"
+        waitUntil: "networkidle0",
+        // Remove the timeout
+        timeout: 0,
       });
     } catch (e) {
       console.log("Error: " + scrapingList[i].groupURL);
       console.log(e);
       continue;
     }
+// for test only ------------------------------------
+page.on('console', consoleObj => console.log(consoleObj.text()));
+// for test only ------------------------------------
 
     let basicInfosFromOneGroup;
     // Ineract with the page directly in the page DOM environment
@@ -99,12 +107,23 @@ async function scrapeFacebookEvents(browser, page) {
             await new Promise(resolve => setTimeout(resolve, 3000));
         }
         // if there is no upcoming events, just return
-        let numberOfEvents;
-        if (document.querySelectorAll('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > .gm7ombtx').length > 0 || document.querySelectorAll('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > .gh3ezpug').length > 0){
-          return basicResults;
-        } else {        
-          numberOfEvents = UpcomingEventsElement.children.length;
+        let text;
+        try {
+          text = document.querySelectorAll('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > .gm7ombtx')[0].parentNode.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].textContent;
+          if (text !== "Past Events") {
+            return basicResults;
+          }
+        } catch (e) {
+          // do nothing
         }
+        let numberOfEvents;
+        if (!text) {
+          if (document.querySelectorAll('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > .gm7ombtx').length > 0 || document.querySelectorAll('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > .gh3ezpug').length > 0){
+            return basicResults;
+          }
+        }
+        numberOfEvents = UpcomingEventsElement.children.length;
+        
 
         // scrape events one by one from current group event list.
         for (let j = 1; j < numberOfEvents; j++) {  
@@ -113,10 +132,18 @@ async function scrapeFacebookEvents(browser, page) {
           let linkToOriginalPost, image, dateTime, title;
           // The sturcture of Facebook events pages are slightly different, This if statement helps build more consistency.
           if (event.childElementCount < 2) {
-            linkToOriginalPost = event.children[0].children[0].children[0].getAttribute("href");
-            image = event.children[0].children[0].children[0].children[0].style.backgroundImage.replace("url(\"", "").replace("\")", "");
-            dateTime = event.children[0].children[1].children[0].children[0].children[0].innerText;
-            title = event.children[0].children[1].children[0].children[1].children[0].children[0].children[0].children[0].innerText;
+            // html structure different
+            if (event.children[0].children[0].href !== undefined) {
+              linkToOriginalPost = event.children[0].children[0].getAttribute("href");
+              image = event.children[0].children[0].children[0].children[0].src;
+              dateTime = event.children[1].children[0].children[0].children[0].children[0].children[0].innerText;
+              title = event.children[1].children[0].children[0].children[0].children[0].children[1].innerText
+            } else {
+              linkToOriginalPost = event.children[0].children[0].children[0].getAttribute("href");
+              image = event.children[0].children[0].children[0].children[0].style.backgroundImage.replace("url(\"", "").replace("\")", "");
+              dateTime = event.children[0].children[1].children[0].children[0].children[0].innerText;
+              title = event.children[0].children[1].children[0].children[1].children[0].children[0].children[0].children[0].innerText;
+            }
           } else { // event.childElementCount >= 2
             // linkToOriginalPost
             try {
@@ -152,9 +179,9 @@ async function scrapeFacebookEvents(browser, page) {
         return basicResults;
       })
     } catch (e) {
+      console.log("Evaluate Error: " + scrapingList[i].groupURL);
+      console.log(e);
       continue;
-      // console.log("Evaluate Error: " + scrapingList[i].groupURL);
-      // console.log(error);
     }
      // End page.evaluate
 

@@ -60,7 +60,21 @@
           </div>
         </div>
         <!-- Change Display -->
-        <div class="col-4 text-white"><h3>Display: </h3></div>
+        <div class="col-4 text-white">
+          <div class="container">
+            <div class="row">
+              <h3 class="col-12">Display: </h3>
+            </div>
+            <form class="row" id="display-section">
+              <!-- Rounded switch -->
+              <label class="switch mx-3">
+                  <input type="checkbox">
+                  <span class="slider round"></span>
+              </label>
+            </form>
+          </div>
+        </div>
+        <!-- End Change Display Section -->
       </div>
     </div>
 
@@ -151,6 +165,15 @@
         let extraInfo = document.querySelectorAll(".extra-info");
         $(extraInfo[index]).toggle();
       }
+
+      // Display 
+      let isToggling = false;
+      $("#display-section").change(() => {
+        if (isToggling) return;
+        isToggling = true;
+        // setTimeout()
+        console.log("toggled")
+      })
 
       // Filter
       $("#filter-section").change(() => {

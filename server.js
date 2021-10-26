@@ -83,8 +83,6 @@ app.get('/init-subscription', (req, res) => {
 
 // MongoDB database
 // Connect to MondoDB
-let subscriptions = Subscription.find().then((result) => {
-    })
 const dbURI = `mongodb+srv://ChenYang-Lin:${process.env.MongoDB_User_Password}@cluster0.cts13.mongodb.net/${process.env.MongoDB_myFirstDatabase}?retryWrites=true&w=majority`;
 mongoose.connect(dbURI)
   .then((result) => {
@@ -102,6 +100,22 @@ mongoose.connect(dbURI)
     }) // End app.listen
   })
   .catch((err) => console.log(err));
+
+// let testList = [
+//   {
+//     groupURL: "https://www.facebook.com/TipThePainScale",
+//   }
+// ]
+// app.listen(process.env.PORT || 3000, async () => {
+//   console.log("app is running on port 3000");
+//   if (listOfEvents.length === 0) {
+//     listOfEvents = await scrapEvents(testList);
+//     listOfEvents = removeDuplicates(listOfEvents);
+//     // console.log(listOfEvents);
+//     console.log(listOfEvents.length);
+//     // listOfEvents = await scrapEvents(scrapingList);
+//   }
+// }) // End app.listen
 
 
 // Routes

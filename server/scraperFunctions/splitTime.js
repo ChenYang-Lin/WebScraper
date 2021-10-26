@@ -88,9 +88,10 @@ let splitTime = (detailDateTime) => {
             dayOfTheMonth = date.getDate().toString();
             year = date.getFullYear().toString();
 
-            let time = detailDateTime.split("AT")[1].split(" ");
-            startTime = time[1].toString();
-            am_pm = time[2].toString();
+            let time = detailDateTime.split(" AT ")[1].split(" ");
+            startTime = time[0].toString();
+            // console.log(detailDateTime.split(" AT ")[1]);
+            am_pm = time[1].toString();
         }
         // if first word is abbr month e.g. JAN
         if (MONTH_ABBR.indexOf(word) > -1) {
@@ -123,9 +124,9 @@ let splitTime = (detailDateTime) => {
     } else {
         isUTC = false;
     }
-    console.log("UTC--------------------------------------------------")
-    console.log(detailDateTime);
-    console.log(isUTC);
+    // console.log("UTC--------------------------------------------------")
+    // console.log(detailDateTime);
+    // console.log(isUTC);
     let splitTime = { dayOfTheWeek, month, dayOfTheMonth, year, startTime, am_pm, isUTC };
     return splitTime;
 }
