@@ -7,6 +7,7 @@ const Subscription = require("./server/models/subscription");
 
 let { scrapEvents, getScraping, getScrapeProgress } = require("./server/scraper.js");
 let { removeDuplicates } = require("./server/removeDuplicates.js");
+let { chronologicalOrder } = require("./server/chronologicalOrder.js");
 
 let listOfEvents = [];
 let scrapingList = [
@@ -92,6 +93,7 @@ mongoose.connect(dbURI)
         Subscription.find().then(async (result) => {
           listOfEvents = await scrapEvents(result);
           listOfEvents = removeDuplicates(listOfEvents);
+          // listOfEvents = chronologicalOrder(listOfEvents);
           console.log(listOfEvents);
           console.log(listOfEvents.length);
         })
@@ -101,9 +103,11 @@ mongoose.connect(dbURI)
   })
   .catch((err) => console.log(err));
 
+  
 // let testList = [
 //   {
 //     groupURL: "https://www.facebook.com/TipThePainScale",
+//     groupURL: "https://www.facebook.com/CCAR4Recovery",
 //   }
 // ]
 // app.listen(process.env.PORT || 3000, async () => {
@@ -111,6 +115,7 @@ mongoose.connect(dbURI)
 //   if (listOfEvents.length === 0) {
 //     listOfEvents = await scrapEvents(testList);
 //     listOfEvents = removeDuplicates(listOfEvents);
+//     listOfEvents = chronologicalOrder(listOfEvents);
 //     // console.log(listOfEvents);
 //     console.log(listOfEvents.length);
 //     // listOfEvents = await scrapEvents(scrapingList);
@@ -216,8 +221,11 @@ app.post("/admin/progress", (req, res) => {
 })
 
 // Update list of events repeatly by doing new scrapes
-cron.schedule("0 0 0 * * *", async () => {
-  console.log("running a task every day at 12:00 AM");
+let second = Math.floor(Math.random() * (59 - 0 + 1)) + 0;
+let minute = Math.floor(Math.random() * (59 - 0 + 1)) + 0;
+let hour = Math.floor(Math.random() * (3 - 1 + 1)) + 1;
+cron.schedule(`${second} ${minute} ${hour} * * *`, async () => {
+  console.log("running a task every day between 1 - 3 AM");
   Subscription.find().then(async (result) => {
     listOfEvents = await scrapEvents(result);
     listOfEvents = removeDuplicates(listOfEvents);

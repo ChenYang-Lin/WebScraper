@@ -62,8 +62,8 @@ async function loginFacebook(page) {
     waitUntil: "networkidle0",
   });
   // username and password
-  await page.type("#email", process.env.EMAIL, { delay: 30 });
-  await page.type("#pass", process.env.PASSWORD, { delay: 30 });
+  await page.type("#email", process.env.EMAIL6, { delay: 30 });
+  await page.type("#pass", process.env.PASSWORD6, { delay: 30 });
   await page.click("#loginbutton");
 
   // Wait for navigation to finish
@@ -310,8 +310,34 @@ pageForOriginalPost.on('console', consoleObj => console.log(consoleObj.text()));
         // Split detailDateTime
         splitTime = await splitTime(detailDateTime);
 
+        // create Date object
+        let months = [
+          'January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July',
+          'August',
+          'September',
+          'October',
+          'November',
+          'December'
+        ];
+        let objectMonth = splitTime.month.charAt(0).toUpperCase() + splitTime.month.slice(1).toLowerCase();
+        let startTime24 = parseInt(splitTime.startTime);
+        if (splitTime.am_pm === "PM") {
+            startTime24 += 12;
+        }
+        let objectDate = new Date(splitTime.year, months.indexOf(objectMonth), splitTime.dayOfTheMonth, startTime24, 0, 0, 0);
+        if (splitTime.isUTC) {
+            objectDate = new Date(Date.UTC(splitTime.year, months.indexOf(objectMonth), splitTime.dayOfTheMonth, startTime24, 0, 0, 0));
+        }
+        console.log("objectDate: ")
+        console.log(objectDate);
 
-        return { detailDateTime, address, description, organizationInfo, splitTime, mapUrl, ticket, ticketLink };
+        return { detailDateTime, address, description, organizationInfo, splitTime, mapUrl, ticket, ticketLink, objectDate };
       });
       await pageForOriginalPost.close();
     }
