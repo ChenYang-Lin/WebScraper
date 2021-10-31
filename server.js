@@ -3,7 +3,8 @@ const app = express();
 const cron = require("node-cron");
 const path = require("path");
 const mongoose = require("mongoose");
-const Subscription = require("./server/models/subscription");
+const Subscription = require("./server/models/subscription"); 
+const Event = require("./server/models/event"); 
 
 let { scrapEvents, getScraping, getScrapeProgress } = require("./server/scraper.js");
 let { removeDuplicates } = require("./server/removeDuplicates.js");
@@ -84,44 +85,91 @@ app.get('/init-subscription', (req, res) => {
 
 // MongoDB database
 // Connect to MondoDB
+// const dbURI = `mongodb+srv://ChenYang-Lin:${process.env.MongoDB_User_Password}@cluster0.cts13.mongodb.net/${process.env.MongoDB_myFirstDatabase}?retryWrites=true&w=majority`;
+// mongoose.connect(dbURI)
+//   .then((result) => {
+//     app.listen(process.env.PORT || 3000, async () => {
+//       console.log("app is running on port 3000");
+//       if (listOfEvents.length === 0) {
+//         Subscription.find().then(async (result) => {
+//           listOfEvents = await scrapEvents(result);
+//           listOfEvents = removeDuplicates(listOfEvents);
+//           listOfEvents = chronologicalOrder(listOfEvents);
+//           await eventDB(listOfEvents);
+//           console.log(listOfEvents);
+//           console.log(listOfEvents.length);
+//         })
+//         // listOfEvents = await scrapEvents(scrapingList);
+//       }
+//     }) // End app.listen
+//   })
+//   .catch((err) => console.log(err));
+
 const dbURI = `mongodb+srv://ChenYang-Lin:${process.env.MongoDB_User_Password}@cluster0.cts13.mongodb.net/${process.env.MongoDB_myFirstDatabase}?retryWrites=true&w=majority`;
 mongoose.connect(dbURI)
   .then((result) => {
     app.listen(process.env.PORT || 3000, async () => {
       console.log("app is running on port 3000");
+      
+      let testList = [
+        // {
+        //   groupURL: "https://www.facebook.com/gloriousrecovery",
+        // },
+        // {
+        //   groupURL: "https://www.facebook.com/TipThePainScale",
+        // },
+        {
+          groupURL: "https://www.facebook.com/CCAR4Recovery",
+        },
+      ];
+
       if (listOfEvents.length === 0) {
-        Subscription.find().then(async (result) => {
-          listOfEvents = await scrapEvents(result);
-          listOfEvents = removeDuplicates(listOfEvents);
-          // listOfEvents = chronologicalOrder(listOfEvents);
-          console.log(listOfEvents);
-          console.log(listOfEvents.length);
+        // console.log(testList.length);
+        // listOfEvents = await scrapEvents(testList);
+        // listOfEvents = removeDuplicates(listOfEvents);
+        // listOfEvents = chronologicalOrder(listOfEvents);
+        // await eventDB(listOfEvents);
+        // console.log(listOfEvents);
+        // console.log(listOfEvents.length);
+        Event.find().then((result) => {
+          result = chronologicalOrder(result)
+          listOfEvents = result;
         })
-        // listOfEvents = await scrapEvents(scrapingList);
       }
     }) // End app.listen
   })
   .catch((err) => console.log(err));
 
-  
-// let testList = [
-//   {
-//     groupURL: "https://www.facebook.com/TipThePainScale",
-//     groupURL: "https://www.facebook.com/CCAR4Recovery",
-//   }
-// ]
-// app.listen(process.env.PORT || 3000, async () => {
-//   console.log("app is running on port 3000");
-//   if (listOfEvents.length === 0) {
-//     listOfEvents = await scrapEvents(testList);
-//     listOfEvents = removeDuplicates(listOfEvents);
-//     listOfEvents = chronologicalOrder(listOfEvents);
-//     // console.log(listOfEvents);
-//     console.log(listOfEvents.length);
-//     // listOfEvents = await scrapEvents(scrapingList);
-//   }
-// }) // End app.listen
 
+async function eventDB(list) {
+  await Event.remove();
+  console.log(list);
+  for (let i = 0; i < list.length; i++) {
+    let event = new Event({
+      title: list[i].title,
+      image: list[i].image,
+      dateTime: list[i].dateTime,
+      linkToOriginalPost: list[i].linkToOriginalPost,
+      detailDateTime: list[i].detailDateTime,
+      address: list[i].address,
+      description: list[i].description,
+
+      organizationInfo: list[i].organizationInfo,
+      splitTime: list[i].splitTime,
+      ticket: list[i].ticket,
+      category: list[i].category,
+      keywords: list[i].keywords,
+      dateObject: list[i].dateObject,
+    });
+    event.save()
+    .then((result) => {
+      console.log(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
+}
 
 // Routes
 app.get("/", async (req, res) => {

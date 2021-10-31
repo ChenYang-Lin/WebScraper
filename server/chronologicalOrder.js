@@ -1,8 +1,10 @@
 
 
-let chronologicalOrder = (oldArray) => {
-  let newArray = oldArray.slice().sort((a, b) => b.objectDate - a.objectDate)
-  return newArray;
+let chronologicalOrder = (array) => {
+  array.sort((a, b) => {
+    return new Date(a.dateObject) - new Date(b.dateObject);
+  })
+  return array;
 };
 
 // export functions

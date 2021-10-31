@@ -1,6 +1,8 @@
 require("dotenv").config();
 const puppeteer = require("puppeteer");
 const { splitTime } = require("./scraperFunctions/splitTime");
+const { dateObject } = require("./scraperFunctions/dateObject");
+const { gengerateProxy } = require("./proxy.js");
 
 let scrapingList = [];
 let errorMessages = [];
@@ -14,39 +16,68 @@ let scrapEvents = async (list) => {
   scrapeProgress = 0;
   scrapeIndex = 0;
 
+  // proxy
+  // const ProxyUrl = await gengerateProxy();
+  // const ProxyUrl = '69.197.181.202:3128';
+  // let ip = "23.224.22.9";
+  // let port = "59394"
+  // const ProxyUrl = `${ip}:${port}`;
+  // const ProxyUrl = '23.224.22.202:59394';
+  // console.log(ProxyUrl);
+
+
+  const useProxy = require('puppeteer-page-proxy');
+
   scrapingList = list;
   try {
     console.log("running scapEvents function");
 
+    
+
     const browser = await puppeteer.launch({
-      // headless: false,
-      headless: true,
+      headless: false,
+      // headless: true,
       args: [
         "--no-sandbox",
+        // `--proxy-server=${ip}`,
+        // "--proxy-server=24.61.67.85:41480",
+        // "--proxy-server=127.0.0.1:9876",
         // '--disable-setuid-sandbox',
+        // `--proxy-server=${ProxyUrl}`,
+        // '--ignore-certificate-errors',
+        // '--ignore-certificate-errors-spki-list ',
       ],
       // defaultViewport: {
       //   width: 1920,
       //   height: 1080,
-      // }
+      // },
+      // userDataDir: "./cache"
     });
     const page = await browser.newPage();
+    
+    // Configure the navigation timeout
+    await page.setDefaultNavigationTimeout(0);
+
+    // const data = await useProxy.lookup(page);
+    // console.log(data.ip);
+    // await useProxy(page, '24.61.67.85:41480');
 
     // const version = await page.browser().version();
     // console.log("browser version:---------------------------------------------------------------------------")
     // console.log("browser version: " + version)
 
-    // Configure the navigation timeout
-    await page.setDefaultNavigationTimeout(0);
 
     // Login
     await loginFacebook(page);
     // Scrapping
     let scrapingResults = await scrapeFacebookEvents(browser, page);
+    // Create and add Date object to each event
+    scrapingResults = dateObject(scrapingResults);
     // close browser
     await browser.close();
 
     console.log("completed scapEvents function");
+    scrapeProgress = 100;
     scraping = false;
     return scrapingResults;
   } catch (error) {
@@ -58,16 +89,24 @@ let scrapEvents = async (list) => {
 
 async function loginFacebook(page) {
   // Go to the login page
+  // await page.goto("https://google.com", {
+  //   waitUntil: "networkidle0",
+  // });
   await page.goto("https://www.facebook.com/login/", {
     waitUntil: "networkidle0",
   });
-  // username and password
-  await page.type("#email", process.env.EMAIL6, { delay: 30 });
-  await page.type("#pass", process.env.PASSWORD6, { delay: 30 });
-  await page.click("#loginbutton");
+  try {
+    // username and password
+    await page.type("#email", process.env.EMAIL, { delay: 30 });
+    await page.type("#pass", process.env.PASSWORD, { delay: 30 });
+    await page.click("#loginbutton");
 
-  // Wait for navigation to finish
-  await page.waitForNavigation({ waitUntil: "networkidle0" });
+    // Wait for navigation to finish
+    await page.waitForNavigation({ waitUntil: "networkidle0" });
+  }
+  catch (e) {
+    console.log("no login");
+  }
 }
 
 async function scrapeFacebookEvents(browser, page) {
@@ -177,6 +216,7 @@ page.on('console', consoleObj => console.log(consoleObj.text()));
           // let organization = event.children[0].children[1].children[1].children[1].children[0];
           // organizationLink = organization.children[0].getAttribute("href");
           // organizationName = organization.children[0].children[0].innerText;
+
           
           // singleEvent = { title, image, dateTime, organizationName, organizationLink, linkToOriginalPost };
           singleEvent = { title, image, dateTime, linkToOriginalPost };
@@ -196,7 +236,7 @@ page.on('console', consoleObj => console.log(consoleObj.text()));
     scrapingResults = scrapingResults.concat(resultsFromOneGroup);
 
     // Progress bar update
-    scrapeProgress = Math.floor(((i + 1) / scrapingList.length) * 100);
+    scrapeProgress = Math.floor(((i + 1) / scrapingList.length) * 90);
     scrapeIndex = i + 1;
     // console.log("progress: " + scrapeProgress);
   } // End for loop for scrapingList
@@ -227,7 +267,7 @@ pageForOriginalPost.on('console', consoleObj => console.log(consoleObj.text()));
 
       // Scrape - ineract with the page directly in the page DOM environment
       await pageForOriginalPost.exposeFunction("splitTime", splitTime);
-      resultsFromOneEvent = await pageForOriginalPost.evaluate(async () => {
+      resultsFromOneEvent = await pageForOriginalPost.evaluate(async (basicInfosFromOneGroup, i) => {
         const headingElement = document.querySelector(".k4urcfbm.nqmvxvec").children[0].children[0].children[0].children[0];
         let detailDateTime = headingElement.children[0].children[0].children[0].innerText;
         let address = headingElement.children[2].children[0].innerText;
@@ -308,37 +348,23 @@ pageForOriginalPost.on('console', consoleObj => console.log(consoleObj.text()));
 
 
         // Split detailDateTime
-        splitTime = await splitTime(detailDateTime);
+        let splittedTime = await splitTime(detailDateTime);
 
-        // create Date object
-        let months = [
-          'January',
-          'February',
-          'March',
-          'April',
-          'May',
-          'June',
-          'July',
-          'August',
-          'September',
-          'October',
-          'November',
-          'December'
-        ];
-        let objectMonth = splitTime.month.charAt(0).toUpperCase() + splitTime.month.slice(1).toLowerCase();
-        let startTime24 = parseInt(splitTime.startTime);
-        if (splitTime.am_pm === "PM") {
-            startTime24 += 12;
+        // Category
+        let category = [];
+        if (detailsElement.lastChild.children[0].children.length > 1) {
+          let categoryDiv = detailsElement.lastChild.children[0].children[1];
+          for (let e = 0; e < categoryDiv.children.length; e++) {
+            let tag = categoryDiv.children[e].children[0].children[0].children[0].innerText;
+            category.push(tag);
+          }
         }
-        let objectDate = new Date(splitTime.year, months.indexOf(objectMonth), splitTime.dayOfTheMonth, startTime24, 0, 0, 0);
-        if (splitTime.isUTC) {
-            objectDate = new Date(Date.UTC(splitTime.year, months.indexOf(objectMonth), splitTime.dayOfTheMonth, startTime24, 0, 0, 0));
-        }
-        console.log("objectDate: ")
-        console.log(objectDate);
 
-        return { detailDateTime, address, description, organizationInfo, splitTime, mapUrl, ticket, ticketLink, objectDate };
-      });
+
+        let keywords = "" + detailDateTime + " " + address + " " + description + " " + basicInfosFromOneGroup[i].dateTime + " " + basicInfosFromOneGroup[i].title;
+
+        return { detailDateTime, address, description, organizationInfo, splitTime: splittedTime, mapUrl, ticket, ticketLink, category, keywords };
+      }, basicInfosFromOneGroup, i);
       await pageForOriginalPost.close();
     }
     // Combine "basic" data from group page and "additional" data from original post of the event
@@ -350,7 +376,7 @@ pageForOriginalPost.on('console', consoleObj => console.log(consoleObj.text()));
     
     // Progress bar update
     let scrapeProgressGroup = (scrapeIndex / scrapingList.length) * 100 
-    let scrapeProgressEvent = (((i + 1) / basicInfosFromOneGroup.length) * 100) * (1 / scrapingList.length);
+    let scrapeProgressEvent = (((i + 1) / basicInfosFromOneGroup.length) * 90) * (1 / scrapingList.length);
     scrapeProgress = Math.floor(scrapeProgressGroup + scrapeProgressEvent);
   } // end for loop - one by one for each event from current group.
   return resultsFromOneGroup;
