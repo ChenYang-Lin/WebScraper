@@ -49,39 +49,6 @@ app.get('/init-subscription', (req, res) => {
   }
   res.redirect('/admin');
 })
-// app.get('/add-subscription', (req, res) => {
-//   const subscription = new Subscription({
-//     groupURL: "https://www.facebook.com/gloriousrecovery",
-//   });
-
-//   subscription.save()
-//     .then((result) => {
-//       res.send(result);
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     })
-// });
-
-// app.get('/all-subscription', (req, res) => {
-//   Subscription.find()
-//     .then((result) => {
-//       res.send(result);
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     })
-// })
-
-// app.get('/single-subscription', (req, res) => {
-//   Subscription.findById('61704685a6a79d205db09a8e')
-//     .then((result) => {
-//       res.send(result)
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     })
-// })
 
 // MongoDB database
 // Connect to MondoDB
@@ -123,7 +90,7 @@ mongoose.connect(dbURI)
         },
       ];
 
-      if (listOfEvents.length === 0) {
+      // if (listOfEvents.length === 0) {
         // console.log(testList.length);
         // listOfEvents = await scrapEvents(testList);
         // listOfEvents = removeDuplicates(listOfEvents);
@@ -131,11 +98,11 @@ mongoose.connect(dbURI)
         // await eventDB(listOfEvents);
         // console.log(listOfEvents);
         // console.log(listOfEvents.length);
-        Event.find().then((result) => {
+      // }
+      Event.find().then((result) => {
           result = chronologicalOrder(result)
           listOfEvents = result;
         })
-      }
     }) // End app.listen
   })
   .catch((err) => console.log(err));
@@ -269,22 +236,25 @@ app.post("/admin/progress", (req, res) => {
 })
 
 // Update list of events repeatly by doing new scrapes
-// let second = Math.floor(Math.random() * (59 - 0 + 1)) + 0;
-// let minute = Math.floor(Math.random() * (59 - 0 + 1)) + 0;
-// let hour = Math.floor(Math.random() * (3 - 1 + 1)) + 1;
-// cron.schedule(`${second} ${minute} ${hour} * * *`, async () => {
-//   second = Math.floor(Math.random() * (59 - 0 + 1)) + 0;
-//   minute = Math.floor(Math.random() * (59 - 0 + 1)) + 0;
-//   hour = Math.floor(Math.random() * (3 - 1 + 1)) + 1;
-//   console.log("running a task every day between 1 - 3 AM");
-//   Subscription.find().then(async (result) => {
-//     listOfEvents = await scrapEvents(result);
-//     listOfEvents = removeDuplicates(listOfEvents);
-//     console.log(listOfEvents);
-//     console.log(listOfEvents.length);
-//   })
-//   // listOfEvents = await scrapEvents(scrapingList);
-// });
+let second = Math.floor(Math.random() * (59 - 0 + 1)) + 0;
+let minute = Math.floor(Math.random() * (59 - 0 + 1)) + 0;
+let hour = Math.floor(Math.random() * (3 - 1 + 1)) + 1;
+cron.schedule(`${second} ${minute} ${hour} * * *`, async () => {
+  second = Math.floor(Math.random() * (59 - 0 + 1)) + 0;
+  minute = Math.floor(Math.random() * (59 - 0 + 1)) + 0;
+  hour = Math.floor(Math.random() * (3 - 1 + 1)) + 1;
+  console.log("running a task every day between 1 - 3 AM");
+  Subscription.find().then(async (result) => {
+    listOfEvents = await scrapEvents(result);
+    listOfEvents = removeDuplicates(listOfEvents);
+    listOfEvents = chronologicalOrder(listOfEvents);
+    listOfEvents = chronologicalOrder(listOfEvents);
+    await eventDB(listOfEvents);
+    // console.log(listOfEvents);
+    // console.log(listOfEvents.length);
+  })
+  // listOfEvents = await scrapEvents(scrapingList);
+});
 
 
 

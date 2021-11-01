@@ -16,18 +16,6 @@ let scrapEvents = async (list) => {
   scrapeProgress = 0;
   scrapeIndex = 0;
 
-  // proxy
-  // const ProxyUrl = await gengerateProxy();
-  // const ProxyUrl = '69.197.181.202:3128';
-  // let ip = "23.224.22.9";
-  // let port = "59394"
-  // const ProxyUrl = `${ip}:${port}`;
-  // const ProxyUrl = '23.224.22.202:59394';
-  // console.log(ProxyUrl);
-
-
-  const useProxy = require('puppeteer-page-proxy');
-
   scrapingList = list;
   try {
     console.log("running scapEvents function");
@@ -40,8 +28,6 @@ let scrapEvents = async (list) => {
       args: [
         "--no-sandbox",
         // `--proxy-server=${ip}`,
-        // "--proxy-server=24.61.67.85:41480",
-        // "--proxy-server=127.0.0.1:9876",
         // '--disable-setuid-sandbox',
         // `--proxy-server=${ProxyUrl}`,
         // '--ignore-certificate-errors',
@@ -57,10 +43,6 @@ let scrapEvents = async (list) => {
     
     // Configure the navigation timeout
     await page.setDefaultNavigationTimeout(0);
-
-    // const data = await useProxy.lookup(page);
-    // console.log(data.ip);
-    // await useProxy(page, '24.61.67.85:41480');
 
     // const version = await page.browser().version();
     // console.log("browser version:---------------------------------------------------------------------------")
