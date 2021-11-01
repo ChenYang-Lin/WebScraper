@@ -1,0 +1,101 @@
+<script>
+    function renderListContainer(listOfEvents) {
+        let newList = document.createElement('div');
+        newList.className = "row justify-content-center";
+
+        for (let i = 0; i < listOfEvents.length; i++) {
+          
+          function getTicketContainer() {
+            // create ticket
+            if (!listOfEvents[i].ticket) return "<!-- no tickets -->";
+            // let outerTicketDiv = document.createElement('div');
+            let ticketContainer = 
+            `
+            <a href="${listOfEvents[i].linkToOriginalPost}" class="text-decoration-none" >
+              <h5 class="text-dark bg-warning">Tickets available here (original page)</h5>
+            </a>
+            `
+            // outerTicketDiv.innerHtml = ticketContainer;
+            return ticketContainer;
+          }
+
+          function getCategoryContainer() {
+            let outerCategoryDiv = document.createElement('div');
+            let categoryContainer = document.createElement('div');
+            categoryContainer.className = "mb-1";
+
+            for (let c = 0; c < listOfEvents[i].category.length; c++) {
+              let element = document.createElement('button');
+              element.classList.add("text-light", "bg-dark", "border", "rounded", "p-1");
+              element.innerHTML = listOfEvents[i].category[c];
+
+              categoryContainer.appendChild(element);
+            }
+            outerCategoryDiv.appendChild(categoryContainer);
+            return outerCategoryDiv.innerHTML;
+          }
+
+          function getOrganizationContainer() {
+            // create organization
+            let outerOrganizationDiv = document.createElement('div');
+            let organizationContainer = document.createElement('h5');
+            organizationContainer.className = "organization-name";
+            organizationContainer.innerHTML += "Organization: "
+            for (let j = 0; j < listOfEvents[i].organizationInfo.length; j++) {
+              let element = document.createElement('a');
+              element.setAttribute('href', listOfEvents[i].organizationInfo[j].link);
+              element.className = "organization-link";
+              element.innerHTML = listOfEvents[i].organizationInfo[j].name;
+
+              organizationContainer.appendChild(element);
+              organizationContainer.innerHTML += ", ";
+            }
+            outerOrganizationDiv.appendChild(organizationContainer);
+            return outerOrganizationDiv.innerHTML;
+          }
+
+          newList.innerHTML += 
+          `
+            <div class="container">
+              <div class="row align-items-center">
+                <!-- Img -->
+                <div class="col-4">
+                  ${getCategoryContainer()}
+                  <img class="img-fluid w-100 rounded" src="${listOfEvents[i].image}" alt="Image" />
+                </div>
+                <!-- Content -->
+                <div class="col-8">
+                  <!-- Tickets -->
+                  ${getTicketContainer()}
+                  <!-- Time -->
+                  <h4 class="text-danger">${listOfEvents[i].detailDateTime}</h4>
+                  <!-- Title -->
+                  <h3 class="fw-bold">
+                    <a href="${listOfEvents[i].linkToOriginalPost}" class="link-to-original-post" >
+                      ${listOfEvents[i].title}
+                    </a>
+                  </h3>
+                  <!-- Location -->
+                  <h4>${listOfEvents[i].address}</h4>
+                  <!-- Button -->
+                  <button class="button border rounded bg-primary text-light m-1 px-3" onclick="expandEvent(${i})">
+                    <i class="bi bi-arrows-expand"> expand</i>
+                  </button>                
+                </div>
+              </div>
+              <!-- Extra Info -->
+              <div class="row align-items-center extra-info" style="display:none;">
+                <!-- Organization -->
+                ${getOrganizationContainer()}
+                <!-- Description -->
+                <p>Description: ${listOfEvents[i].description}</p>
+              </div>
+              <!-- End Extra Info -->
+            </div>
+            <hr>
+            <br>
+          `
+        }
+        $("#list-container").html(newList);
+      }
+</script>

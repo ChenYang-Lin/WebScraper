@@ -3,4 +3,53 @@
     let listOfEventsCopy = listOfEvents;
     console.log(listOfEvents);
 
+    // Get unique organization and category
+    let uniqueOrganization = {};
+    let uniqueCategory = {};
+    let listOrganization = [];
+    let listCategory = [];
+    for (let i = 0; i < listOfEventsCopy.length; i++) {
+        for (let j = 0; j < listOfEventsCopy[i].organizationInfo.length; j++) {
+            let name = listOfEventsCopy[i].organizationInfo[j].name;
+            uniqueOrganization[name] = name;
+        }
+        for (let j = 0; j < listOfEventsCopy[i].category.length; j++) {
+            let name = listOfEventsCopy[i].category[j];
+            uniqueCategory[name] = name;
+        }
+    }
+    console.log(uniqueOrganization);
+    console.log(uniqueCategory);
+
+    // Filter organization selection
+    let filterOrganizationContent;
+    let outerOrganizationDiv = document.createElement('div');
+    let allOrganization = document.createElement('option');
+    allOrganization.setAttribute("value", "all");
+    allOrganization.innerHTML = "All Organization";
+    outerOrganizationDiv.appendChild(allOrganization);
+    for (let i in uniqueOrganization) {
+        let element = document.createElement('option');
+        element.setAttribute("value", uniqueOrganization[i]);
+        element.innerHTML = uniqueOrganization[i];
+        outerOrganizationDiv.appendChild(element);
+    }
+    filterOrganizationContent = outerOrganizationDiv.innerHTML;
+    $("#filter-organization-name").html(filterOrganizationContent);
+
+    // Filter catory selection
+    let filterCategoryContent;
+    let outerCategoryDiv = document.createElement('div');
+    let allCategory = document.createElement('option');
+    allCategory.setAttribute("value", "all");
+    allCategory.innerHTML = "All Category";
+    outerCategoryDiv.appendChild(allCategory);
+    for (let i in uniqueCategory) {
+        let element = document.createElement('option');
+        element.setAttribute("value", uniqueCategory[i]);
+        element.innerHTML = uniqueCategory[i];
+        outerCategoryDiv.appendChild(element);
+    }
+    filterCategoryContent = outerCategoryDiv.innerHTML;
+    $("#filter-category-name").html(filterCategoryContent);
 </script>

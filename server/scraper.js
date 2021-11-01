@@ -20,11 +20,9 @@ let scrapEvents = async (list) => {
   try {
     console.log("running scapEvents function");
 
-    
-
     const browser = await puppeteer.launch({
-      headless: false,
-      // headless: true,
+      // headless: false,
+      headless: true,
       args: [
         "--no-sandbox",
         // `--proxy-server=${ip}`,
