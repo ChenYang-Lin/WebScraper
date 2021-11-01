@@ -77,8 +77,8 @@ async function loginFacebook(page) {
   });
   try {
     // username and password
-    await page.type("#email", process.env.EMAIL, { delay: 30 });
-    await page.type("#pass", process.env.PASSWORD, { delay: 30 });
+    await page.type("#email", process.env.EMAIL2, { delay: 30 });
+    await page.type("#pass", process.env.PASSWORD2, { delay: 30 });
     await page.click("#loginbutton");
 
     // Wait for navigation to finish

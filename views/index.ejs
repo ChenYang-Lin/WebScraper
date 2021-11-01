@@ -199,6 +199,7 @@
       })
 
       // Filter
+      // Filter time
       $("#filter-section").change(() => {
         // e.preventDefault();
 
@@ -219,7 +220,15 @@
         }
         renderListContainer(listOfEvents);
       })
+      // Filter category
+      $("#filter-organization").change(() => {
+        let selected = $("#filter-organization option:selected").val();
+        listOfEvents = filterOrganization(selected);
+      })
 
+      function filterOrganization(selected) {
+        
+      }
       
     </script>
   </body>
