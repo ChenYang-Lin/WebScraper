@@ -32,6 +32,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 
 
+
+
 // Mongoose and Mongo sandbox routes
 // Initialize subscription database
 app.get('/init-subscription', (req, res) => {
@@ -90,6 +92,12 @@ mongoose.connect(dbURI)
         },
       ];
 
+        listOfEvents = await scrapEvents(testList);
+        listOfEvents = removeDuplicates(listOfEvents);
+        listOfEvents = chronologicalOrder(listOfEvents);
+        // await eventDB(listOfEvents);
+
+
       // if (listOfEvents.length === 0) {
         // console.log(testList.length);
         // listOfEvents = await scrapEvents(testList);
@@ -99,10 +107,10 @@ mongoose.connect(dbURI)
         // console.log(listOfEvents);
         // console.log(listOfEvents.length);
       // }
-      Event.find().then((result) => {
-          result = chronologicalOrder(result)
-          listOfEvents = result;
-        })
+      // Event.find().then((result) => {
+      //     result = chronologicalOrder(result)
+      //     listOfEvents = result;
+      //   })
     }) // End app.listen
   })
   .catch((err) => console.log(err));
@@ -289,3 +297,38 @@ setInterval(function () {
     console.log("ping every 20 min. to prevent heroku sleep")
   });
 }, 20 * 60 * 1000); // every 20 minutes
+
+
+
+// calendar.calendars.clear({
+//       "calendarId": "primary"
+//   }, (err, res) => {
+//     if (err) return err;
+//     // Create a new event start date instance for temp uses in our calendar.
+//     const eventStartTime = new Date();
+//     eventStartTime.setDate(eventStartTime.getDay() + 10);
+
+//     // Create a dummy event for temp uses in our calendar
+//     const event = {
+//       summary: `DataHaven: Empowering People to Create Thriving Communities Through Data`,
+//       location: `Online`,
+//       description: `Description`,
+//       colorId: 1,
+//       start: {
+//         dateTime: eventStartTime,
+//         timeZone: "America/New_York",
+//       },
+//       end: {
+//         dateTime: eventStartTime,
+//         timeZone: "America/New_York",
+//       },
+//     };
+
+//     calendar.events.insert({ calendarId: "primary", resource: event }, (err) => {
+//       // Check for errors and log them if they exist.
+//       if (err) return console.error("Error Creating Calender Event:", err);
+//       // Else log that the event was created.
+//       return console.log("Calendar event successfully created.");
+//     });
+//   });
+

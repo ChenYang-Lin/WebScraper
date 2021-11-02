@@ -4,6 +4,28 @@ const { splitTime } = require("./scraperFunctions/splitTime");
 const { dateObject } = require("./scraperFunctions/dateObject");
 const { gengerateProxy } = require("./proxy.js");
 
+
+// Google Calendar init
+const { google } = require("googleapis"); // Require google from googleapis package.
+const { OAuth2 } = google.auth; // Require oAuth2 from our google instance.
+
+// Create a new instance of oAuth and set our Client ID & Client Secret.
+const oAuth2Client = new OAuth2(
+  "305848138959-hbuahn7pqcn6ron8e907f1of6jdrn8b0.apps.googleusercontent.com",
+  "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"
+);
+
+// Call the setCredentials method on our oAuth2Client instance and set our refresh token.
+oAuth2Client.setCredentials({
+  refresh_token:
+    "1//04pdUfKkT5-zNCgYIARAAGAQSNwF-L9Ir7TqvykNGavxLeBNinKNltNF6FcDYiwnzvwhkGNWODRRnDzpuKqY4xxaNGJdSw70R2v8",
+});
+
+// Create a new calender instance.
+const calendar = google.calendar({ version: "v3", auth: oAuth2Client });
+
+// End google calendar init
+
 let scrapingList = [];
 let errorMessages = [];
 let scrapeProgress = 0;
@@ -21,8 +43,8 @@ let scrapEvents = async (list) => {
     console.log("running scapEvents function");
 
     const browser = await puppeteer.launch({
-      // headless: false,
-      headless: true,
+      headless: false,
+      // headless: true,
       args: [
         "--no-sandbox",
         // `--proxy-server=${ip}`,
@@ -77,8 +99,8 @@ async function loginFacebook(page) {
   });
   try {
     // username and password
-    await page.type("#email", process.env.EMAIL2, { delay: 30 });
-    await page.type("#pass", process.env.PASSWORD2, { delay: 30 });
+    await page.type("#email", process.env.EMAIL, { delay: 30 });
+    await page.type("#pass", process.env.PASSWORD, { delay: 30 });
     await page.click("#loginbutton");
 
     // Wait for navigation to finish
@@ -247,7 +269,7 @@ pageForOriginalPost.on('console', consoleObj => console.log(consoleObj.text()));
 
       // Scrape - ineract with the page directly in the page DOM environment
       await pageForOriginalPost.exposeFunction("splitTime", splitTime);
-      resultsFromOneEvent = await pageForOriginalPost.evaluate(async (basicInfosFromOneGroup, i) => {
+      resultsFromOneEvent = await pageForOriginalPost.evaluate(async (basicInfosFromOneGroup, i, calendar) => {
         const headingElement = document.querySelector(".k4urcfbm.nqmvxvec").children[0].children[0].children[0].children[0];
         let detailDateTime = headingElement.children[0].children[0].children[0].innerText;
         let address = headingElement.children[2].children[0].innerText;
@@ -343,10 +365,45 @@ pageForOriginalPost.on('console', consoleObj => console.log(consoleObj.text()));
 
         let keywords = "" + detailDateTime + " " + address + " " + description + " " + basicInfosFromOneGroup[i].dateTime + " " + basicInfosFromOneGroup[i].title;
 
+
         return { detailDateTime, address, description, organizationInfo, splitTime: splittedTime, mapUrl, ticket, ticketLink, category, keywords };
-      }, basicInfosFromOneGroup, i);
+      }, basicInfosFromOneGroup, i, calendar);
+
       await pageForOriginalPost.close();
     }
+    // Google Calendar
+    // add to calendar
+    // Create a dummy event for temp uses in our calendar
+    console.log(resultsFromOneEvent);
+    let eventStartTime = new Date(resultsFromOneEvent.splitTime.year, resultsFromOneEvent.splitTime.month, resultsFromOneEvent.splitTime.dayOfTheWeek, resultsFromOneEvent.splitTime.startTime, 0, 0, 0);
+
+    if (resultsFromOneEvent.splitTime.isUTC) {
+        eventStartTime = new Date(Date.UTC(resultsFromOneEvent.splitTime.year, resultsFromOneEvent.splitTime.month, resultsFromOneEvent.splitTime.dayOfTheWeek, resultsFromOneEvent.splitTime.startTime, 0, 0, 0));
+    }
+    eventStartTime.setDate(eventStartTime.getDay());
+    const event = {
+      summary: "basicInfosFromOneGroup[i].title",
+      location: "resultsFromOneEvent.address",
+      description: "resultsFromOneEvent.description",
+      colorId: 1,
+      start: {
+        dateTime: eventStartTime,
+        timeZone: "America/New_York",
+      },
+      end: {
+        dateTime: eventStartTime,
+        timeZone: "America/New_York",
+      },
+    };
+    console.log(calendar);
+
+    calendar.events.insert({ calendarId: "primary", resource: event }, (err) => {
+      // Check for errors and log them if they exist.
+      if (err) return console.error("Error Creating Calender Event:", err);
+      // Else log that the event was created.
+      return console.log("Calendar event successfully created.");
+    });
+
     // Combine "basic" data from group page and "additional" data from original post of the event
     let basicInfoOfCurrEvent = basicInfosFromOneGroup[i];
     let moreInfoOfCurrEvent = resultsFromOneEvent;
