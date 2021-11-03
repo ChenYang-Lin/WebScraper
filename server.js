@@ -101,7 +101,7 @@ mongoose.connect(dbURI)
       //   // console.log(listOfEvents.length);
       // })
       Event.find().then((result) => {
-          // result = chronologicalOrder(result);
+          result = chronologicalOrder(result);
           listOfEvents = result;
         })
     }) // End app.listen
@@ -249,7 +249,6 @@ cron.schedule(`${second} ${minute} ${hour} * * *`, async () => {
     listOfEvents = await scrapEvents(result);
     if (listOfEvents.length !== 0) {
       listOfEvents = removeDuplicates(listOfEvents);
-      listOfEvents = chronologicalOrder(listOfEvents);
       listOfEvents = chronologicalOrder(listOfEvents);
       await eventDB(listOfEvents);
       let today = new Date();
