@@ -99,13 +99,13 @@
 
 
     <!-- Event Container -->
-    <div id="list-container" class="container bg-white shadow p-3 rounded my-3">
+    <div id="list-container" class="container p-3 rounded my-3">
       <div class="row justify-content-center">
         <% for (let i = 0; i < listOfEvents.length; i++) { %>
-          <div class="container">
+          <div class="container card shadow my-3">
             <div class="row align-items-center">
               <!-- Img/Category -->
-              <div class="col-4">
+              <div class="col-12 col-sm-4 my-2">
                 <!-- Category -->
                 <div class="mb-1">
                   <% for (let c = 0; c < listOfEvents[i].category.length; c++) { %>
@@ -118,7 +118,7 @@
                 <img class="img-fluid w-100 rounded" src="<%= listOfEvents[i].image %>" alt="Image" />
               </div>
               <!-- Content -->
-              <div class="col-8">
+              <div class="col-12 col-sm-8 my-2">
                 <!-- Tickets -->
                 <% if(listOfEvents[i].ticket) { %>
                   <a href="<%= listOfEvents[i].linkToOriginalPost %>" class="text-decoration-none" >
@@ -174,8 +174,6 @@
             </div>
             <!-- End Extra Info -->
           </div>
-          <hr>
-          <br>
         <% } %>
       </div>
     </div>
@@ -204,7 +202,7 @@
       function copyToClipboard(url) {
         navigator.clipboard.writeText(url).then(function() {
           /* clipboard successfully set */
-          alert("copied url to clipboard: \n" + url);
+          alert("link to original post copied clipboard: \n" + url);
         }, function() {
           /* clipboard write failed */
           alert("failed to copy url");

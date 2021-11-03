@@ -1,3 +1,7 @@
+body,
+#list-container {
+  background-color: #fafafa;
+}
 /* Admin page url styles */
 .url {
   border: none;
