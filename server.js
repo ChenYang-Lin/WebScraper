@@ -52,26 +52,6 @@ app.get('/init-subscription', (req, res) => {
 
 // MongoDB database
 // Connect to MondoDB
-// const dbURI = `mongodb+srv://ChenYang-Lin:${process.env.MongoDB_User_Password}@cluster0.cts13.mongodb.net/${process.env.MongoDB_myFirstDatabase}?retryWrites=true&w=majority`;
-// mongoose.connect(dbURI)
-//   .then((result) => {
-//     app.listen(process.env.PORT || 3000, async () => {
-//       console.log("app is running on port 3000");
-//       if (listOfEvents.length === 0) {
-//         Subscription.find().then(async (result) => {
-//           listOfEvents = await scrapEvents(result);
-//           listOfEvents = removeDuplicates(listOfEvents);
-//           listOfEvents = chronologicalOrder(listOfEvents);
-//           await eventDB(listOfEvents);
-//           console.log(listOfEvents);
-//           console.log(listOfEvents.length);
-//         })
-//         // listOfEvents = await scrapEvents(scrapingList);
-//       }
-//     }) // End app.listen
-//   })
-//   .catch((err) => console.log(err));
-
 const dbURI = `mongodb+srv://ChenYang-Lin:${process.env.MongoDB_User_Password}@cluster0.cts13.mongodb.net/${process.env.MongoDB_myFirstDatabase}?retryWrites=true&w=majority`;
 mongoose.connect(dbURI)
   .then((result) => {
@@ -90,17 +70,38 @@ mongoose.connect(dbURI)
         },
       ];
 
-      // if (listOfEvents.length === 0) {
-        // console.log(testList.length);
-        // listOfEvents = await scrapEvents(testList);
-        // listOfEvents = removeDuplicates(listOfEvents);
-        // listOfEvents = chronologicalOrder(listOfEvents);
-        // await eventDB(listOfEvents);
-        // console.log(listOfEvents);
-        // console.log(listOfEvents.length);
+      // listOfEvents = await scrapEvents(testList);
+      // if (listOfEvents.length !== 0) {
+      //   listOfEvents = removeDuplicates(listOfEvents);
+      //   listOfEvents = chronologicalOrder(listOfEvents);
+      //   listOfEvents = chronologicalOrder(listOfEvents);
+      //   await eventDB(listOfEvents);
+      //   let today = new Date();
+      //   let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
+      //   let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      //   console.log(date + "  " + time);
       // }
+      // console.log(listOfEvents);
+      // console.log(listOfEvents.length);
+
+      // Subscription.find().then(async (result) => {
+      //   listOfEvents = await scrapEvents(result);
+      //   if (listOfEvents.length !== 0) {
+      //     listOfEvents = removeDuplicates(listOfEvents);
+      //     listOfEvents = chronologicalOrder(listOfEvents);
+      //     listOfEvents = chronologicalOrder(listOfEvents);
+      //     // console.log(listOfEvents);
+      //     await eventDB(listOfEvents);
+      //     let today = new Date();
+      //     let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
+      //     let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      //     console.log(date + "  " + time);
+      //   }
+      //   // console.log(listOfEvents);
+      //   // console.log(listOfEvents.length);
+      // })
       Event.find().then((result) => {
-          result = chronologicalOrder(result)
+          // result = chronologicalOrder(result);
           listOfEvents = result;
         })
     }) // End app.listen
@@ -110,7 +111,7 @@ mongoose.connect(dbURI)
 
 async function eventDB(list) {
   await Event.remove();
-  console.log(list);
+  // console.log(list);
   for (let i = 0; i < list.length; i++) {
     let event = new Event({
       title: list[i].title,
@@ -130,7 +131,7 @@ async function eventDB(list) {
     });
     event.save()
     .then((result) => {
-      console.log(result);
+      // console.log(result);
     })
     .catch((err) => {
       console.log(err);
@@ -246,10 +247,16 @@ cron.schedule(`${second} ${minute} ${hour} * * *`, async () => {
   console.log("running a task every day between 1 - 3 AM");
   Subscription.find().then(async (result) => {
     listOfEvents = await scrapEvents(result);
-    listOfEvents = removeDuplicates(listOfEvents);
-    listOfEvents = chronologicalOrder(listOfEvents);
-    listOfEvents = chronologicalOrder(listOfEvents);
-    await eventDB(listOfEvents);
+    if (listOfEvents.length !== 0) {
+      listOfEvents = removeDuplicates(listOfEvents);
+      listOfEvents = chronologicalOrder(listOfEvents);
+      listOfEvents = chronologicalOrder(listOfEvents);
+      await eventDB(listOfEvents);
+      let today = new Date();
+      let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
+      let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      console.log(date + "  " + time);
+    }
     // console.log(listOfEvents);
     // console.log(listOfEvents.length);
   })

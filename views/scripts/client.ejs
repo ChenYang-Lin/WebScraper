@@ -3,7 +3,7 @@
     let listOfEventsCopy = listOfEvents;
     console.log(listOfEvents);
 
-    // Get unique organization and category
+    // Get unique organization and category ----------------------------------------------
     let uniqueOrganization = {};
     let uniqueCategory = {};
     let listOrganization = [];
@@ -18,8 +18,8 @@
             uniqueCategory[name] = name;
         }
     }
-    console.log(uniqueOrganization);
-    console.log(uniqueCategory);
+    // console.log(uniqueOrganization);
+    // console.log(uniqueCategory);
 
     // Filter organization selection
     let filterOrganizationContent;
@@ -52,4 +52,5 @@
     }
     filterCategoryContent = outerCategoryDiv.innerHTML;
     $("#filter-category-name").html(filterCategoryContent);
+    // End unique organization and category ----------------------------------------------
 </script>
