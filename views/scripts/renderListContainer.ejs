@@ -57,14 +57,14 @@
           newList.innerHTML += 
           `
             <div class="container card shadow my-3">
-              <div class="row align-items-center">
+              <div class="row">
                 <!-- Img/Category -->
                 <div class="col-12 col-sm-4 my-2">
                   ${getCategoryContainer()}
                   <img class="img-fluid w-100 rounded" src="${listOfEvents[i].image}" alt="Image" />
                 </div>
                 <!-- Content -->
-                <div class="col-12 col-sm-8 my-2">
+                <div class="col-12 col-sm-8 my-2 d-flex flex-column pt-4">
                   <!-- Tickets -->
                   ${getTicketContainer()}
                   <!-- Time -->
@@ -78,7 +78,7 @@
                   <!-- Location -->
                   <h4>${listOfEvents[i].address}</h4>        
                   <!-- Button Container -->
-                  <div class="button-container">
+                  <div class="button-container mt-auto">
                     <!-- Expand Button -->
                     <div class="event-btn">
                       <button class="button border rounded bg-primary text-light m-1 px-3 fit-btn" onclick="expandEvent(${i})">
