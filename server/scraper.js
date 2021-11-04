@@ -207,9 +207,9 @@ page.on('console', consoleObj => console.log(consoleObj.text()));
         return basicResults;
       })
     } catch (e) {
+      continue;
       console.log("Evaluate Error: " + scrapingList[i].groupURL);
       console.log(e);
-      continue;
     }
      // End page.evaluate
 
