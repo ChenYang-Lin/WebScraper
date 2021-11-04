@@ -146,7 +146,8 @@ page.on('console', consoleObj => console.log(consoleObj.text()));
         let numberOfEvents;
         if (!text) {
           if (document.querySelectorAll('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > .gm7ombtx').length > 0 || document.querySelectorAll('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > .gh3ezpug').length > 0){
-            return basicResults;
+            // return basicResults;
+            continue;
           }
         }
         numberOfEvents = UpcomingEventsElement.children.length;
