@@ -51,6 +51,8 @@ let scrapEvents = async (list) => {
     await loginFacebook(page);
     // Scrapping
     let scrapingResults = await scrapeFacebookEvents(browser, page);
+    
+    console.log(scrapingResults);
     // Create and add Date object to each event
     scrapingResults = dateObject(scrapingResults);
     // close browser
@@ -102,7 +104,7 @@ async function scrapeFacebookEvents(browser, page) {
     } else {
       eventsURL = "/events";
     }
-    console.log("scrapingList: " + eventsURL);
+    console.log("scrapingList: " + scrapingList[i].groupURL);
 
     try {
       await page.goto(scrapingList[i].groupURL + eventsURL, {
@@ -111,9 +113,9 @@ async function scrapeFacebookEvents(browser, page) {
         timeout: 0,
       });
     } catch (e) {
+      continue;
       console.log("Error: " + scrapingList[i].groupURL);
       console.log(e);
-      continue;
     }
 // for test only ------------------------------------
 page.on('console', consoleObj => console.log(consoleObj.text()));
@@ -146,8 +148,7 @@ page.on('console', consoleObj => console.log(consoleObj.text()));
         let numberOfEvents;
         if (!text) {
           if (document.querySelectorAll('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > .gm7ombtx').length > 0 || document.querySelectorAll('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > .gh3ezpug').length > 0){
-            // return basicResults;
-            continue;
+            return basicResults;
           }
         }
         numberOfEvents = UpcomingEventsElement.children.length;
@@ -208,13 +209,16 @@ page.on('console', consoleObj => console.log(consoleObj.text()));
         return basicResults;
       })
     } catch (e) {
-      continue;
       console.log("Evaluate Error: " + scrapingList[i].groupURL);
       console.log(e);
+      return [];
     }
      // End page.evaluate
 
     let resultsFromOneGroup = await scrapeIndividaulEvents(basicInfosFromOneGroup, browser);
+    console.log(basicInfosFromOneGroup);
+    console.log(resultsFromOneGroup);
+    console.log(scrapingResults);
     scrapingResults = scrapingResults.concat(resultsFromOneGroup);
 
     // Progress bar update

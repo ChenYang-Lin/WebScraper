@@ -85,26 +85,26 @@ mongoose.connect(dbURI)
       // console.log(listOfEvents);
       // console.log(listOfEvents.length);
 
-      Subscription.find().then(async (result) => {
-        let newList = await scrapEvents(result);
-        if (newList.length !== 0) {
-          listOfEvents = newList;
-          listOfEvents = chronologicalOrder(listOfEvents);
-          listOfEvents = chronologicalOrder(listOfEvents);
-          // console.log(listOfEvents);
-          await eventDB(listOfEvents);
-          let today = new Date();
-          let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
-          let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-          console.log(date + "  " + time);
-        }
-        // console.log(listOfEvents);
-        // console.log(listOfEvents.length);
-      })
-      // Event.find().then((result) => {
-      //   result = chronologicalOrder(result);
-      //   listOfEvents = result;
+      // Subscription.find().then(async (result) => {
+      //   let newList = await scrapEvents(result);
+      //   if (newList.length !== 0) {
+      //     listOfEvents = newList;
+      //     listOfEvents = chronologicalOrder(listOfEvents);
+      //     listOfEvents = chronologicalOrder(listOfEvents);
+      //     // console.log(listOfEvents);
+      //     await eventDB(listOfEvents);
+      //     let today = new Date();
+      //     let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
+      //     let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      //     console.log(date + "  " + time);
+      //   }
+      //   console.log(listOfEvents.length);
+      //   console.log(listOfEvents);
       // })
+      Event.find().then((result) => {
+        result = chronologicalOrder(result);
+        listOfEvents = result;
+      })
     }) // End app.listen
   })
   .catch((err) => console.log(err));
