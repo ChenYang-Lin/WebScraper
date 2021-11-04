@@ -248,8 +248,9 @@ cron.schedule(`${second} ${minute} ${hour} * * *`, async () => {
   hour = Math.floor(Math.random() * (3 - 1 + 1)) + 1;
   console.log("running a task every day between 1 - 3 AM");
   Subscription.find().then(async (result) => {
-    listOfEvents = await scrapEvents(result);
-    if (listOfEvents.length !== 0) {
+    let newList = await scrapEvents(result);
+    if (newList.length !== 0) {
+      listOfEvents = newList;
       listOfEvents = removeDuplicates(listOfEvents);
       listOfEvents = chronologicalOrder(listOfEvents);
       await eventDB(listOfEvents);
