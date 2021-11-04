@@ -23,6 +23,7 @@ let scrapingList = [
   "https://www.facebook.com/kcmakesmusic",
   "https://www.facebook.com/liberationprograms",
 ];
+let lastUpdate = "";
 
 // Register view engine
 app.set("view engine", "ejs");
@@ -156,6 +157,7 @@ app.get("/admin", async (req, res) => {
         result,
         scraping,
         scrapeProgress,
+        lastUpdate,
       });
     })
     .catch((err) => {
@@ -254,7 +256,8 @@ cron.schedule(`${second} ${minute} ${hour} * * *`, async () => {
       let today = new Date();
       let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
       let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-      console.log(date + "  " + time);
+      lastUpdate = date + "  " + time;
+      console.log(lastUpdate);
     }
     // console.log(listOfEvents);
     // console.log(listOfEvents.length);
