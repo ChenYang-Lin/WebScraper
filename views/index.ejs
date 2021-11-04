@@ -41,7 +41,7 @@
     <div class="container bg-dark my-3 p-3">
       <div class="row">
         <!-- Filter -->
-        <div class="col-8 text-white">
+        <div class="col-6 text-white">
           <div class="container">
             <div class="row">
               <h3 class="col-12">Filter: </h3>
@@ -78,7 +78,7 @@
         <div class="col-4 text-white">
           <div class="container">
             <div class="row">
-              <h3 class="col-12">Display: </h3>
+              <h3 class="col-12">Calendar: </h3>
             </div>
             <form class="row" id="display-section">
               <!-- Rounded switch -->
@@ -99,7 +99,7 @@
     <% } %>
 
 
-    <!-- Event Container -->
+    <!-- List View -->
     <div id="list-container" class="container p-3 rounded my-3">
       <div class="row justify-content-center">
         <% for (let i = 0; i < listOfEvents.length; i++) { %>
@@ -180,71 +180,59 @@
     </div>
 
 
-    <!-- Footer -->
-    <div id="calendar-styles">
+    <!-- Calendar View -->
+    <div id="calendar-styles" style="display: none;">
       <div class="content">
-    <div class="calendar-container">
-      <div class="calendar"> 
-        <div class="year-header"> 
-          <span class="left-button" id="prev"> &lang; </span> 
-          <span class="year" id="label"></span> 
-          <span class="right-button" id="next"> &rang; </span>
-        </div> 
-        <table class="months-table"> 
-          <tbody>
-            <tr class="months-row">
-              <td class="month">Jan</td> 
-              <td class="month">Feb</td> 
-              <td class="month">Mar</td> 
-              <td class="month">Apr</td> 
-              <td class="month">May</td> 
-              <td class="month">Jun</td> 
-              <td class="month">Jul</td>
-              <td class="month">Aug</td> 
-              <td class="month">Sep</td> 
-              <td class="month">Oct</td>          
-              <td class="month">Nov</td>
-              <td class="month">Dec</td>
-            </tr>
-          </tbody>
-        </table> 
-        
-        <table class="days-table"> 
-          <td class="day">Sun</td> 
-          <td class="day">Mon</td> 
-          <td class="day">Tue</td> 
-          <td class="day">Wed</td> 
-          <td class="day">Thu</td> 
-          <td class="day">Fri</td> 
-          <td class="day">Sat</td>
-        </table> 
-        <div class="frame"> 
-          <table class="dates-table"> 
-              <tbody class="tbody">             
-              </tbody> 
-          </table>
-        </div> 
-        <!-- <button class="button" id="add-button">Add Event</button> -->
+        <div class="calendar-container">
+          <div class="calendar"> 
+            <div class="year-header"> 
+              <span class="left-button" id="prev"> &lang; </span> 
+              <span class="year" id="label"></span> 
+              <span class="right-button" id="next"> &rang; </span>
+            </div> 
+            <table class="months-table"> 
+              <tbody>
+                <tr class="months-row">
+                  <td class="month">Jan</td> 
+                  <td class="month">Feb</td> 
+                  <td class="month">Mar</td> 
+                  <td class="month">Apr</td> 
+                  <td class="month">May</td> 
+                  <td class="month">Jun</td> 
+                  <td class="month">Jul</td>
+                  <td class="month">Aug</td> 
+                  <td class="month">Sep</td> 
+                  <td class="month">Oct</td>          
+                  <td class="month">Nov</td>
+                  <td class="month">Dec</td>
+                </tr>
+              </tbody>
+            </table> 
+            
+            <table class="days-table"> 
+              <td class="day">Sun</td> 
+              <td class="day">Mon</td> 
+              <td class="day">Tue</td> 
+              <td class="day">Wed</td> 
+              <td class="day">Thu</td> 
+              <td class="day">Fri</td> 
+              <td class="day">Sat</td>
+            </table> 
+            <div class="frame"> 
+              <table class="dates-table"> 
+                  <tbody class="tbody">             
+                  </tbody> 
+              </table>
+            </div> 
+          </div>
+        </div>
+        <div class="events-container">
+        </div>
       </div>
     </div>
-    <div class="events-container">
-    </div>
-    <!-- <div class="dialog" id="dialog">
-        <h2 class="dialog-header"> Add New Event </h2>
-        <form class="form" id="form">
-          <div class="form-container" align="center">
-            <label class="form-label" id="valueFromMyButton" for="name">Event name</label>
-            <input class="input" type="text" id="name" maxlength="36">
-            <label class="form-label" id="valueFromMyButton" for="count">Number of people to invite</label>
-            <input class="input" type="number" id="count" min="0" max="1000000" maxlength="7">
-            <input type="button" value="Cancel" class="button" id="cancel-button">
-            <input type="button" value="OK" class="button" id="ok-button">
-          </div>
-        </form>
-      </div> -->
-  </div>
-  <!-- Dialog Box-->
-    </div>
+
+    <!-- Footer -->
+    <div class="extra-space" style="margin-bottom: 300px;"></div>
 
     <!-- Bootstrap script -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
@@ -281,13 +269,19 @@
       // $copiedElement.fadeIn(100);
       // $copiedElement.fadeOut(5000);
 
-      // Display 
-      let isToggling = false;
+      // Change Display 
+      let display = 0; // 0 = list view; 1 = calendar view
       $("#display-section").change(() => {
-        if (isToggling) return;
-        isToggling = true;
-        // setTimeout()
-        console.log("toggled")
+        // console.log(display);
+        if (display === 0) {
+          display = 1;
+          $('#calendar-styles').show();
+          $('#list-container').hide();
+        } else {
+          display = 0;
+          $('#list-container').show();
+          $('#calendar-styles').hide();
+        }
       })
 
 
