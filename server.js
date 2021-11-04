@@ -101,10 +101,10 @@ mongoose.connect(dbURI)
         // console.log(listOfEvents);
         // console.log(listOfEvents.length);
       })
-      Event.find().then((result) => {
-          result = chronologicalOrder(result);
-          listOfEvents = result;
-        })
+      // Event.find().then((result) => {
+      //   result = chronologicalOrder(result);
+      //   listOfEvents = result;
+      // })
     }) // End app.listen
   })
   .catch((err) => console.log(err));
