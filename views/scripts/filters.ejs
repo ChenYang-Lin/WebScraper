@@ -23,6 +23,8 @@
         listOfEvents = filterOrganization(selectedOrganization, listOfEvents);
         listOfEvents = filterCategory(selectedCategory, listOfEvents);
         renderListContainer(listOfEvents);
+        updateEvents(listOfEvents);
+        init_calendar(new Date());
     }
 
     // Filter time
