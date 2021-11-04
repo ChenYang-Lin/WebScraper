@@ -25,8 +25,8 @@ let scrapEvents = async (list) => {
       headless: true,
       args: [
         "--no-sandbox",
+        '--disable-setuid-sandbox',
         // `--proxy-server=${ip}`,
-        // '--disable-setuid-sandbox',
         // `--proxy-server=${ProxyUrl}`,
         // '--ignore-certificate-errors',
         // '--ignore-certificate-errors-spki-list ',
@@ -102,6 +102,7 @@ async function scrapeFacebookEvents(browser, page) {
     } else {
       eventsURL = "/events";
     }
+    console.log("scrapingList: " + eventsURL);
 
     try {
       await page.goto(scrapingList[i].groupURL + eventsURL, {
