@@ -243,23 +243,26 @@ let second = Math.floor(Math.random() * (59 - 0 + 1)) + 0;
 let minute = Math.floor(Math.random() * (59 - 0 + 1)) + 0;
 let hour = Math.floor(Math.random() * (3 - 1 + 1)) + 1;
 cron.schedule(`${second} ${minute} ${hour} * * *`, async () => {
+    let today = new Date();
+    let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
+    let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    lastUpdate = "" + date + "  " + time + "..." + hour + ":" + minute + ":" + second;
+    
   second = Math.floor(Math.random() * (59 - 0 + 1)) + 0;
   minute = Math.floor(Math.random() * (59 - 0 + 1)) + 0;
   hour = Math.floor(Math.random() * (3 - 1 + 1)) + 1;
   console.log("running a task every day between 1 - 3 AM");
   Subscription.find().then(async (result) => {
     let newList = await scrapEvents(result);
+    
     if (newList.length !== 0) {
       listOfEvents = newList;
       listOfEvents = removeDuplicates(listOfEvents);
       listOfEvents = chronologicalOrder(listOfEvents);
       await eventDB(listOfEvents);
-      let today = new Date();
-      let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
-      let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-      lastUpdate = date + "  " + time;
-      console.log(lastUpdate);
+      
     }
+    console.log(lastUpdate);
     // console.log(listOfEvents);
     // console.log(listOfEvents.length);
   })
