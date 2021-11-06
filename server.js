@@ -243,10 +243,6 @@ let second = Math.floor(Math.random() * (59 - 0 + 1)) + 0;
 let minute = Math.floor(Math.random() * (59 - 0 + 1)) + 0;
 let hour = Math.floor(Math.random() * (3 - 1 + 1)) + 1;
 cron.schedule(`${second} ${minute} ${hour} * * *`, async () => {
-    let today = new Date();
-    let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
-    let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    lastUpdate = "" + date + "  " + time;
     
   second = Math.floor(Math.random() * (59 - 0 + 1)) + 0;
   minute = Math.floor(Math.random() * (59 - 0 + 1)) + 0;
@@ -260,7 +256,11 @@ cron.schedule(`${second} ${minute} ${hour} * * *`, async () => {
       listOfEvents = removeDuplicates(listOfEvents);
       listOfEvents = chronologicalOrder(listOfEvents);
       await eventDB(listOfEvents);
-      
+        
+      let today = new Date();
+      let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
+      let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      lastUpdate = "" + date + "  " + time;
     }
     console.log(lastUpdate);
     // console.log(listOfEvents);

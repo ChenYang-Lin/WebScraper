@@ -151,6 +151,7 @@ page.on('console', consoleObj => console.log(consoleObj.text()));
             return basicResults;
           }
         }
+        console.log(UpcomingEventsElement);
         numberOfEvents = UpcomingEventsElement.children.length;
         
 
