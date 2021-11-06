@@ -79,8 +79,8 @@ async function loginFacebook(page) {
   });
   try {
     // username and password
-    await page.type("#email", process.env.EMAIL2, { delay: 30 });
-    await page.type("#pass", process.env.PASSWORD2, { delay: 30 });
+    await page.type("#email", process.env.EMAIL, { delay: 30 });
+    await page.type("#pass", process.env.PASSWORD, { delay: 30 });
     await page.click("#loginbutton");
 
     // Wait for navigation to finish
@@ -152,6 +152,7 @@ page.on('console', consoleObj => console.log(consoleObj.text()));
           }
         }
         console.log(UpcomingEventsElement);
+        console.log(UpcomingEventsElement.children.length);
         numberOfEvents = UpcomingEventsElement.children.length;
         
 
@@ -232,6 +233,7 @@ page.on('console', consoleObj => console.log(consoleObj.text()));
 
 // Scrape more information for events from a group.
 async function scrapeIndividaulEvents(basicInfosFromOneGroup, browser) {
+  console.log("scrape individual post")
   let resultsFromOneGroup = [];
   let screenshot;
   // one by one for each event from current group.
