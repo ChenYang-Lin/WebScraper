@@ -151,8 +151,8 @@ page.on('console', consoleObj => console.log(consoleObj.text()));
             return basicResults;
           }
         }
-        console.log(UpcomingEventsElement);
-        console.log(UpcomingEventsElement.children.length);
+        // console.log(UpcomingEventsElement);
+        // console.log(UpcomingEventsElement.children.length);
         numberOfEvents = UpcomingEventsElement.children.length;
         
 
@@ -218,9 +218,9 @@ page.on('console', consoleObj => console.log(consoleObj.text()));
      // End page.evaluate
 
     let resultsFromOneGroup = await scrapeIndividaulEvents(basicInfosFromOneGroup, browser);
-    console.log(basicInfosFromOneGroup);
-    console.log(resultsFromOneGroup);
-    console.log(scrapingResults);
+    // console.log(basicInfosFromOneGroup);
+    // console.log(resultsFromOneGroup);
+    // console.log(scrapingResults);
     scrapingResults = scrapingResults.concat(resultsFromOneGroup);
 
     // Progress bar update
@@ -233,7 +233,7 @@ page.on('console', consoleObj => console.log(consoleObj.text()));
 
 // Scrape more information for events from a group.
 async function scrapeIndividaulEvents(basicInfosFromOneGroup, browser) {
-  console.log("scrape individual post")
+  // console.log("scrape individual post")
   let resultsFromOneGroup = [];
   let screenshot;
   // one by one for each event from current group.
