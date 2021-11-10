@@ -89,7 +89,7 @@ mongoose.connect(dbURI)
       //   let newList = await scrapEvents(result);
       //   if (newList.length !== 0) {
       //     listOfEvents = newList;
-      //     listOfEvents = chronologicalOrder(listOfEvents);
+      //     listOfEvents = removeDuplicates(listOfEvents);
       //     listOfEvents = chronologicalOrder(listOfEvents);
       //     // console.log(listOfEvents);
       //     await eventDB(listOfEvents);

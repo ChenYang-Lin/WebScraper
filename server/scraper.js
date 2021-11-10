@@ -126,11 +126,16 @@ page.on('console', consoleObj => console.log(consoleObj.text()));
     try {
       basicInfosFromOneGroup = await page.evaluate(async () => {
         let basicResults = [];
-        const UpcomingEventsDiv = ".dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi";
-        let UpcomingEventsElement = document.querySelectorAll(UpcomingEventsDiv)[0];
+        let UpcomingEventsElement = document.querySelectorAll(".dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi")[0];
 
         // expand see more
-        const seeMoreBtn = document.querySelector('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > [aria-label="See More"]')
+        let seeMoreBtn;
+        seeMoreBtn = document.querySelector('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > [aria-label="See More"]')
+        if (seeMoreBtn) {
+            await seeMoreBtn.click();    
+            await new Promise(resolve => setTimeout(resolve, 3000));
+        }
+        seeMoreBtn = document.querySelector('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > [aria-label="See more"]')
         if (seeMoreBtn) {
             await seeMoreBtn.click();    
             await new Promise(resolve => setTimeout(resolve, 3000));
@@ -162,38 +167,23 @@ page.on('console', consoleObj => console.log(consoleObj.text()));
           let event = UpcomingEventsElement.children[j];
           let linkToOriginalPost, image, dateTime, title;
           // The sturcture of Facebook events pages are slightly different, This if statement helps build more consistency.
-          if (event.childElementCount < 2) {
-            // html structure different
+
+          try {
             if (event.children[0].children[0].href !== undefined) {
+              console.log(event);
               linkToOriginalPost = event.children[0].children[0].getAttribute("href");
               image = event.children[0].children[0].children[0].children[0].src;
               dateTime = event.children[1].children[0].children[0].children[0].children[0].children[0].innerText;
-              title = event.children[1].children[0].children[0].children[0].children[0].children[1].innerText
+              title = event.children[1].children[0].children[0].children[0].children[0].children[1].innerText;
             } else {
               linkToOriginalPost = event.children[0].children[0].children[0].getAttribute("href");
               image = event.children[0].children[0].children[0].children[0].style.backgroundImage.replace("url(\"", "").replace("\")", "");
               dateTime = event.children[0].children[1].children[0].children[0].children[0].innerText;
               title = event.children[0].children[1].children[0].children[1].children[0].children[0].children[0].children[0].innerText;
             }
-          } else { // event.childElementCount >= 2
-            // linkToOriginalPost
-            try {
-              linkToOriginalPost = event.children[0].children[0].getAttribute("href");
-              if (linkToOriginalPost.substring(0, 5) !== "https") {
-                linkToOriginalPost = "#";
-              }
-            } catch (error) {
-              linkToOriginalPost = "#"
-            }
-            image = event.children[0].children[0].children[0].children[0].src;
-            let timeTitleAddressDiv = event.children[1].children[0].children[0].children[0].children[0];
-            dateTime = timeTitleAddressDiv.children[0].children[0].innerText;
-            // title
-            try {
-              title = timeTitleAddressDiv.children[1].children[0].children[0].children[0].children[0].innerText;
-            } catch (error) {
-              title = "null";
-            }
+          } catch (e) {
+            console.log("Data Error: " + j);
+            continue;
           }
 
           // scrape data based on the structure of Facebook page.
@@ -213,7 +203,8 @@ page.on('console', consoleObj => console.log(consoleObj.text()));
     } catch (e) {
       console.log("Evaluate Error: " + scrapingList[i].groupURL);
       console.log(e);
-      return [];
+      // return [];
+      continue;
     }
      // End page.evaluate
 
@@ -244,6 +235,8 @@ async function scrapeIndividaulEvents(basicInfosFromOneGroup, browser) {
     } else { // exist link to original post
       // create new page and navigate to the original post of current event to scrape more information
       const pageForOriginalPost = await browser.newPage();
+      // Configure the navigation timeout
+      await pageForOriginalPost.setDefaultNavigationTimeout(0);
       await pageForOriginalPost.goto(basicInfosFromOneGroup[i].linkToOriginalPost, {
         waitUntil: "networkidle0"
       });

@@ -257,7 +257,7 @@
       function copyToClipboard(url) {
         navigator.clipboard.writeText(url).then(function() {
           /* clipboard successfully set */
-          alert("link to original post copied clipboard: \n" + url);
+          alert("link to original post copied to clipboard: \n" + url);
         }, function() {
           /* clipboard write failed */
           alert("failed to copy url");
