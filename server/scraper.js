@@ -270,7 +270,7 @@ pageForOriginalPost.on('console', consoleObj => console.log(consoleObj.text()));
           if (document.querySelectorAll(".discj3wi.ihqw7lf3 > .dwo3fsh8")[0].parentNode.lastChild.children[0].children[0].children.length > 1) {
             document.querySelectorAll(".discj3wi.ihqw7lf3 > .dwo3fsh8")[0].parentNode.lastChild.children[0].children[0].children[1].children[0].click();
           } else {
-            document.querySelectorAll(".discj3wi.ihqw7lf3 > .dwo3fsh8")[0].parentNode.lastChild.children[0].children[0].children[0].children[0].click();
+            document.querySelectorAll(".discj3wi.ihqw7lf3 > .dwo3fsh8")[0].parentNode.lastChild.children[0].children[0].children[0].lastElementChild.click();
           }
           await new Promise(resolve => setTimeout(resolve, 4000));
         } catch (e) {
