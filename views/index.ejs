@@ -12,6 +12,7 @@
     <!-- Bootstrap Icon -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <!-- CSS -->
+    <link rel="stylesheet" href="/calendar.css" type="text/css">
     <link rel="stylesheet" href="/style.css" type="text/css">
   </head>  
   <body>
@@ -25,7 +26,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a href="#" class="nav-link">Contact Us</a>
+              <a href="mailto:info@gloriousrecovery.org" class="nav-link">Contact Us</a>
             </li>
             <li class="nav-item">
               <a href="#" class="nav-link">Request Event</a>
@@ -35,23 +36,90 @@
       </div>
     </nav>
 
+
+    <!-- Filter And Change Display Section -->
+    <div class="container bg-dark my-3 p-3">
+      <div class="row">
+        <!-- Filter -->
+        <div class="col-6 text-white">
+          <div class="container">
+            <div class="row">
+              <h3 class="col-12">Filter: </h3>
+            </div>
+            <!-- Filter week -->
+            <form class="row" id="filter-time">
+              <div class="col-12 my-2">
+                <select name="filter-week " id="filter-week" class="form-select">
+                  <option value="all">All Time</option>
+                  <option value="thisWeek">This Week</option>
+                  <option value="nextWeek">Next Week</option>
+                </select>
+              </div>
+            </form>
+            <!-- Filter Organization -->
+            <form class="row" id="filter-organization">
+              <div class="col-12 my-2">
+                <select name="filter-organization " id="filter-organization-name" class="form-select">
+                  <option value="all">All Organization</option>
+                </select>
+              </div>
+            </form>
+            <!-- Filter Category -->
+            <form class="row" id="filter-category">
+              <div class="col-12 my-2">
+                <select name="filter-week " id="filter-category-name" class="form-select">
+                  <option value="all">All Category</option>
+                </select>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- Change Display -->
+        <div class="col-4 text-white">
+          <div class="container">
+            <div class="row">
+              <h3 class="col-12">Calendar: </h3>
+            </div>
+            <form class="row" id="display-section">
+              <!-- Rounded switch -->
+              <label class="switch mx-3">
+                  <input type="checkbox">
+                  <span class="slider round"></span>
+              </label>
+            </form>
+          </div>
+        </div>
+        <!-- End Change Display Section -->
+      </div>
+    </div>
+
+    <!-- Check if any event exist -->
     <% if(listOfEvents.length === 0) { %>
       <h1>no events, try again later</h1>
     <% } %>
 
 
-    <!-- Event Container -->
-    <div class="container bg-white shadow p-3 rounded my-3">
+    <!-- List View -->
+    <div id="list-container" class="container p-3 rounded my-3">
       <div class="row justify-content-center">
         <% for (let i = 0; i < listOfEvents.length; i++) { %>
-          <div class="container">
-            <div class="row align-items-center">
-              <!-- Img -->
-              <div class="col-4">
+          <div class="container card shadow my-3">
+            <div class="row">
+              <!-- Img/Category -->
+              <div class="col-12 col-sm-4 my-2">
+                <!-- Category -->
+                <div class="mb-1">
+                  <% for (let c = 0; c < listOfEvents[i].category.length; c++) { %>
+                    <button class="text-light bg-dark border rounded p-1 category-btn">
+                      <%= listOfEvents[i].category[c] %>
+                    </button>
+                  <% } %>
+                </div>
+                <!-- Image -->
                 <img class="img-fluid w-100 rounded" src="<%= listOfEvents[i].image %>" alt="Image" />
               </div>
               <!-- Content -->
-              <div class="col-8">
+              <div class="col-12 col-sm-8 my-2 d-flex flex-column pt-4">
                 <!-- Tickets -->
                 <% if(listOfEvents[i].ticket) { %>
                   <a href="<%= listOfEvents[i].linkToOriginalPost %>" class="text-decoration-none" >
@@ -68,10 +136,27 @@
                 </h3>
                 <!-- Location -->
                 <h4><%= listOfEvents[i].address %></h4>
-                <!-- Button -->
-                <button class="button border rounded bg-primary text-light m-1 px-3" onclick="expandEvent(<%= i %>)">
-                  <i class="bi bi-arrows-expand"> expand</i>
-                </button>                
+                <!-- Button Container -->
+                <div class="button-container mt-auto">
+                  <!-- Expand Button -->
+                  <div class="event-btn">
+                    <button type="button" class="btn btn-primary text-light m-1 px-3 fit-btn" onclick="expandEvent(<%= i %>)">
+                      <i class="bi bi-arrows-expand"></i> Expand
+                    </button>
+                  </div>
+                  <!-- Share Button -->
+                  <div class="btn-group event-btn">
+                    <button type="button" class="btn btn-primary dropdown-toggle fit-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="bi bi-share-fill"></i> Share
+                    </button>
+                    <ul class="dropdown-menu share-dropdown shadow-lg">
+                      <li><a href="https://www.facebook.com/sharer.php?u=<%= listOfEvents[i].linkToOriginalPost %>" target="_blank" class="facebook-btn"><i class="bi bi-facebook"></i></a></li>
+                      <li><a href="https://twitter.com/share?url=<%= listOfEvents[i].linkToOriginalPost %>&text=<%= listOfEvents[i].title %>: " target="_blank" class="twitter-btn"><i class="bi bi-twitter"></i></a></li>
+                      <li><a onclick="copyToClipboard('<%= listOfEvents[i].linkToOriginalPost %>')" class="clipboard-url"><i class="bi bi-clipboard"></i></a></li>
+                    </ul>
+                  </div>
+                </div>
+                <!-- End Button Container -->
               </div>
             </div>
             <!-- Extra Info -->
@@ -82,8 +167,7 @@
                 <% for (let j = 0; j < listOfEvents[i].organizationInfo.length; j++) { %>
                   <a href="<%= listOfEvents[i].organizationInfo[j].link %>" class="organization-link" >
                     <%= listOfEvents[i].organizationInfo[j].name %>
-                  </a>
-                  ,
+                  </a>, 
                 <% } %>
               </h5>
               <!-- Description -->
@@ -91,21 +175,64 @@
             </div>
             <!-- End Extra Info -->
           </div>
-          <!-- <img src="data:image/png;base64, <%= listOfEvents[i].screenshot %>" /> -->
-          <hr>
-          <br>
         <% } %>
       </div>
     </div>
 
 
-    <!-- Footer -->
-    <button class="filter" onclick="filterCurrentWeek(listOfEvents, 0)">filter this week</button>
-    <button class="filter" onclick="filterCurrentWeek(listOfEvents, 1)">filter next week</button>
-    <button class="filter" onclick="filterCurrentWeek(listOfEvents, 2)">filter 2 week</button>
-    <button class="filter" onclick="filterCurrentWeek(listOfEvents, 3)">filter 3 week</button>
-    <button class="filter" onclick="filterCurrentWeek(listOfEvents, 4)">filter 4 week</button>
+    <!-- Calendar View -->
+    <div id="calendar-styles" style="display: none;">
+      <div class="content">
+        <div class="calendar-container">
+          <div class="calendar"> 
+            <div class="year-header"> 
+              <span class="left-button" id="prev"> &lang; </span> 
+              <span class="year" id="label"></span> 
+              <span class="right-button" id="next"> &rang; </span>
+            </div> 
+            <table class="months-table"> 
+              <tbody>
+                <tr class="months-row">
+                  <td class="month">Jan</td> 
+                  <td class="month">Feb</td> 
+                  <td class="month">Mar</td> 
+                  <td class="month">Apr</td> 
+                  <td class="month">May</td> 
+                  <td class="month">Jun</td> 
+                  <td class="month">Jul</td>
+                  <td class="month">Aug</td> 
+                  <td class="month">Sep</td> 
+                  <td class="month">Oct</td>          
+                  <td class="month">Nov</td>
+                  <td class="month">Dec</td>
+                </tr>
+              </tbody>
+            </table> 
+            
+            <table class="days-table"> 
+              <td class="day">Sun</td> 
+              <td class="day">Mon</td> 
+              <td class="day">Tue</td> 
+              <td class="day">Wed</td> 
+              <td class="day">Thu</td> 
+              <td class="day">Fri</td> 
+              <td class="day">Sat</td>
+            </table> 
+            <div class="frame"> 
+              <table class="dates-table"> 
+                  <tbody class="tbody">             
+                  </tbody> 
+              </table>
+            </div> 
+          </div>
+        </div>
+        <div class="events-container">
+        </div>
+      </div>
+    </div>
 
+    <!-- Footer -->
+    <div class="extra-space" style="margin-bottom: 300px;"></div>
 
     <!-- Bootstrap script -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
@@ -114,15 +241,51 @@
 
     <!-- Scripts -->
     <%- include ('scripts/client.ejs') %>
-    <%- include ('scripts/filterWeek.ejs') %>
-    <%- include ('scripts/render.ejs') %>
+    <%- include ('scripts/renderListContainer.ejs') %>
+    <%- include ('scripts/calendar.ejs') %>
+    <%- include ('scripts/filters.ejs') %>
+    
 
     <script>
-      // id="expand-btn"
+      // Expand button for each event in list
       function expandEvent(index) {
         let extraInfo = document.querySelectorAll(".extra-info");
         $(extraInfo[index]).toggle();
       }
+
+      // Share button for copy to clipboard
+      function copyToClipboard(url) {
+        navigator.clipboard.writeText(url).then(function() {
+          /* clipboard successfully set */
+          alert("link to original post copied to clipboard: \n" + url);
+        }, function() {
+          /* clipboard write failed */
+          alert("failed to copy url");
+        });
+      }
+      // var $copiedElement = $("<span>");
+      // $copiedElement.addClass('copied').text('copied!');
+      // $('.copyto-clipboard').append($copiedElement);
+      // $copiedElement.fadeIn(100);
+      // $copiedElement.fadeOut(5000);
+
+      // Change Display 
+      let display = 0; // 0 = list view; 1 = calendar view
+      $("#display-section").change(() => {
+        // console.log(display);
+        if (display === 0) {
+          display = 1;
+          $('#calendar-styles').show();
+          $('#list-container').hide();
+        } else {
+          display = 0;
+          $('#list-container').show();
+          $('#calendar-styles').hide();
+        }
+      })
+
+
+      
     </script>
   </body>
 </html>

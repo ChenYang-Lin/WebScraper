@@ -3,10 +3,12 @@ const app = express();
 const cron = require("node-cron");
 const path = require("path");
 const mongoose = require("mongoose");
-const Subscription = require("./server/models/subscription");
+const Subscription = require("./server/models/subscription"); 
+const Event = require("./server/models/event"); 
 
 let { scrapEvents, getScraping, getScrapeProgress } = require("./server/scraper.js");
 let { removeDuplicates } = require("./server/removeDuplicates.js");
+let { chronologicalOrder } = require("./server/chronologicalOrder.js");
 
 let listOfEvents = [];
 let scrapingList = [
@@ -21,6 +23,7 @@ let scrapingList = [
   "https://www.facebook.com/kcmakesmusic",
   "https://www.facebook.com/liberationprograms",
 ];
+let lastUpdate = "";
 
 // Register view engine
 app.set("view engine", "ejs");
@@ -47,62 +50,95 @@ app.get('/init-subscription', (req, res) => {
   }
   res.redirect('/admin');
 })
-// app.get('/add-subscription', (req, res) => {
-//   const subscription = new Subscription({
-//     groupURL: "https://www.facebook.com/gloriousrecovery",
-//   });
-
-//   subscription.save()
-//     .then((result) => {
-//       res.send(result);
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     })
-// });
-
-// app.get('/all-subscription', (req, res) => {
-//   Subscription.find()
-//     .then((result) => {
-//       res.send(result);
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     })
-// })
-
-// app.get('/single-subscription', (req, res) => {
-//   Subscription.findById('61704685a6a79d205db09a8e')
-//     .then((result) => {
-//       res.send(result)
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     })
-// })
 
 // MongoDB database
 // Connect to MondoDB
-let subscriptions = Subscription.find().then((result) => {
-    })
 const dbURI = `mongodb+srv://ChenYang-Lin:${process.env.MongoDB_User_Password}@cluster0.cts13.mongodb.net/${process.env.MongoDB_myFirstDatabase}?retryWrites=true&w=majority`;
 mongoose.connect(dbURI)
   .then((result) => {
     app.listen(process.env.PORT || 3000, async () => {
       console.log("app is running on port 3000");
-      if (listOfEvents.length === 0) {
-        Subscription.find().then(async (result) => {
-          listOfEvents = await scrapEvents(result);
-          listOfEvents = removeDuplicates(listOfEvents);
-          // console.log(listOfEvents);
-          console.log(listOfEvents.length);
-        })
-        // listOfEvents = await scrapEvents(scrapingList);
-      }
+      
+      let testList = [
+        // {
+        //   groupURL: "https://www.facebook.com/gloriousrecovery",
+        // },
+        // {
+        //   groupURL: "https://www.facebook.com/TipThePainScale",
+        // },
+        {
+          groupURL: "https://www.facebook.com/CCAR4Recovery",
+        },
+      ];
+
+      // listOfEvents = await scrapEvents(testList);
+      // if (listOfEvents.length !== 0) {
+      //   listOfEvents = removeDuplicates(listOfEvents);
+      //   listOfEvents = chronologicalOrder(listOfEvents);
+      //   listOfEvents = chronologicalOrder(listOfEvents);
+      //   await eventDB(listOfEvents);
+      //   let today = new Date();
+      //   let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
+      //   let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      //   console.log(date + "  " + time);
+      // }
+      // console.log(listOfEvents);
+      // console.log(listOfEvents.length);
+
+      // Subscription.find().then(async (result) => {
+      //   let newList = await scrapEvents(result);
+      //   if (newList.length !== 0) {
+      //     listOfEvents = newList;
+      //     listOfEvents = removeDuplicates(listOfEvents);
+      //     listOfEvents = chronologicalOrder(listOfEvents);
+      //     // console.log(listOfEvents);
+      //     await eventDB(listOfEvents);
+      //     let today = new Date();
+      //     let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
+      //     let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      //     console.log(date + "  " + time);
+      //   }
+      //   console.log(listOfEvents.length);
+      //   console.log(listOfEvents);
+      // })
+      Event.find().then((result) => {
+        result = chronologicalOrder(result);
+        listOfEvents = result;
+      })
     }) // End app.listen
   })
   .catch((err) => console.log(err));
 
+
+async function eventDB(list) {
+  await Event.remove();
+  // console.log(list);
+  for (let i = 0; i < list.length; i++) {
+    let event = new Event({
+      title: list[i].title,
+      image: list[i].image,
+      dateTime: list[i].dateTime,
+      linkToOriginalPost: list[i].linkToOriginalPost,
+      detailDateTime: list[i].detailDateTime,
+      address: list[i].address,
+      description: list[i].description,
+
+      organizationInfo: list[i].organizationInfo,
+      splitTime: list[i].splitTime,
+      ticket: list[i].ticket,
+      category: list[i].category,
+      keywords: list[i].keywords,
+      dateObject: list[i].dateObject,
+    });
+    event.save()
+    .then((result) => {
+      // console.log(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
+}
 
 // Routes
 app.get("/", async (req, res) => {
@@ -121,6 +157,7 @@ app.get("/admin", async (req, res) => {
         result,
         scraping,
         scrapeProgress,
+        lastUpdate,
       });
     })
     .catch((err) => {
@@ -187,6 +224,7 @@ app.post("/admin/scrape", (req, res) => {
     // console.log(req.body);
     Subscription.find().then(async (result) => {
       listOfEvents = await scrapEvents(result);
+      listOfEvents = removeDuplicates(listOfEvents);
     })
   } 
 })
@@ -201,15 +239,38 @@ app.post("/admin/progress", (req, res) => {
 })
 
 // Update list of events repeatly by doing new scrapes
-cron.schedule("0 0 0 * * *", async () => {
-  console.log("running a task every day at 12:00 AM");
+let second = Math.floor(Math.random() * (59 - 0 + 1)) + 0;
+let minute = Math.floor(Math.random() * (59 - 0 + 1)) + 0;
+let hour = Math.floor(Math.random() * (3 - 1 + 1)) + 1;
+cron.schedule(`${second} ${minute} ${hour} * * *`, async () => {
+    
+  second = Math.floor(Math.random() * (59 - 0 + 1)) + 0;
+  minute = Math.floor(Math.random() * (59 - 0 + 1)) + 0;
+  hour = Math.floor(Math.random() * (3 - 1 + 1)) + 1;
+  console.log("running a task every day between 1 - 3 AM");
   Subscription.find().then(async (result) => {
-    listOfEvents = await scrapEvents(result);
-    console.log(listOfEvents);
-    console.log(listOfEvents.length);
+    let newList = await scrapEvents(result);
+    
+    if (newList.length !== 0) {
+      listOfEvents = newList;
+      listOfEvents = removeDuplicates(listOfEvents);
+      listOfEvents = chronologicalOrder(listOfEvents);
+      await eventDB(listOfEvents);
+        
+      let today = new Date();
+      let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
+      let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      lastUpdate = "" + date + "  " + time;
+    }
+    console.log(lastUpdate);
+    // console.log(listOfEvents);
+    // console.log(listOfEvents.length);
   })
   // listOfEvents = await scrapEvents(scrapingList);
 });
+
+
+
 
 // Subscription.find().then(async (result) => {
 //   listOfEvents = await scrapEvents(result);

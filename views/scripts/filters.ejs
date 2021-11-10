@@ -1,0 +1,100 @@
+<script>
+    let selectedTime = "all";
+    let selectedOrganization = "all";
+    let selectedCategory = "all";
+
+    // listeners for filter input
+    $("#filter-time").change(() => {
+        selectedTime = $("#filter-time option:selected").val();
+        updateList();
+    });
+    $("#filter-organization").change(() => {
+        selectedOrganization = $("#filter-organization option:selected").val();
+        updateList();
+    });
+    $("#filter-category").change(() => {
+        selectedCategory = $("#filter-category option:selected").val();
+        updateList();
+    })
+
+    function updateList() {
+        listOfEvents = listOfEventsCopy;
+        listOfEvents = filterTime(selectedTime, listOfEvents);
+        listOfEvents = filterOrganization(selectedOrganization, listOfEvents);
+        listOfEvents = filterCategory(selectedCategory, listOfEvents);
+        renderListContainer(listOfEvents);
+        updateEvents(listOfEvents);
+        init_calendar(new Date());
+    }
+
+    // Filter time
+    function filterTime(selected, listOfEvents) {
+        if (selected === "all") {
+            return listOfEvents;
+        } else if (selected === "thisWeek") {
+            listOfEvents = filterCurrentWeek(listOfEvents, 0);
+        } else if (selected === "nextWeek") {
+            listOfEvents = filterCurrentWeek(listOfEvents, 1);
+        } else {
+            console.log("filter selected not defined")
+        }
+        return listOfEvents;
+    }
+    
+    // Filter organization
+    function filterOrganization(selected, listOfEvents) {
+        if (selected === "all") {
+            return listOfEvents;
+        }
+        listOfEvents = listOfEvents.filter((element) => {
+            let organizations = element.organizationInfo;
+            for (let i = 0; i < organizations.length; i++) {
+                if (organizations[i].name === selected) 
+                    return true;
+            }
+        })
+        return listOfEvents;
+    }
+
+    // Filter category
+    function filterCategory(selected, listOfEvents) {
+        if (selected === "all") {
+            return listOfEvents;
+        }
+        listOfEvents = listOfEvents.filter((element) => {
+            let categories = element.category;
+            for (let i = 0; i < categories.length; i++) {
+                if (categories[i] === selected) 
+                    return true;
+            }
+        })
+        return listOfEvents;
+    }
+
+    // More function for filter time (week)
+    function filterCurrentWeek(listOfEvents, week){
+        let [start, end] = getWeekDates(week);
+
+        listOfEvents = listOfEvents.filter((object) => {
+            let date = new Date(object.dateObject);
+            return date >= start && date < end
+        })
+        return listOfEvents;
+    }
+
+    function getWeekDates(week) {
+        let now = new Date();
+        let dayOfWeek = now.getDay(); 
+        let numDay = now.getDate();
+
+        let start = new Date(now); 
+        start.setDate(numDay  + ((week > 0) ? 7 - dayOfWeek : 0) + ((week > 0) ? ((week - 1) * 7) : 0));
+        start.setHours(0, 0, 0, 0);
+
+        let end = new Date(now);
+        end.setDate(numDay + 1 + (7 - dayOfWeek) + (week * 7));
+        end.setHours(0, 0, 0, 0);
+
+        return [start, end];
+    }
+</script>
