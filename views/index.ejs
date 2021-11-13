@@ -36,7 +36,24 @@
       </div>
     </nav>
 
+    <!-- Featured Section -->
+    <div class="container p-3 rounded mb-0 pb-0">
+      <div class="row justify-content-center mb-0 pb-0">
+        <h1 calss="mb-0 pb-0">Featured Events: </h1>
+      </div>
+    </div>
+    <div id="featured-container" class="container p-3 rounded mt-0">
+      <div class="row justify-content-center">
+      </div>
+    </div>
 
+
+    <!-- All Events -->
+    <div class="container p-3 rounded my-3">
+      <div class="row justify-content-center">
+        <h1>All Events: </h1>
+      </div>
+    </div>
     <!-- Filter And Change Display Section -->
     <div class="container bg-dark my-3 p-3">
       <div class="row">
@@ -98,7 +115,6 @@
       <h1>no events, try again later</h1>
     <% } %>
 
-
     <!-- List View -->
     <div id="list-container" class="container p-3 rounded my-3">
       <div class="row justify-content-center">
@@ -154,6 +170,12 @@
                       <li><a href="https://twitter.com/share?url=<%= listOfEvents[i].linkToOriginalPost %>&text=<%= listOfEvents[i].title %>: " target="_blank" class="twitter-btn"><i class="bi bi-twitter"></i></a></li>
                       <li><a onclick="copyToClipboard('<%= listOfEvents[i].linkToOriginalPost %>')" class="clipboard-url"><i class="bi bi-clipboard"></i></a></li>
                     </ul>
+                  </div>
+                  <!-- Featured Button -->
+                  <div class="event-btn">
+                    <button type="button" class="btn btn-primary pin-btn-all text-light m-1 px-3" value="pin" onclick="pinClicked(<%= i %>)">
+                      <i class="bi bi-pin-fill"></i> Pin
+                    </button>
                   </div>
                 </div>
                 <!-- End Button Container -->
@@ -242,11 +264,78 @@
     <!-- Scripts -->
     <%- include ('scripts/client.ejs') %>
     <%- include ('scripts/renderListContainer.ejs') %>
+    <%- include ('scripts/renderFeatured.ejs') %>
     <%- include ('scripts/calendar.ejs') %>
     <%- include ('scripts/filters.ejs') %>
     
 
     <script>
+      $(document).ready(function() {
+        renderFeatured(); 
+        rerenderPinWithLS();
+      });
+
+      let featuredList = JSON.parse(localStorage.getItem("featuredList"));
+      if (featuredList == null) {
+        featuredList = {};
+      };
+
+      // pin add or remove
+      function pinClicked(index) {
+        let pinBtn = document.querySelectorAll(".pin-btn-all");
+        
+        if ($(pinBtn[index]).attr("value") == "pin") {
+          let link = listOfEvents[index].linkToOriginalPost;
+          featuredList[link] = link;
+          localStorage.setItem("featuredList", JSON.stringify(featuredList));
+        } else {
+          let link = listOfEvents[index].linkToOriginalPost;
+          delete featuredList[link];
+          localStorage.setItem("featuredList", JSON.stringify(featuredList));
+        }
+        renderFeatured(); 
+        rerenderPinWithLS();
+      }
+
+      function removeFeatured(index) {
+        let pinBtn = document.querySelectorAll(".pin-btn-featured");
+        if ($(pinBtn[index]).attr("value") != "unpin") return;
+
+        let link = featuredListOfEvents[index].linkToOriginalPost;
+        delete featuredList[link];
+        localStorage.setItem("featuredList", JSON.stringify(featuredList));
+        
+        renderFeatured(); 
+        rerenderPinWithLS();
+      }
+      
+      
+      function rerenderPinWithLS() {
+        let featuredList = JSON.parse(localStorage.getItem("featuredList"));
+        if (featuredList == null) return;
+
+        let pinBtn = document.querySelectorAll(".pin-btn-all");
+        for(let i = 0; i < listOfEvents.length; i++) {
+          $(pinBtn[i]).val("pin");
+          $(pinBtn[i]).html(`
+            <i class="bi bi-pin-fill"></i> Pin
+          `);
+          $(pinBtn[i]).removeClass("btn-danger").addClass("btn-primary");
+
+          for (let j in featuredList) {
+            if (listOfEvents[i].linkToOriginalPost == featuredList[j]) {
+              $(pinBtn[i]).val("unpin");
+              $(pinBtn[i]).html(`
+                <i class="bi bi-pin-angle-fill"></i> Unpin 
+              `);
+              $(pinBtn[i]).removeClass("btn-primary").addClass("btn-danger");
+              break;
+            } 
+          }
+        }
+      }
+      
+
       // Expand button for each event in list
       function expandEvent(index) {
         let extraInfo = document.querySelectorAll(".extra-info");
@@ -263,11 +352,6 @@
           alert("failed to copy url");
         });
       }
-      // var $copiedElement = $("<span>");
-      // $copiedElement.addClass('copied').text('copied!');
-      // $('.copyto-clipboard').append($copiedElement);
-      // $copiedElement.fadeIn(100);
-      // $copiedElement.fadeOut(5000);
 
       // Change Display 
       let display = 0; // 0 = list view; 1 = calendar view

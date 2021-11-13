@@ -24,6 +24,7 @@
         listOfEvents = filterCategory(selectedCategory, listOfEvents);
         renderListContainer(listOfEvents);
         updateEvents(listOfEvents);
+        rerenderPinWithLS();
         init_calendar(new Date());
     }
 

@@ -1,17 +1,35 @@
 <script>
-    function renderListContainer(listOfEvents) {
+    function renderFeatured() {
+        // Seleted featured list
+        featuredListOfEvents = [];
+
+        let featuredList = JSON.parse(localStorage.getItem("featuredList"));
+        if (featuredList == null) return;
+
+        for(let i = 0; i < listOfEventsCopy.length; i++) {
+          for (let j in featuredList) {
+            if (listOfEventsCopy[i].linkToOriginalPost == featuredList[j]) {
+                console.log(listOfEventsCopy[i]);
+              featuredListOfEvents.push(listOfEventsCopy[i]);
+              break;
+            }
+          }
+        }
+        console.log(featuredListOfEvents);
+
+        // render featured list
         let newList = document.createElement('div');
         newList.className = "row justify-content-center";
 
-        for (let i = 0; i < listOfEvents.length; i++) {
+        for (let i = 0; i < featuredListOfEvents.length; i++) {
           
           function getTicketContainer() {
             // create ticket
-            if (!listOfEvents[i].ticket) return "<!-- no tickets -->";
+            if (!featuredListOfEvents[i].ticket) return "<!-- no tickets -->";
             // let outerTicketDiv = document.createElement('div');
             let ticketContainer = 
             `
-            <a href="${listOfEvents[i].linkToOriginalPost}" class="text-decoration-none" >
+            <a href="${featuredListOfEvents[i].linkToOriginalPost}" class="text-decoration-none" >
               <h5 class="text-dark bg-warning">Tickets available here (original page)</h5>
             </a>
             `
@@ -24,10 +42,10 @@
             let categoryContainer = document.createElement('div');
             categoryContainer.className = "mb-1";
 
-            for (let c = 0; c < listOfEvents[i].category.length; c++) {
+            for (let c = 0; c < featuredListOfEvents[i].category.length; c++) {
               let element = document.createElement('button');
               element.classList.add("text-light", "bg-dark", "border", "rounded", "p-1", "category-btn");
-              element.innerHTML = listOfEvents[i].category[c];
+              element.innerHTML = featuredListOfEvents[i].category[c];
 
               categoryContainer.appendChild(element);
             }
@@ -41,11 +59,11 @@
             let organizationContainer = document.createElement('h5');
             organizationContainer.className = "organization-name";
             organizationContainer.innerHTML += "Organization: "
-            for (let j = 0; j < listOfEvents[i].organizationInfo.length; j++) {
+            for (let j = 0; j < featuredListOfEvents[i].organizationInfo.length; j++) {
               let element = document.createElement('a');
-              element.setAttribute('href', listOfEvents[i].organizationInfo[j].link);
+              element.setAttribute('href', featuredListOfEvents[i].organizationInfo[j].link);
               element.className = "organization-link";
-              element.innerHTML = listOfEvents[i].organizationInfo[j].name;
+              element.innerHTML = featuredListOfEvents[i].organizationInfo[j].name;
 
               organizationContainer.appendChild(element);
               organizationContainer.innerHTML += ", ";
@@ -61,22 +79,22 @@
                 <!-- Img/Category -->
                 <div class="col-12 col-sm-4 my-2">
                   ${getCategoryContainer()}
-                  <img class="img-fluid w-100 rounded" src="${listOfEvents[i].image}" alt="Image" />
+                  <img class="img-fluid w-100 rounded" src="${featuredListOfEvents[i].image}" alt="Image" />
                 </div>
                 <!-- Content -->
                 <div class="col-12 col-sm-8 my-2 d-flex flex-column pt-4">
                   <!-- Tickets -->
                   ${getTicketContainer()}
                   <!-- Time -->
-                  <h4 class="text-danger">${listOfEvents[i].detailDateTime}</h4>
+                  <h4 class="text-danger">${featuredListOfEvents[i].detailDateTime}</h4>
                   <!-- Title -->
                   <h3 class="fw-bold">
-                    <a href="${listOfEvents[i].linkToOriginalPost}" class="link-to-original-post" >
-                      ${listOfEvents[i].title}
+                    <a href="${featuredListOfEvents[i].linkToOriginalPost}" class="link-to-original-post" >
+                      ${featuredListOfEvents[i].title}
                     </a>
                   </h3>
                   <!-- Location -->
-                  <h4>${listOfEvents[i].address}</h4>        
+                  <h4>${featuredListOfEvents[i].address}</h4>        
                   <!-- Button Container -->
                   <div class="button-container mt-auto">
                     <!-- Expand Button -->
@@ -91,15 +109,15 @@
                         <i class="bi bi-share-fill"></i> Share
                       </button>
                       <ul class="dropdown-menu share-dropdown shadow-lg">
-                        <li><a href="https://www.facebook.com/sharer.php?u=${listOfEvents[i].linkToOriginalPost}" target="_blank" class="facebook-btn"><i class="bi bi-facebook"></i></a></li>
-                        <li><a href="https://twitter.com/share?url=${listOfEvents[i].linkToOriginalPost}&text=${listOfEvents[i].title}: " target="_blank" class="twitter-btn"><i class="bi bi-twitter"></i></a></li>
-                        <li><a onclick="copyToClipboard('${listOfEvents[i].linkToOriginalPost}')" class="clipboard-url"><i class="bi bi-clipboard"></i></a></li>
+                        <li><a href="https://www.facebook.com/sharer.php?u=${featuredListOfEvents[i].linkToOriginalPost}" target="_blank" class="facebook-btn"><i class="bi bi-facebook"></i></a></li>
+                        <li><a href="https://twitter.com/share?url=${featuredListOfEvents[i].linkToOriginalPost}&text=${featuredListOfEvents[i].title}: " target="_blank" class="twitter-btn"><i class="bi bi-twitter"></i></a></li>
+                        <li><a onclick="copyToClipboard('${featuredListOfEvents[i].linkToOriginalPost}')" class="clipboard-url"><i class="bi bi-clipboard"></i></a></li>
                       </ul>
                     </div>
                     <!-- Featured Button -->
                     <div class="event-btn">
-                      <button type="button" class="btn btn-primary pin-btn-all text-light m-1 px-3" value="pin" onclick="pinClicked(${i})">
-                        <i class="bi bi-pin-fill"></i> Pin
+                      <button type="button" class="btn btn-danger pin-btn-featured text-light m-1 px-3" value="unpin" onclick="removeFeatured(${i})">
+                        <i class="bi bi-pin-angle-fill"></i> Unpin 
                       </button>
                     </div>
                   </div>
@@ -111,12 +129,12 @@
                 <!-- Organization -->
                 ${getOrganizationContainer()}
                 <!-- Description -->
-                <p>Description: ${listOfEvents[i].description}</p>
+                <p>Description: ${featuredListOfEvents[i].description}</p>
               </div>
               <!-- End Extra Info -->
             </div>
           `
         }
-        $("#list-container").html(newList);
+        $("#featured-container").html(newList);
       }
 </script>
