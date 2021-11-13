@@ -271,6 +271,7 @@
 
     <script>
       $(document).ready(function() {
+        removePastEventPins();
         renderFeatured(); 
         rerenderPinWithLS();
       });
@@ -295,6 +296,27 @@
         }
         renderFeatured(); 
         rerenderPinWithLS();
+      }
+      
+      function removePastEventPins() {
+        featuredList = JSON.parse(localStorage.getItem("featuredList"));
+        if (featuredList == null) return;
+
+        let newfeaturedList = featuredList;
+        for (let j in featuredList) {
+          for(let i = 0; i < listOfEventsCopy.length; i++) {
+            if (listOfEventsCopy[i].linkToOriginalPost == featuredList[j]) {
+              break;
+            } else {
+              if (i == listOfEventsCopy.length - 1) {
+                let link = featuredList[j];
+                delete newfeaturedList[link];
+              }
+            }
+          }
+        }
+        featuredList = newfeaturedList;
+        localStorage.setItem("featuredList", JSON.stringify(featuredList));
       }
 
       function removeFeatured(index) {

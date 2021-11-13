@@ -9,13 +9,13 @@
         for(let i = 0; i < listOfEventsCopy.length; i++) {
           for (let j in featuredList) {
             if (listOfEventsCopy[i].linkToOriginalPost == featuredList[j]) {
-                console.log(listOfEventsCopy[i]);
+                // console.log(listOfEventsCopy[i]);
               featuredListOfEvents.push(listOfEventsCopy[i]);
               break;
             }
           }
         }
-        console.log(featuredListOfEvents);
+        // console.log(featuredListOfEvents);
 
         // render featured list
         let newList = document.createElement('div');
