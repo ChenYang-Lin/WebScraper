@@ -274,9 +274,13 @@
         removePastEventPins();
         renderFeatured(); 
         rerenderPinWithLS();
+        featuredList = JSON.parse(localStorage.getItem("featuredList"));
+        if (featuredList == null) {
+          featuredList = {};
+        };
       });
 
-      let featuredList = JSON.parse(localStorage.getItem("featuredList"));
+      featuredList = JSON.parse(localStorage.getItem("featuredList"));
       if (featuredList == null) {
         featuredList = {};
       };
@@ -349,7 +353,7 @@
       
       
       function rerenderPinWithLS() {
-        let featuredList = JSON.parse(localStorage.getItem("featuredList"));
+        featuredList = JSON.parse(localStorage.getItem("featuredList"));
         if (featuredList == null) return;
 
         let pinBtn = document.querySelectorAll(".pin-btn-all");
