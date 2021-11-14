@@ -288,6 +288,8 @@
         
         $(pinBtn[index]).removeClass("btn-primary").addClass("btn-danger");
         console.log("clicked");
+        console.log("value");
+        console.log($(pinBtn[index]).attr("value"))
         
         if ($(pinBtn[index]).attr("value") == "pin") {
           let link = listOfEvents[index].linkToOriginalPost;
