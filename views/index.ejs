@@ -156,7 +156,7 @@
                 <div class="button-container mt-auto">
                   <!-- Expand Button -->
                   <div class="event-btn">
-                    <button type="button" class="btn btn-primary text-light m-1 px-3 fit-btn" onclick="expandEvent(<%= i %>)">
+                    <button type="button" class="btn btn-primary text-light m-1 px-3 fit-btn" onclick="expandEventAll(<%= i %>)">
                       <i class="bi bi-arrows-expand"></i> Expand
                     </button>
                   </div>
@@ -182,7 +182,7 @@
               </div>
             </div>
             <!-- Extra Info -->
-            <div class="row align-items-center extra-info" style="display:none;">
+            <div class="row align-items-center extra-info-all" style="display:none;">
               <!-- Organization -->
               <h5 class="organization-name">
                 Organization: 
@@ -364,10 +364,15 @@
       
 
       // Expand button for each event in list
-      function expandEvent(index) {
-        let extraInfo = document.querySelectorAll(".extra-info");
+      function expandEventAll(index) {
+        let extraInfo = document.querySelectorAll(".extra-info-all");
         $(extraInfo[index]).toggle();
       }
+      function expandEventFeatured(index) {
+        let extraInfo = document.querySelectorAll(".extra-info-featured");
+        $(extraInfo[index]).toggle();
+      }
+      
 
       // Share button for copy to clipboard
       function copyToClipboard(url) {

@@ -81,7 +81,7 @@
                   <div class="button-container mt-auto">
                     <!-- Expand Button -->
                     <div class="event-btn">
-                      <button type="button" class="btn btn-primary text-light m-1 px-3 fit-btn" onclick="expandEvent(${i})">
+                      <button type="button" class="btn btn-primary text-light m-1 px-3 fit-btn" onclick="expandEventAll(${i})">
                         <i class="bi bi-arrows-expand"></i> Expand
                       </button>
                     </div>
@@ -107,7 +107,7 @@
                 </div>
               </div>
               <!-- Extra Info -->
-              <div class="row align-items-center extra-info" style="display:none;">
+              <div class="row align-items-center extra-info-all" style="display:none;">
                 <!-- Organization -->
                 ${getOrganizationContainer()}
                 <!-- Description -->

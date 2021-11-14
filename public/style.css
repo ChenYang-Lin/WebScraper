@@ -1,13 +1,12 @@
 /*  */
 
 body,
-#list-container {
+#list-container,
+#featured-container {
   background-color: #fafafa;
+  transition: all 0.5s linear;
 }
-body.noscroll{
-    position:fixed;
-    overflow:hidden;
-}
+
 /* Admin page url styles */
 .url {
   border: none;
