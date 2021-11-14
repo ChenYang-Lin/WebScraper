@@ -287,7 +287,6 @@
 
       // pin add or remove
       function pinClicked(index) {
-        event.preventDefault();
         let pinBtn = document.querySelectorAll(".pin-btn-all");        
         $(pinBtn[index]).removeClass("btn-primary").addClass("btn-danger");
         
@@ -302,6 +301,7 @@
         }
         renderFeatured(); 
         rerenderPinWithLS();
+        $(pinBtn[index]).scrollIntoView();
       }
       
       function removePastEventPins() {
