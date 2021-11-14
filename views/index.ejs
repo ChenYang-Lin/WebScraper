@@ -292,7 +292,10 @@
         if ($(pinBtn[index]).attr("value") == "pin") {
           let link = listOfEvents[index].linkToOriginalPost;
           featuredList[link] = link;
+          console.log("pass");
           localStorage.setItem("featuredList", JSON.stringify(featuredList));
+          console.log("success");
+          console.log(JSON.parse(localStorage.getItem("featuredList")))
         } else {
           let link = listOfEvents[index].linkToOriginalPost;
           delete featuredList[link];
