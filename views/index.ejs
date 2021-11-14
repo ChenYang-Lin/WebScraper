@@ -284,6 +284,10 @@
       // pin add or remove
       function pinClicked(index) {
         let pinBtn = document.querySelectorAll(".pin-btn-all");
+
+        
+        $(pinBtn[index]).removeClass("btn-primary").addClass("btn-danger");
+        console.log("clicked");
         
         if ($(pinBtn[index]).attr("value") == "pin") {
           let link = listOfEvents[index].linkToOriginalPost;
