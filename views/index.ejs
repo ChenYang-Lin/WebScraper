@@ -290,8 +290,10 @@
         console.log("clicked");
         console.log("value");
         console.log($(pinBtn[index]).attr("value"))
+        console.log($(pinBtn[index]).attr("value") == "pin")
         
         if ($(pinBtn[index]).attr("value") == "pin") {
+          console.log("pass1");
           let link = listOfEvents[index].linkToOriginalPost;
           featuredList[link] = link;
           console.log("pass");
