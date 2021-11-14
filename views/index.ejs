@@ -287,28 +287,13 @@
 
       // pin add or remove
       function pinClicked(index) {
-        let pinBtn = document.querySelectorAll(".pin-btn-all");
-
-        
+        let pinBtn = document.querySelectorAll(".pin-btn-all");        
         $(pinBtn[index]).removeClass("btn-primary").addClass("btn-danger");
-        console.log("clicked");
         
         if ($(pinBtn[index]).attr("value") == "pin") {
           let link = listOfEvents[index].linkToOriginalPost;
-          console.log(featuredList);
-          try {
-            featuredList[link] = link;
-          } catch (e) {
-            console.log(e);
-          }
-          
-          console.log(featuredList);
-          console.log("pass2");
-          console.log(featuredList[link]);
-          console.log("pass");
+          featuredList[link] = link;
           localStorage.setItem("featuredList", JSON.stringify(featuredList));
-          console.log("success");
-          console.log(JSON.parse(localStorage.getItem("featuredList")))
         } else {
           let link = listOfEvents[index].linkToOriginalPost;
           delete featuredList[link];

@@ -4,6 +4,10 @@ body,
 #list-container {
   background-color: #fafafa;
 }
+body.noscroll{
+    position:fixed;
+    overflow:hidden;
+}
 /* Admin page url styles */
 .url {
   border: none;
