@@ -301,7 +301,7 @@
         }
         renderFeatured(); 
         rerenderPinWithLS();
-        document.querySelectorAll(".pin-btn-all")[index].parentNode.parentNode.parentNode.parentNode.parentNode.scrollIntoView();
+        document.querySelectorAll(".pin-btn-all")[index].parentNode.parentNode.parentNode.parentNode.parentNode.scrollIntoView({ duration: 500 });
       }
       
       function removePastEventPins() {
