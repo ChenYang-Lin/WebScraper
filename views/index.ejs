@@ -294,11 +294,14 @@
         
         if ($(pinBtn[index]).attr("value") == "pin") {
           console.log("pass1");
+          console.log(listOfEvents);
+          console.log(listOfEvents[index].linkToOriginalPost);
           let link = listOfEvents[index].linkToOriginalPost;
+          console.log("link")
+          console.log(link);
           featuredList[link] = link;
           
           console.log(featuredList);
-          console.log(link);
           console.log("pass2");
           console.log(featuredList[link]);
           console.log("pass");
