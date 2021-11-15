@@ -114,6 +114,7 @@ mongoose.connect(dbURI)
         listOfEvents = result;
       })
       Manually.find().then((result) => {
+        result = chronologicalOrder(result);
         listOfManuallyAddedEvents = result;
       })
     }) // End app.listen
@@ -236,8 +237,9 @@ let storage = multer.diskStorage({
 let upload = multer({ storage: storage })
 
 app.get("/admin/manuallyAddEvent", (req, res) => {
-  Manually.find().sort({ createdAt: 1 })
+  Manually.find()
     .then((result) => {
+      listOfManuallyAddedEvents = result;
       res.render('manuallyAddEvent', { listOfManuallyAddedEvents: result });
     })
     .catch((err) => {
@@ -308,7 +310,7 @@ app.post("/admin/manuallyAddEvent", upload.single('inputImage'), async (req, res
       category: listOfManuallyAddedEvents[i].category,
       dateObject: listOfManuallyAddedEvents[i].dateObject,
     });
-    manually.save()
+    await manually.save()
     .then((result) => {
       // console.log(result);
     })
@@ -318,7 +320,7 @@ app.post("/admin/manuallyAddEvent", upload.single('inputImage'), async (req, res
   }
   // console.log(listOfManuallyAddedEvents);
 
-  // Remove files form uploads folder
+  // Remove files in uploads folder
   fs.readdir(uploadsDirectory, (err, files) => {
     if (err) throw err;
 
