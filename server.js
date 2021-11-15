@@ -257,8 +257,8 @@ app.post("/admin/manuallyAddEvent", upload.single('inputImage'), async (req, res
   let date = inputDate.split("-");
   let time = inputTime.split(":");
   const offset = 300;
-  dt = new Date(date[0], date[1] - 1, date[2], time[0], time[1], 0, 0);
-  dateObject = new Date(dt.getTime() + offset*60*1000);
+  dateObject = new Date(date[0], date[1] - 1, date[2], time[0], time[1], 0, 0);
+  dateObject = new Date(dateObject.getTime() + offset*60*1000);
   let organization = [
     {
       name: inputEventBy,
@@ -326,7 +326,12 @@ app.post("/admin/manuallyAddEvent", upload.single('inputImage'), async (req, res
   fs.readdir(uploadsDirectory, (err, files) => {
     if (err) throw err;
 
+    let firstFile = true;
     for (const file of files) {
+      if (firstFile) {
+        firstFile = false;
+        continue;
+      }
       fs.unlink(path.join(uploadsDirectory, file), err => {
         if (err) throw err;
       });
