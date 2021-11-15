@@ -254,6 +254,7 @@ app.post("/admin/manuallyAddEvent", upload.single('inputImage'), async (req, res
   let event = {};
   let { inputTitle, inputAddress, inputDate, inputTime, inputImage, inputLink, inputTicketLink, inputEventBy, inputCategories, inputDescription } = req.body;
 
+
   let date = inputDate.split("-");
   let time = inputTime.split(":");
   const offset = 300;
@@ -278,7 +279,6 @@ app.post("/admin/manuallyAddEvent", upload.single('inputImage'), async (req, res
     contentType: 'image/*'
   }
 
-  
   event.title = inputTitle;
   event.image = inputImage;
   event.dateTime = dateObject.toString();
@@ -308,7 +308,7 @@ app.post("/admin/manuallyAddEvent", upload.single('inputImage'), async (req, res
 
       organizationInfo: listOfManuallyAddedEvents[i].organizationInfo,
       ticket: listOfManuallyAddedEvents[i].ticket,
-      ticketLink: listOfManuallyAddedEvents[i].ticket,
+      ticketLink: listOfManuallyAddedEvents[i].ticketLink,
       category: listOfManuallyAddedEvents[i].category,
       dateObject: listOfManuallyAddedEvents[i].dateObject,
     });
