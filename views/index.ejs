@@ -39,7 +39,7 @@
     <!-- Featured Section -->
     <div class="container p-3 rounded mb-0 pb-0">
       <div class="row justify-content-center mb-0 pb-0">
-        <h1 calss="mb-0 pb-0">Featured Events: </h1>
+        <h3 calss="mb-0 pb-0">Featured Events: </h3>
       </div>
     </div>
     <div id="featured-container" class="container p-3 rounded mt-0">
@@ -49,9 +49,10 @@
 
 
     <!-- All Events -->
+    <hr>
     <div class="container p-3 rounded my-3">
       <div class="row justify-content-center">
-        <h1>All Events: </h1>
+        <h3>All Events: </h3>
       </div>
     </div>
     <!-- Filter And Change Display Section -->
@@ -301,7 +302,7 @@
         }
         renderFeatured(); 
         rerenderPinWithLS();
-        document.querySelectorAll(".pin-btn-all")[index].parentNode.parentNode.parentNode.parentNode.parentNode.scrollIntoView({ duration: 500 });
+        document.querySelectorAll(".pin-btn-all")[index].parentNode.parentNode.parentNode.parentNode.parentNode.scrollIntoView();
       }
       
       function removePastEventPins() {

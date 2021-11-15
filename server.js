@@ -3,14 +3,22 @@ const app = express();
 const cron = require("node-cron");
 const path = require("path");
 const mongoose = require("mongoose");
+
+const bodyParser = require('body-parser');
+const fs = require('fs');
+require('dotenv/config');
+
 const Subscription = require("./server/models/subscription"); 
 const Event = require("./server/models/event"); 
+const Manually = require("./server/models/manually"); 
 
 let { scrapEvents, getScraping, getScrapeProgress } = require("./server/scraper.js");
 let { removeDuplicates } = require("./server/removeDuplicates.js");
 let { chronologicalOrder } = require("./server/chronologicalOrder.js");
 
 let listOfEvents = [];
+let listOfManuallyAddedEvents = [];
+const uploadsDirectory = 'uploads';
 let scrapingList = [
   // "https://www.facebook.com/groups/444744689463060",
   // "https://www.facebook.com/groups/recoveryfriends717",
@@ -105,6 +113,9 @@ mongoose.connect(dbURI)
         result = chronologicalOrder(result);
         listOfEvents = result;
       })
+      Manually.find().then((result) => {
+        listOfManuallyAddedEvents = result;
+      })
     }) // End app.listen
   })
   .catch((err) => console.log(err));
@@ -163,10 +174,6 @@ app.get("/admin", async (req, res) => {
     .catch((err) => {
       console.log(err);
     })
-
-  // res.render("admin", {
-  //   scrapingList,
-  // });
 });
 
 app.post("/edit-remove", (req, res) => {
@@ -215,6 +222,133 @@ app.post("/add", (req, res) => {
   }
 
 });
+
+
+const multer = require('multer');
+let storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads');
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + "-" + Date.now());
+  }
+})
+let upload = multer({ storage: storage })
+
+app.get("/admin/manuallyAddEvent", (req, res) => {
+  Manually.find().sort({ createdAt: 1 })
+    .then((result) => {
+      res.render('manuallyAddEvent', { listOfManuallyAddedEvents: result });
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+});
+
+app.post("/admin/manuallyAddEvent", upload.single('inputImage'), async (req, res) => {
+  // listOfManuallyAddedEvents
+
+
+  let event = {};
+  let { inputTitle, inputAddress, inputDate, inputTime, inputImage, inputLink, inputTicketLink, inputEventBy, inputCategories, inputDescription } = req.body;
+
+  let date = inputDate.split("-");
+  let time = inputTime.split(":");
+  dateObject = new Date(date[0], date[1], date[2], time[0], time[1], 0, 0);
+  let organization = [
+    {
+      name: inputEventBy,
+      link: '',
+    }
+  ] 
+  let ticket;
+  if (inputTicketLink)
+    ticket = true;
+  else {
+    ticket = false;
+    inputTicketLink = "";
+  }
+
+  inputImage = {
+    data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
+    contentType: 'image/*'
+  }
+
+  
+  event.title = inputTitle;
+  event.image = inputImage;
+  event.dateTime = dateObject.toString();
+  event.linkToOriginalPost = inputLink;
+  event.detailDateTime = dateObject.toString();
+  event.address = inputAddress;
+  event.description = inputDescription;
+  event.organizationInfo = organization;
+  event.ticket = ticket;
+  event.ticketLink = inputTicketLink;
+  event.category = [inputCategories];
+  event.dateObject = dateObject;
+
+  listOfManuallyAddedEvents.push(event);
+
+  await Manually.remove();
+  // console.log(list);
+  for (let i = 0; i < listOfManuallyAddedEvents.length; i++) {
+    let manually = new Manually({
+      title: listOfManuallyAddedEvents[i].title,
+      image: listOfManuallyAddedEvents[i].image,
+      dateTime: listOfManuallyAddedEvents[i].dateTime,
+      linkToOriginalPost: listOfManuallyAddedEvents[i].linkToOriginalPost,
+      detailDateTime: listOfManuallyAddedEvents[i].detailDateTime,
+      address: listOfManuallyAddedEvents[i].address,
+      description: listOfManuallyAddedEvents[i].description,
+
+      organizationInfo: listOfManuallyAddedEvents[i].organizationInfo,
+      ticket: listOfManuallyAddedEvents[i].ticket,
+      ticketLink: listOfManuallyAddedEvents[i].ticket,
+      category: listOfManuallyAddedEvents[i].category,
+      dateObject: listOfManuallyAddedEvents[i].dateObject,
+    });
+    manually.save()
+    .then((result) => {
+      // console.log(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
+  // console.log(listOfManuallyAddedEvents);
+
+  // Remove files form uploads folder
+  fs.readdir(uploadsDirectory, (err, files) => {
+    if (err) throw err;
+
+    for (const file of files) {
+      fs.unlink(path.join(uploadsDirectory, file), err => {
+        if (err) throw err;
+      });
+    }
+  });
+
+  res.redirect('/admin/manuallyAddEvent');
+});
+
+app.post("/admin/manuallyAddEvent-remove", (req, res) => {
+  console.log(req.body);
+  const { manuallyId, btnName } = req.body;
+  if (btnName === "remove") {
+    Manually.findByIdAndDelete(manuallyId, (err, result) => {
+      if (err) {
+        res.send(err);
+      }
+      else {
+        res.redirect('/admin/manuallyAddEvent');
+      }
+    });
+  } 
+});
+
+
+
 
 app.post("/admin/scrape", (req, res) => {
   let scraping = getScraping();
