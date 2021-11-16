@@ -290,7 +290,7 @@ app.post("/admin/manuallyAddEvent", upload.single('inputImage'), async (req, res
     dateObject: dateObject,
     uuid: uuidv4(),
   });
-  manually.save()
+  await manually.save()
   .then((result) => {
     // console.log(result)
   })
