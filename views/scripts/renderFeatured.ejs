@@ -8,7 +8,13 @@
 
         for(let i = 0; i < listOfEventsCopy.length; i++) {
           for (let j in featuredList) {
-            if (listOfEventsCopy[i]._id == featuredList[j]) {
+            let id;
+            if (listOfEventsCopy[i].isManuallyAdded) {
+              id = listOfEventsCopy[i].uuid;
+            } else {
+              id = listOfEventsCopy[i].linkToOriginalPost;
+            }
+            if (id == featuredList[j]) {
                 // console.log(listOfEventsCopy[i]);
               featuredListOfEvents.push(listOfEventsCopy[i]);
               break;

@@ -292,17 +292,27 @@
         featuredList = {};
       };
 
+      // get uuid or linkToOriginalPost
+      function getId(index) {
+        let id;
+          if (listOfEvents[index].isManuallyAdded) {
+            id = listOfEvents[index].uuid;
+          } else {
+            id = listOfEvents[index].linkToOriginalPost;
+          }
+        return id;
+      }
       // pin add or remove
       function pinClicked(index) {
         let pinBtn = document.querySelectorAll(".pin-btn-all");        
         $(pinBtn[index]).removeClass("btn-primary").addClass("btn-danger");
         
         if ($(pinBtn[index]).attr("value") == "pin") {
-          let id = listOfEvents[index]._id;
+          let id = getId(index);
           featuredList[id] = id;
           localStorage.setItem("featuredList", JSON.stringify(featuredList));
         } else {
-          let id = listOfEvents[index]._id;
+          let id = getId(index);
           delete featuredList[id];
           localStorage.setItem("featuredList", JSON.stringify(featuredList));
         }
@@ -318,13 +328,18 @@
         let newfeaturedList = featuredList;
         for (let j in featuredList) {
           for(let i = 0; i < listOfEventsCopy.length; i++) {
-            if (listOfEventsCopy[i]._id == featuredList[j]) {
-              break;
-            } else {
-              if (i == listOfEventsCopy.length - 1) {
-                let id = featuredList[j];
-                delete newfeaturedList[id];
+            if (listOfEventsCopy[i].isManuallyAdded) {
+              if (listOfEventsCopy[i].uuid == featuredList[j]) {
+                break;
               }
+            } else { // not manually added
+              if (listOfEventsCopy[i].linkToOriginalPost == featuredList[j]) {
+                break;
+              }
+            }
+            if (i == listOfEventsCopy.length - 1) {
+              let id = featuredList[j];
+              delete newfeaturedList[id];
             }
           }
         }
@@ -336,7 +351,12 @@
         let pinBtn = document.querySelectorAll(".pin-btn-featured");
         if ($(pinBtn[index]).attr("value") != "unpin") return;
 
-        let id = featuredListOfEvents[index]._id;
+        let id;
+        if (featuredListOfEvents[index].isManuallyAdded) {
+          id = featuredListOfEvents[index].uuid;
+        } else {
+          id = featuredListOfEvents[index].linkToOriginalPost;
+        }
         delete featuredList[id];
         localStorage.setItem("featuredList", JSON.stringify(featuredList));
         
@@ -357,7 +377,8 @@
           $(pinBtn[i]).removeClass("btn-danger").addClass("btn-primary");
 
           for (let j in featuredList) {
-            if (listOfEvents[i]._id == featuredList[j]) {
+            let id = getId(i);
+            if (id == featuredList[j]) {
               $(pinBtn[i]).val("unpin");
               $(pinBtn[i]).html(`
                 <i class="bi bi-pin-angle-fill"></i> Unpin 

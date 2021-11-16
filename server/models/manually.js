@@ -60,6 +60,10 @@ const manuallySchema = new Schema({
         type: String,
         required: true
     },
+    uuid: {
+        type: String,
+        required: true
+    },
 });
 
 const Manually = mongoose.model("manually", manuallySchema);

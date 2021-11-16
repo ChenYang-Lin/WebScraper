@@ -3,8 +3,8 @@ const app = express();
 const cron = require("node-cron");
 const path = require("path");
 const mongoose = require("mongoose");
+const { v4: uuidv4 } = require('uuid');
 
-const bodyParser = require('body-parser');
 const fs = require('fs');
 require('dotenv/config');
 
@@ -149,7 +149,6 @@ async function eventDB(list) {
 
 // Routes
 app.get("/", async (req, res) => {
-  await getManuallyAndScrapedList();
   res.render("index", {
     listOfEvents,
   });
@@ -244,8 +243,6 @@ app.get("/admin/manuallyAddEvent", (req, res) => {
 });
 
 app.post("/admin/manuallyAddEvent", upload.single('inputImage'), async (req, res) => {
-  // listOfManuallyAddedEvents
-
 
   let event = {};
   let { inputTitle, inputAddress, inputDate, inputTime, inputImage, inputLink, inputTicketLink, inputEventBy, inputCategories, inputDescription } = req.body;
@@ -275,48 +272,31 @@ app.post("/admin/manuallyAddEvent", upload.single('inputImage'), async (req, res
     contentType: 'image/*'
   }
 
-  event.title = inputTitle;
-  event.image = inputImage;
-  event.dateTime = dateObject.toString();
-  event.linkToOriginalPost = inputLink;
-  event.detailDateTime = dateObject.toString();
-  event.address = inputAddress;
-  event.description = inputDescription;
-  event.organizationInfo = organization;
-  event.ticket = ticket;
-  event.ticketLink = inputTicketLink;
-  event.category = [inputCategories];
-  event.dateObject = dateObject;
+  // Add to db
+  let manually = new Manually({
+    title: inputTitle,
+    image: inputImage,
+    dateTime: dateObject.toString(),
+    linkToOriginalPost: inputLink,
+    detailDateTime: dateObject.toString(),
+    address: inputAddress,
+    description: inputDescription,
+    organizationInfo: organization,
+    ticket: ticket,
+    ticketLink: inputTicketLink,
+    category: [inputCategories],
+    isManuallyAdded: true,
+    dateObject: dateObject,
+    uuid: uuidv4(),
+  });
+  manually.save()
+  .then((result) => {
+    // console.log(result)
+  })
+  .catch((err) => {
+    console.log(err);
+  })
 
-  listOfManuallyAddedEvents.push(event);
-
-  await Manually.remove();
-  // console.log(list);
-  for (let i = 0; i < listOfManuallyAddedEvents.length; i++) {
-    let manually = new Manually({
-      title: listOfManuallyAddedEvents[i].title,
-      image: listOfManuallyAddedEvents[i].image,
-      dateTime: listOfManuallyAddedEvents[i].dateTime,
-      linkToOriginalPost: listOfManuallyAddedEvents[i].linkToOriginalPost,
-      detailDateTime: listOfManuallyAddedEvents[i].detailDateTime,
-      address: listOfManuallyAddedEvents[i].address,
-      description: listOfManuallyAddedEvents[i].description,
-
-      organizationInfo: listOfManuallyAddedEvents[i].organizationInfo,
-      ticket: listOfManuallyAddedEvents[i].ticket,
-      ticketLink: listOfManuallyAddedEvents[i].ticketLink,
-      category: listOfManuallyAddedEvents[i].category,
-      isManuallyAdded: true,
-      dateObject: listOfManuallyAddedEvents[i].dateObject,
-    });
-    await manually.save()
-    .then((result) => {
-      // console.log(result);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-  }
   // console.log(listOfManuallyAddedEvents);
 
   // Remove files in uploads folder
