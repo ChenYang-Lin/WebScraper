@@ -321,16 +321,16 @@ app.post("/admin/manuallyAddEvent", upload.single('inputImage'), async (req, res
   res.redirect('/admin/manuallyAddEvent');
 });
 
-app.post("/admin/manuallyAddEvent-remove", (req, res) => {
+app.post("/admin/manuallyAddEvent-remove", async (req, res) => {
   // console.log(req.body);
   const { manuallyId, btnName } = req.body;
   if (btnName === "remove") {
-    Manually.findByIdAndDelete(manuallyId, (err, result) => {
+    Manually.findByIdAndDelete(manuallyId, async (err, result) => {
       if (err) {
         res.send(err);
       }
       else {
-        getManuallyAndScrapedList();
+        await getManuallyAndScrapedList();
         res.redirect('/admin/manuallyAddEvent');
       }
     });
@@ -338,9 +338,9 @@ app.post("/admin/manuallyAddEvent-remove", (req, res) => {
 });
 
 // Request event routes
-// app.get("/requestEvent", (req, res) => {
-//   res.render("userRequestForm");
-// });
+app.get("/requestEvent", (req, res) => {
+  res.render("userRequestForm");
+});
 
 
 app.post("/admin/scrape", (req, res) => {
