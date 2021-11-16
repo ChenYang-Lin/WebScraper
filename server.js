@@ -154,6 +154,7 @@ app.get("/", async (req, res) => {
   });
 });
 
+// Admin and list of subscription routes
 app.get("/admin", async (req, res) => {
   Subscription.find().sort({ createdAt: 1 })
     .then((result) => {
@@ -219,7 +220,7 @@ app.post("/add", (req, res) => {
 
 });
 
-
+// Manually add event routes
 const multer = require('multer');
 let storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -329,16 +330,17 @@ app.post("/admin/manuallyAddEvent-remove", (req, res) => {
         res.send(err);
       }
       else {
-        listOfManuallyAddedEvents = result;
-        listOfEvents.push.apply(scrapedList, listOfManuallyAddedEvents);
-        listOfEvents = chronologicalOrder(listOfEvents);
+        getManuallyAndScrapedList();
         res.redirect('/admin/manuallyAddEvent');
       }
     });
   } 
 });
 
-
+// Request event routes
+// app.get("/requestEvent", (req, res) => {
+//   res.render("userRequestForm");
+// });
 
 
 app.post("/admin/scrape", (req, res) => {
