@@ -11,6 +11,7 @@ require('dotenv/config');
 const Subscription = require("./server/models/subscription"); 
 const Event = require("./server/models/event"); 
 const Manually = require("./server/models/manually"); 
+const Request = require("./server/models/request"); 
 
 let { scrapEvents, getScraping, getScrapeProgress } = require("./server/scraper.js");
 let { removeDuplicates } = require("./server/removeDuplicates.js");
@@ -19,6 +20,7 @@ let { chronologicalOrder } = require("./server/chronologicalOrder.js");
 let listOfEvents = [];
 let scrapedList = [];
 let listOfManuallyAddedEvents = [];
+let listOfRequestedEvents = [];
 const uploadsDirectory = 'uploads';
 let scrapingList = [
   // "https://www.facebook.com/groups/444744689463060",
@@ -111,6 +113,9 @@ mongoose.connect(dbURI)
       //   console.log(listOfEvents);
       // })
       await getManuallyAndScrapedList();
+      await Request.find().then((result) => {
+        listOfRequestedEvents = result;
+      })
     }) // End app.listen
   })
   .catch((err) => console.log(err));
@@ -337,9 +342,143 @@ app.post("/admin/manuallyAddEvent-remove", async (req, res) => {
   } 
 });
 
+// Manage Requests
+app.get("/admin/manageRequests", (req, res) => {
+  res.render("manageRequests", {
+    listOfRequestedEvents,
+  });
+});
+
+app.post("/admin/manageRequests", async(req, res) => {
+  // console.log(req.body);
+  const { btnName, requestId } = req.body;
+  if (btnName === "accept") {
+    // let event = await Request.find(requestId);
+    await Request.find({"_id": requestId}).then(async (result) => {
+      console.log(result);
+      result = result[0];
+      // Add to db
+      let manually = new Manually({
+        title: result.title,
+        image: result.image,
+        dateTime: result.dateTime,
+        linkToOriginalPost: result.linkToOriginalPost,
+        detailDateTime: result.detailDateTime,
+        address: result.address,
+        description: result.description,
+        organizationInfo: result.organizationInfo,
+        ticket: result.ticket,
+        ticketLink: result.ticketLint,
+        category: result.category,
+        isManuallyAdded: true,
+        dateObject: result.dateObject,
+        uuid: result.uuid,
+      });
+      await manually.save()
+      .then((result) => {
+        // console.log(result)
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+    })
+  } 
+
+  // else if (btnName === "remove") {}
+  await Request.remove({_id:requestId});
+
+  await Request.find().then((result) => {
+    listOfRequestedEvents = result;
+  })
+  await getManuallyAndScrapedList();
+  
+  res.redirect('/admin/manageRequests');
+});
+
 // Request event routes
 app.get("/requestEvent", (req, res) => {
   res.render("userRequestForm");
+});
+
+
+app.post("/requestEvent", upload.single('inputImage'), async (req, res) => {
+
+  let { inputTitle, inputAddress, inputDate, inputTime, inputImage, inputLink, inputTicketLink, inputEventBy, inputCategories, inputDescription, inputEmail } = req.body;
+
+
+  let date = inputDate.split("-");
+  let time = inputTime.split(":");
+  const offset = 300;
+  dateObject = new Date(date[0], date[1] - 1, date[2], time[0], time[1], 0, 0);
+  dateObject = new Date(dateObject.getTime() + offset*60*1000);
+  let organization = [
+    {
+      name: inputEventBy,
+      link: '',
+    }
+  ] 
+  let ticket;
+  if (inputTicketLink)
+    ticket = true;
+  else {
+    ticket = false;
+    inputTicketLink = "";
+  }
+
+  inputImage = {
+    data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
+    contentType: 'image/*'
+  }
+
+  // Add to db
+  let request = new Request({
+    title: inputTitle,
+    image: inputImage,
+    email: inputEmail,
+    dateTime: dateObject.toString(),
+    linkToOriginalPost: inputLink,
+    detailDateTime: dateObject.toString(),
+    address: inputAddress,
+    description: inputDescription,
+    organizationInfo: organization,
+    ticket: ticket,
+    ticketLink: inputTicketLink,
+    category: [inputCategories],
+    isManuallyAdded: true,
+    dateObject: dateObject,
+    uuid: uuidv4(),
+  });
+  await request.save()
+  .then((result) => {
+    // console.log(result)
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+
+  // console.log(listOfManuallyAddedEvents);
+
+  // Remove files in uploads folder
+  fs.readdir(uploadsDirectory, (err, files) => {
+    if (err) throw err;
+
+    let firstFile = true;
+    for (const file of files) {
+      if (firstFile) {
+        firstFile = false;
+        continue;
+      }
+      fs.unlink(path.join(uploadsDirectory, file), err => {
+        if (err) throw err;
+      });
+    }
+  });
+
+  await Request.find().then((result) => {
+    listOfRequestedEvents = result;
+  })
+
+  res.redirect('/');
 });
 
 

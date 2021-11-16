@@ -41,7 +41,7 @@
     <div>
         <!-- Request for an event -->
         <h3 class="text-center">Request Event </h3>
-        <form class="container bg-white shadow p-3 rounded my-3" action="/admin/manuallyAddEvent" method="POST" enctype="multipart/form-data">
+        <form class="container bg-white shadow p-3 rounded my-3" action="/requestEvent" method="POST" enctype="multipart/form-data">
             <div class="row">
                 
                 <!-- title -->
@@ -68,6 +68,11 @@
                 <div class="form-group mb-3 col-12 col-md-6 col-xl-4">
                     <label for="inputImage" class="form-label"><strong>Upload Image</strong></label>
                     <input type="file" name="inputImage" class="form-control" id="inputImage" accept="image/*" required>
+                </div>
+                <!-- email -->
+                <div class="form-group mb-3 col-12 col-md-6">
+                    <label for="inputEmail" class="form-label"><strong>Email</strong></label>
+                    <input type="email" name="inputEmail" class="form-control" id="inputEmail" required>
                 </div>
                 <!-- link -->
                 <div class="form-group mb-3 col-12 col-md-6">

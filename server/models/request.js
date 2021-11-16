@@ -1,12 +1,16 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const eventSchema = new Schema({
+const requestSchema = new Schema({
     title: {
         type: String,
         required: true
     },
     image: {
+        data: Buffer,
+        contentType: String
+    },
+    email: {
         type: String,
         required: true
     },
@@ -15,8 +19,7 @@ const eventSchema = new Schema({
         required: true
     },
     linkToOriginalPost: {
-        type: String,
-        required: true
+        type: String
     },
     detailDateTime: {
         type: String,
@@ -38,59 +41,35 @@ const eventSchema = new Schema({
             },
             link: {
                 type: String,
-                required: true
             }
         }
     ],
-    splitTime: {
-        dayOfTheWeek: {
-            type: String,
-            required: true
-        },
-        month: {
-            type: String,
-            required: true
-        },
-        dayOfTheMonth: {
-            type: String,
-            required: true
-        },
-        year: {
-            type: String,
-            required: true
-        },
-        startTime: {
-            type: String,
-            required: true
-        },
-        am_pm: {
-            type: String,
-            required: true
-        },
-        isUTC: {
-            type: Boolean,
-            required: true
-        },
-    },
     ticket: {
         type: Boolean,
         required: true
+    },
+    ticketLink: {
+        type: String
     },
     category: [
         {
             type: String,
         }
     ],
-    keywords: {
-        type: String,
+    isManuallyAdded: {
+        type: Boolean,
         required: true
     },
     dateObject: {
         type: String,
         required: true
     },
+    uuid: {
+        type: String,
+        required: true
+    },
 });
 
-const Event = mongoose.model("event", eventSchema);
+const Request = mongoose.model("request", requestSchema);
 
-module.exports = Event;
+module.exports = Request;
