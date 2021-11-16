@@ -155,13 +155,27 @@
             for(var i=0; i<events.length; i++) {
                 let eventCard = $("<div class='event-card'></div>");
                 let eventTicket;
-                if (events[i].ticket) {
-                    eventTicket = $(
-                    `<a href="${events[i].linkToOriginalPost}" class="text-decoration-none" >
-                        <h5 class="text-dark bg-warning">Tickets available here</h5>
-                    </a>`)
+                let eventImage;
+                if (events[i].isManuallyAdded) { 
+                    let buf = buffer.Buffer.from((events[i].image.data)).toString('base64');
+                    eventImage = $(`<img class="img-fluid w-100 rounded" src="data:image/${events[i].image.contentType};base64,${buf}" alt="Image">`);
+
+                    if (events[i].ticket) {
+                        eventTicket = $(
+                        `<a href="${events[i].ticketLink}" class="text-decoration-none" >
+                            <h5 class="text-dark bg-warning">Tickets available here</h5>
+                        </a>`)
+                    }
+                } else {
+                    eventImage = $(`<img class="img-fluid w-100 rounded" src="${events[i].image}" alt="Image" />`);
+                    if (events[i].ticket) {
+                        eventTicket = $(
+                        `<a href="${events[i].linkToOriginalPost}" class="text-decoration-none" >
+                            <h5 class="text-dark bg-warning">Tickets available here</h5>
+                        </a>`)
+                    }
                 }
-                let eventImage = $(`<img class="img-fluid w-100 rounded" src="${events[i].image}" alt="Image" />`);
+
                 let eventTitle = $(`<a href="${events[i].linkToOriginalPost}"><h4>${events[i].title}</h4></a>`);
                 
                 // $(eventCard).append(eventImage).append(eventTitle);
@@ -170,6 +184,7 @@
             }
         }
     }
+
 
     // Checks if a specific date has any events
     function check_events(day, month, year) {
@@ -215,9 +230,11 @@
             
             object.title = listOfEvents[i].title;
             object.ticket = listOfEvents[i].ticket;
+            object.ticketLink = listOfEvents[i].ticketLink;
             object.image = listOfEvents[i].image;
             object.linkToOriginalPost = listOfEvents[i].linkToOriginalPost;
             object.organizationInfo = listOfEvents[i].organizationInfo;
+            object.isManuallyAdded = listOfEvents[i].isManuallyAdded;
         }
         selectedEvent = check_events(selectedDay, selectedMonth, selectedYear);
         show_events(selectedEvent, selectedMonthStr, selectedDay);

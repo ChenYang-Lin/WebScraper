@@ -85,6 +85,10 @@ const eventSchema = new Schema({
         type: String,
         required: true
     },
+    isManuallyAdded: {
+        type: Boolean,
+        required: true
+    },
     dateObject: {
         type: String,
         required: true

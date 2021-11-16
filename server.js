@@ -17,6 +17,7 @@ let { removeDuplicates } = require("./server/removeDuplicates.js");
 let { chronologicalOrder } = require("./server/chronologicalOrder.js");
 
 let listOfEvents = [];
+let scrapedList = [];
 let listOfManuallyAddedEvents = [];
 const uploadsDirectory = 'uploads';
 let scrapingList = [
@@ -109,14 +110,7 @@ mongoose.connect(dbURI)
       //   console.log(listOfEvents.length);
       //   console.log(listOfEvents);
       // })
-      Event.find().then((result) => {
-        result = chronologicalOrder(result);
-        listOfEvents = result;
-      })
-      Manually.find().then((result) => {
-        result = chronologicalOrder(result);
-        listOfManuallyAddedEvents = result;
-      })
+      await getManuallyAndScrapedList();
     }) // End app.listen
   })
   .catch((err) => console.log(err));
@@ -140,6 +134,7 @@ async function eventDB(list) {
       ticket: list[i].ticket,
       category: list[i].category,
       keywords: list[i].keywords,
+      isManuallyAdded: false,
       dateObject: list[i].dateObject,
     });
     event.save()
@@ -154,6 +149,7 @@ async function eventDB(list) {
 
 // Routes
 app.get("/", async (req, res) => {
+  await getManuallyAndScrapedList();
   res.render("index", {
     listOfEvents,
   });
@@ -310,6 +306,7 @@ app.post("/admin/manuallyAddEvent", upload.single('inputImage'), async (req, res
       ticket: listOfManuallyAddedEvents[i].ticket,
       ticketLink: listOfManuallyAddedEvents[i].ticketLink,
       category: listOfManuallyAddedEvents[i].category,
+      isManuallyAdded: true,
       dateObject: listOfManuallyAddedEvents[i].dateObject,
     });
     await manually.save()
@@ -338,11 +335,13 @@ app.post("/admin/manuallyAddEvent", upload.single('inputImage'), async (req, res
     }
   });
 
+  await getManuallyAndScrapedList();
+
   res.redirect('/admin/manuallyAddEvent');
 });
 
 app.post("/admin/manuallyAddEvent-remove", (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const { manuallyId, btnName } = req.body;
   if (btnName === "remove") {
     Manually.findByIdAndDelete(manuallyId, (err, result) => {
@@ -350,6 +349,9 @@ app.post("/admin/manuallyAddEvent-remove", (req, res) => {
         res.send(err);
       }
       else {
+        listOfManuallyAddedEvents = result;
+        listOfEvents.push.apply(scrapedList, listOfManuallyAddedEvents);
+        listOfEvents = chronologicalOrder(listOfEvents);
         res.redirect('/admin/manuallyAddEvent');
       }
     });
@@ -366,6 +368,7 @@ app.post("/admin/scrape", (req, res) => {
   if (req.body.scrapeBtnVal === "scrape") {
     // console.log(req.body);
     Subscription.find().then(async (result) => {
+      result = chronologicalOrder(result);
       listOfEvents = await scrapEvents(result);
       listOfEvents = removeDuplicates(listOfEvents);
     })
@@ -445,3 +448,17 @@ setInterval(function () {
     console.log("ping every 20 min. to prevent heroku sleep")
   });
 }, 20 * 60 * 1000); // every 20 minutes
+
+
+async function getManuallyAndScrapedList() {
+  await Event.find().then((result) => {
+    scrapedList = result;
+    listOfEvents = scrapedList;
+  })
+  await Manually.find().then((result) => {
+    listOfManuallyAddedEvents = result;
+  })
+  listOfEvents.push.apply(listOfEvents, listOfManuallyAddedEvents);
+  listOfEvents = chronologicalOrder(listOfEvents);
+  // console.log(listOfEvents);
+}

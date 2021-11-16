@@ -1,3 +1,4 @@
+
 <script>
     function renderListContainer(listOfEvents) {
         let newList = document.createElement('div');
@@ -54,6 +55,21 @@
             return outerOrganizationDiv.innerHTML;
           }
 
+          function getImageContainer() {
+            let outerImageDiv = document.createElement('div');
+            let imageContainer = document.createElement('img');
+            imageContainer.classList.add("img-fluid", "w-100", "rounded");
+            imageContainer.alt = "Image";
+            if (listOfEvents[i].isManuallyAdded) { 
+              let buf = buffer.Buffer.from((listOfEvents[i].image.data)).toString('base64');
+              imageContainer.src = `data:image/${listOfEvents[i].image.contentType};base64,${buf}`;
+            } else {
+              imageContainer.src = listOfEvents[i].image;
+            }
+            outerImageDiv.appendChild(imageContainer);
+            return outerImageDiv.innerHTML;
+          }
+
           newList.innerHTML += 
           `
             <div class="container card shadow my-3">
@@ -61,7 +77,7 @@
                 <!-- Img/Category -->
                 <div class="col-12 col-sm-4 my-2">
                   ${getCategoryContainer()}
-                  <img class="img-fluid w-100 rounded" src="${listOfEvents[i].image}" alt="Image" />
+                  ${getImageContainer()}
                 </div>
                 <!-- Content -->
                 <div class="col-12 col-sm-8 my-2 d-flex flex-column pt-4">

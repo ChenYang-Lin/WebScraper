@@ -52,6 +52,10 @@ const manuallySchema = new Schema({
             type: String,
         }
     ],
+    isManuallyAdded: {
+        type: Boolean,
+        required: true
+    },
     dateObject: {
         type: String,
         required: true
