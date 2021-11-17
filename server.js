@@ -355,7 +355,7 @@ app.post("/admin/manageRequests", async(req, res) => {
   if (btnName === "accept") {
     // let event = await Request.find(requestId);
     await Request.find({"_id": requestId}).then(async (result) => {
-      console.log(result);
+      // console.log(result);
       result = result[0];
       // Add to db
       let manually = new Manually({
@@ -523,6 +523,8 @@ cron.schedule(`${second} ${minute} ${hour} * * *`, async () => {
       listOfEvents = removeDuplicates(listOfEvents);
       listOfEvents = chronologicalOrder(listOfEvents);
       await eventDB(listOfEvents);
+
+      await getManuallyAndScrapedList();
         
       let today = new Date();
       let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
