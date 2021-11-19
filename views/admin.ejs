@@ -80,7 +80,7 @@
         <p>logMessages.errorMessages[i]</p>
       <% } %>
     <% } %>
-    
+
     <!-- Bootstrap script -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
     <!-- JQuery -->
@@ -88,6 +88,7 @@
 
     <script>
       let scraping = <%- JSON.stringify(scraping) %>;
+      let logMessages = <%- JSON.stringify(logMessages) %>;
 
       let scrapeProgressBar = $('#scrape-progress');
       let scrapeBtn = $('#scrape-btn');
@@ -95,6 +96,7 @@
       let isAnim = false;
 
       $(document).ready(() => {
+        console.log(logMessages)
         // console.log("document is ready")
         // console.log(scraping);
         if (scraping) {

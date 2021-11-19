@@ -112,20 +112,21 @@ mongoose.connect(dbURI)
           console.log(date + "  " + time);
 
           lastUpdate = "" + date + "  " + time;
-          let errorMessages = getErrorMessages();
+          // let errorMessages = getErrorMessages();
 
-          await Log.remove();
-          let log = new Log({
-            lastUpdate: lastUpdate,
-            errorMessages: errorMessages,
-          });
-          log.save()
-          .then((result) => {
-            // console.log(result);
-          })
-          .catch((err) => {
-            console.log(err);
-          })
+          // await Log.remove();
+          // let log = new Log({
+          //   lastUpdate: lastUpdate,
+          //   errorMessages: errorMessages,
+          // });
+          // log.save()
+          // .then((result) => {
+          //   logMessages = result;
+          //   // console.log(result);
+          // })
+          // .catch((err) => {
+          //   console.log(err);
+          // })
         }
         console.log(listOfEvents.length);
         console.log(listOfEvents);
@@ -552,6 +553,22 @@ cron.schedule(`${second} ${minute} ${hour} * * *`, async () => {
       let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
       let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
       lastUpdate = "" + date + "  " + time;
+
+      let errorMessages = getErrorMessages();
+
+      await Log.remove();
+      let log = new Log({
+        lastUpdate: lastUpdate,
+        errorMessages: errorMessages,
+      });
+      log.save()
+      .then((result) => {
+        logMessages = result;
+        // console.log(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
     }
     console.log(lastUpdate);
     // console.log(listOfEvents);
