@@ -192,7 +192,7 @@ app.get("/admin", async (req, res) => {
         scraping,
         scrapeProgress,
         lastUpdate,
-        log,
+        logMessages,
       });
     })
     .catch((err) => {

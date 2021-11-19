@@ -74,9 +74,9 @@
     </div>
 
     <!-- Footer -->
-    <h4 class="m-3 p-3">Last Update: <%= lastUpdate %></h4>
-    <% for (let i = 0; i < errorMessages.length; i++) { %>
-      <p>errorMessages[i]</p>
+    <h4 class="m-3 p-3">Last Update: <%= logMessages.lastUpdate %></h4>
+    <% for (let i = 0; i < logMessages.errorMessages.length; i++) { %>
+      <p>logMessages.errorMessages[i]</p>
     <% } %>
 
     <!-- Bootstrap script -->
