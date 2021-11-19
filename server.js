@@ -12,6 +12,7 @@ const Subscription = require("./server/models/subscription");
 const Event = require("./server/models/event"); 
 const Manually = require("./server/models/manually"); 
 const Request = require("./server/models/request"); 
+const Log = require("./server/models/log"); 
 
 let { scrapEvents, getScraping, getScrapeProgress, getErrorMessages } = require("./server/scraper.js");
 let { removeDuplicates } = require("./server/removeDuplicates.js");
@@ -21,6 +22,7 @@ let listOfEvents = [];
 let scrapedList = [];
 let listOfManuallyAddedEvents = [];
 let listOfRequestedEvents = [];
+let logMessages;
 const uploadsDirectory = 'uploads';
 let scrapingList = [
   // "https://www.facebook.com/groups/444744689463060",
@@ -108,6 +110,22 @@ mongoose.connect(dbURI)
           let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
           let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
           console.log(date + "  " + time);
+
+          lastUpdate = "" + date + "  " + time;
+          let errorMessages = getErrorMessages();
+
+          await Log.remove();
+          let log = new Log({
+            lastUpdate: lastUpdate,
+            errorMessages: errorMessages,
+          });
+          log.save()
+          .then((result) => {
+            // console.log(result);
+          })
+          .catch((err) => {
+            console.log(err);
+          })
         }
         console.log(listOfEvents.length);
         console.log(listOfEvents);
@@ -115,6 +133,9 @@ mongoose.connect(dbURI)
       await getManuallyAndScrapedList();
       await Request.find().then((result) => {
         listOfRequestedEvents = result;
+      })
+      await Log.find().then((result) => {
+        logMessages = result;
       })
     }) // End app.listen
   })
@@ -166,13 +187,12 @@ app.get("/admin", async (req, res) => {
       // console.log(result);
       let scraping = getScraping();
       let scrapeProgress = getScrapeProgress();
-      let errorMessages = getErrorMessages();
       res.render("admin", {
         result,
         scraping,
         scrapeProgress,
         lastUpdate,
-        errorMessages,
+        log,
       });
     })
     .catch((err) => {
