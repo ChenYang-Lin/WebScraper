@@ -13,7 +13,7 @@ const Event = require("./server/models/event");
 const Manually = require("./server/models/manually"); 
 const Request = require("./server/models/request"); 
 
-let { scrapEvents, getScraping, getScrapeProgress } = require("./server/scraper.js");
+let { scrapEvents, getScraping, getScrapeProgress, getErrorMessages } = require("./server/scraper.js");
 let { removeDuplicates } = require("./server/removeDuplicates.js");
 let { chronologicalOrder } = require("./server/chronologicalOrder.js");
 
@@ -166,11 +166,13 @@ app.get("/admin", async (req, res) => {
       // console.log(result);
       let scraping = getScraping();
       let scrapeProgress = getScrapeProgress();
+      let errorMessages = getErrorMessages();
       res.render("admin", {
         result,
         scraping,
         scrapeProgress,
         lastUpdate,
+        errorMessages,
       });
     })
     .catch((err) => {

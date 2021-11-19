@@ -21,8 +21,8 @@ let scrapEvents = async (list) => {
     console.log("running scapEvents function");
 
     const browser = await puppeteer.launch({
-      headless: false,
-      // headless: true,
+      // headless: false,
+      headless: true,
       args: [
         "--no-sandbox",
         '--disable-setuid-sandbox',
@@ -162,7 +162,6 @@ page.on('console', consoleObj => console.log(consoleObj.text()));
           numberOfEvents = UpcomingEventsElement.children.length;
         } catch (e) {
           console.log(e);
-          continue;
         }
         
 
@@ -208,7 +207,9 @@ page.on('console', consoleObj => console.log(consoleObj.text()));
     } catch (e) {
       console.log("Evaluate Error: " + scrapingList[i].groupURL);
       console.log(e);
-      // return [];
+      basicInfosFromOneGroup = [];
+      let errorOrganization = scrapingList[i].groupURL;
+      errorMessages.push(errorOrganization);
       continue;
     }
      // End page.evaluate
@@ -377,8 +378,12 @@ function getScraping() {
   return scraping;
 }
 
+function getErrorMessages() {
+  return errorMessages;
+}
+
 // export functions
-module.exports = { scrapEvents, getScraping, getScrapeProgress };
+module.exports = { scrapEvents, getScraping, getScrapeProgress, getErrorMessages };
 
 // for testing only, print out any console.log from page.evaluate
 // page.on('console', msg => {
