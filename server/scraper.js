@@ -21,8 +21,8 @@ let scrapEvents = async (list) => {
     console.log("running scapEvents function");
 
     const browser = await puppeteer.launch({
-      // headless: false,
-      headless: true,
+      headless: false,
+      // headless: true,
       args: [
         "--no-sandbox",
         '--disable-setuid-sandbox',
@@ -150,7 +150,6 @@ page.on('console', consoleObj => console.log(consoleObj.text()));
         } catch (e) {
           // do nothing
         }
-        let numberOfEvents;
         if (!text) {
           if (document.querySelectorAll('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > .gm7ombtx').length > 0 || document.querySelectorAll('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > .gh3ezpug').length > 0){
             return basicResults;
@@ -158,7 +157,13 @@ page.on('console', consoleObj => console.log(consoleObj.text()));
         }
         // console.log(UpcomingEventsElement);
         // console.log(UpcomingEventsElement.children.length);
-        numberOfEvents = UpcomingEventsElement.children.length;
+        let numberOfEvents;
+        try {
+          numberOfEvents = UpcomingEventsElement.children.length;
+        } catch (e) {
+          console.log(e);
+          continue;
+        }
         
 
         // scrape events one by one from current group event list.

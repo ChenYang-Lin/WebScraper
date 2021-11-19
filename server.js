@@ -96,22 +96,22 @@ mongoose.connect(dbURI)
       // console.log(listOfEvents);
       // console.log(listOfEvents.length);
 
-      // Subscription.find().then(async (result) => {
-      //   let newList = await scrapEvents(result);
-      //   if (newList.length !== 0) {
-      //     listOfEvents = newList;
-      //     listOfEvents = removeDuplicates(listOfEvents);
-      //     listOfEvents = chronologicalOrder(listOfEvents);
-      //     // console.log(listOfEvents);
-      //     await eventDB(listOfEvents);
-      //     let today = new Date();
-      //     let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
-      //     let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-      //     console.log(date + "  " + time);
-      //   }
-      //   console.log(listOfEvents.length);
-      //   console.log(listOfEvents);
-      // })
+      Subscription.find().then(async (result) => {
+        let newList = await scrapEvents(result);
+        if (newList.length !== 0) {
+          listOfEvents = newList;
+          listOfEvents = removeDuplicates(listOfEvents);
+          listOfEvents = chronologicalOrder(listOfEvents);
+          // console.log(listOfEvents);
+          await eventDB(listOfEvents);
+          let today = new Date();
+          let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
+          let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+          console.log(date + "  " + time);
+        }
+        console.log(listOfEvents.length);
+        console.log(listOfEvents);
+      })
       await getManuallyAndScrapedList();
       await Request.find().then((result) => {
         listOfRequestedEvents = result;
