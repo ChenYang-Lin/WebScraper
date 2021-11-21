@@ -26,10 +26,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a href="mailto:info@gloriousrecovery.org" class="nav-link">Contact Us</a>
+              <a href="/" class="nav-link active">Home</a>
             </li>
             <li class="nav-item">
               <a href="/requestEvent" class="nav-link">Request Event</a>
+            </li>
+            <li class="nav-item">
+              <a href="mailto:info@gloriousrecovery.org" class="nav-link">Contact Us</a>
             </li>
           </ul>
         </div>
@@ -40,6 +43,7 @@
     <div class="container p-3 rounded mb-0 pb-0">
       <div class="row justify-content-center mb-0 pb-0">
         <h3 calss="mb-0 pb-0">Featured Events: </h3>
+        <p><em>Pinned events will be cleared when you clear the browser cache/history.</em></p>
       </div>
     </div>
     <div id="featured-container" class="container p-3 rounded mt-0">
@@ -148,7 +152,7 @@
                   </a>
                 <% } %>
                 <!-- Time -->
-                <h4 class="text-danger"><%= listOfEvents[i].detailDateTime %></h4>
+                <h4 class="text-danger"><%= listOfEvents[i].dateTime %></h4>
                 <!-- Title -->
                 <h3 class="fw-bold">
                   <a href="<%= listOfEvents[i].linkToOriginalPost %>" class="link-to-original-post" >

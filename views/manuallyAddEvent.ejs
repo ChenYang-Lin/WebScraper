@@ -33,7 +33,10 @@
               <a href="/admin" class="nav-link">Subscriptions</a>
             </li>
             <li class="nav-item">
-              <a href="/admin/manageRequests" class="nav-link">Requests</a>
+              <a href="/admin/manuallyAddEvent" class="nav-link active">Added Events</a>
+            </li>
+            <li class="nav-item">
+              <a href="/admin/manageRequests" class="nav-link">Requested Events</a>
             </li>
           </ul>
         </div>
@@ -72,7 +75,7 @@
                             </a>
                             <% } %>
                             <!-- Time -->
-                            <h4 class="text-danger"><%= listOfManuallyAddedEvents[i].detailDateTime %></h4>
+                            <h4 class="text-danger"><%= listOfManuallyAddedEvents[i].dateTime %></h4>
                             <!-- Title -->
                             <h3 class="fw-bold">
                             <a href="<%= listOfManuallyAddedEvents[i].linkToOriginalPost %>" class="link-to-original-post" >

@@ -41,7 +41,7 @@ let scrapEvents = async (list) => {
     // Scrapping
     let scrapingResults = await scrapeFacebookEvents(browser, page);
     
-    console.log(scrapingResults);
+    // console.log(scrapingResults);
     // Create and add Date object to each event
     scrapingResults = dateObject(scrapingResults);
     // close browser
@@ -158,36 +158,26 @@ page.on('console', consoleObj => console.log(consoleObj.text()));
         for (let j = 1; j < numberOfEvents; j++) {  
           // loop starts from 1 because first element of div is title => "Upcoming Events" text container
           let event = UpcomingEventsElement.children[j];
-          let linkToOriginalPost, image, dateTime, title;
+          let linkToOriginalPost, image, title;
           // The sturcture of Facebook events pages are slightly different, This if statement helps build more consistency.
 
           try {
             if (event.children[0].children[0].href !== undefined) {
-              console.log(event);
+              // console.log(event);
               linkToOriginalPost = event.children[0].children[0].getAttribute("href");
               image = event.children[0].children[0].children[0].children[0].src;
-              dateTime = event.children[1].children[0].children[0].children[0].children[0].children[0].innerText;
               title = event.children[1].children[0].children[0].children[0].children[0].children[1].innerText;
             } else {
               linkToOriginalPost = event.children[0].children[0].children[0].getAttribute("href");
               image = event.children[0].children[0].children[0].children[0].style.backgroundImage.replace("url(\"", "").replace("\")", "");
-              dateTime = event.children[0].children[1].children[0].children[0].children[0].innerText;
               title = event.children[0].children[1].children[0].children[1].children[0].children[0].children[0].children[0].innerText;
             }
           } catch (e) {
             console.log("Data Error: " + j);
             continue;
           }
-
-          // scrape data based on the structure of Facebook page.
-
-          // let organization = event.children[0].children[1].children[1].children[1].children[0];
-          // organizationLink = organization.children[0].getAttribute("href");
-          // organizationName = organization.children[0].children[0].innerText;
-
           
-          // singleEvent = { title, image, dateTime, organizationName, organizationLink, linkToOriginalPost };
-          singleEvent = { title, image, dateTime, linkToOriginalPost };
+          singleEvent = { title, image, linkToOriginalPost };
 
           basicResults.push(singleEvent);
         } // End for loop for current group event list

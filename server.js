@@ -98,39 +98,39 @@ mongoose.connect(dbURI)
       // console.log(listOfEvents);
       // console.log(listOfEvents.length);
 
-      await Subscription.find().then(async (result) => {
-        let newList = await scrapEvents(result);
-        if (newList.length !== 0) {
-          listOfEvents = newList;
-          listOfEvents = removeDuplicates(listOfEvents);
-          listOfEvents = chronologicalOrder(listOfEvents);
-          // console.log(listOfEvents);
-          await eventDB(listOfEvents);
-          let today = new Date();
-          let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
-          let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-          console.log(date + "  " + time);
+      // await Subscription.find().then(async (result) => {
+      //   let newList = await scrapEvents(result);
+      //   if (newList.length !== 0) {
+      //     listOfEvents = newList;
+      //     listOfEvents = removeDuplicates(listOfEvents);
+      //     listOfEvents = chronologicalOrder(listOfEvents);
+      //     // console.log(listOfEvents);
+      //     await eventDB(listOfEvents);
+      //     let today = new Date();
+      //     let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
+      //     let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      //     console.log(date + "  " + time);
 
-          lastUpdate = "" + date + "  " + time;
-          let errorMessages = getErrorMessages();
+      //     lastUpdate = "" + date + "  " + time;
+      //     let errorMessages = getErrorMessages();
 
-          await Log.remove();
-          let log = new Log({
-            lastUpdate: lastUpdate,
-            errorMessages: errorMessages,
-          });
-          log.save()
-          .then((result) => {
-            logMessages = result;
-            // console.log(result);
-          })
-          .catch((err) => {
-            console.log(err);
-          })
-        }
-        console.log(listOfEvents.length);
-        console.log(listOfEvents);
-      })
+      //     await Log.remove();
+      //     let log = new Log({
+      //       lastUpdate: lastUpdate,
+      //       errorMessages: errorMessages,
+      //     });
+      //     log.save()
+      //     .then((result) => {
+      //       logMessages = result;
+      //       // console.log(result);
+      //     })
+      //     .catch((err) => {
+      //       console.log(err);
+      //     })
+      //   }
+      //   console.log(listOfEvents.length);
+      //   console.log(listOfEvents);
+      // })
       await getManuallyAndScrapedList();
       await Request.find().then((result) => {
         listOfRequestedEvents = result;
@@ -279,9 +279,7 @@ app.post("/admin/manuallyAddEvent", upload.single('inputImage'), async (req, res
 
   let date = inputDate.split("-");
   let time = inputTime.split(":");
-  const offset = 300;
   dateObject = new Date(date[0], date[1] - 1, date[2], time[0], time[1], 0, 0);
-  dateObject = new Date(dateObject.getTime() + offset*60*1000);
   let organization = [
     {
       name: inputEventBy,
@@ -305,7 +303,7 @@ app.post("/admin/manuallyAddEvent", upload.single('inputImage'), async (req, res
   let manually = new Manually({
     title: inputTitle,
     image: inputImage,
-    dateTime: dateObject.toString(),
+    dateTime: dateObject.toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: "full", timeStyle: "long" }),
     linkToOriginalPost: inputLink,
     detailDateTime: dateObject.toString(),
     address: inputAddress,
@@ -431,9 +429,7 @@ app.post("/requestEvent", upload.single('inputImage'), async (req, res) => {
 
   let date = inputDate.split("-");
   let time = inputTime.split(":");
-  const offset = 300;
   dateObject = new Date(date[0], date[1] - 1, date[2], time[0], time[1], 0, 0);
-  dateObject = new Date(dateObject.getTime() + offset*60*1000);
   let organization = [
     {
       name: inputEventBy,
@@ -458,7 +454,7 @@ app.post("/requestEvent", upload.single('inputImage'), async (req, res) => {
     title: inputTitle,
     image: inputImage,
     email: inputEmail,
-    dateTime: dateObject.toString(),
+    dateTime: dateObject.toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: "full", timeStyle: "long" }),
     linkToOriginalPost: inputLink,
     detailDateTime: dateObject.toString(),
     address: inputAddress,
