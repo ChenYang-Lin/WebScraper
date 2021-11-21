@@ -2,10 +2,9 @@ require("dotenv").config();
 const puppeteer = require("puppeteer");
 const { splitTime } = require("./scraperFunctions/splitTime");
 const { dateObject } = require("./scraperFunctions/dateObject");
-const { gengerateProxy } = require("./proxy.js");
 
 let scrapingList = [];
-let errorMessages = [];
+let errorMessages = ["hello",];
 let scrapeProgress = 0;
 let scrapeIndex = 0;
 let scraping = false;
@@ -26,16 +25,7 @@ let scrapEvents = async (list) => {
       args: [
         "--no-sandbox",
         '--disable-setuid-sandbox',
-        // `--proxy-server=${ip}`,
-        // `--proxy-server=${ProxyUrl}`,
-        // '--ignore-certificate-errors',
-        // '--ignore-certificate-errors-spki-list ',
       ],
-      // defaultViewport: {
-      //   width: 1920,
-      //   height: 1080,
-      // },
-      // userDataDir: "./cache"
     });
     const page = await browser.newPage();
     
@@ -43,7 +33,6 @@ let scrapEvents = async (list) => {
     await page.setDefaultNavigationTimeout(0);
 
     // const version = await page.browser().version();
-    // console.log("browser version:---------------------------------------------------------------------------")
     // console.log("browser version: " + version)
 
 
