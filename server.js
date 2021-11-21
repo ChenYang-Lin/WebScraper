@@ -98,7 +98,7 @@ mongoose.connect(dbURI)
       // console.log(listOfEvents);
       // console.log(listOfEvents.length);
 
-      Subscription.find().then(async (result) => {
+      await Subscription.find().then(async (result) => {
         let newList = await scrapEvents(result);
         if (newList.length !== 0) {
           listOfEvents = newList;
@@ -538,7 +538,7 @@ cron.schedule(`${second} ${minute} ${hour} * * *`, async () => {
   minute = Math.floor(Math.random() * (59 - 0 + 1)) + 0;
   hour = Math.floor(Math.random() * (3 - 1 + 1)) + 1;
   console.log("running a task every day between 1 - 3 AM");
-  Subscription.find().then(async (result) => {
+  await Subscription.find().then(async (result) => {
     let newList = await scrapEvents(result);
     
     if (newList.length !== 0) {

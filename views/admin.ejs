@@ -77,7 +77,7 @@
     <h4 class="m-3 p-3">Last Update: <%= logMessages.lastUpdate %></h4>
     <% if (logMessages.errorMessages) { %>
       <% for (let i = 0; i < logMessages.errorMessages.length; i++) { %>
-        <p>logMessages.errorMessages[i]</p>
+        <p><%= logMessages.errorMessages[i] %></p>
       <% } %>
     <% } %>
 
