@@ -215,11 +215,18 @@ app.post("/admin/manuallyAddEvent", upload.single('inputImage'), async (req, res
   let { inputTitle, inputAddress, inputDate, inputTime, inputImage, inputLink, inputTicketLink, inputEventBy, inputCategories, inputDescription } = req.body;
 
 
+  // Date Object
   let date = inputDate.split("-");
   let time = inputTime.split(":");
   // dateObject = new Date(date[0], date[1] - 1, date[2], time[0], time[1], 0, 0);
   dateObject = new Date(Date.UTC(date[0], date[1] - 1, date[2], time[0], time[1], 0, 0));
-  dateObject = new Date(dateObject.getTime() + offset*60*1000);
+    dateObject = new Date(dateObject.getTime() + offset*60*1000);
+  let dateString = dateObject.toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: "full", timeStyle: "long" })
+  dateString = dateString.toLowerCase();
+  if (dateString.includes("edt")) 
+    dateObject.setHours( dateObject.setHours() - 1 );
+
+  
   let organization = [
     {
       name: inputEventBy,
@@ -361,40 +368,23 @@ app.get("/requestEvent", (req, res) => {
   res.render("userRequestForm");
 });
 
-function utcConverterToLocalTimezone(dateUTC) {
-  const localTimezone = dateUTC
-    .toLocaleString({ timeZone: "America/New_York" })
-    .split(" ");
-
-  const diamesaño = localTimezone[0].split("/");
-  let dia = diamesaño[0];
-  let mes = diamesaño[1];
-  const año = diamesaño[2];
-  const hora = localTimezone[1];
-  console.log(dia)
-  console.log(mes)
-  console.log(año)
-  console.log(hora)
-
-  dia < 10 ? (dia = `${0}${dia}`) : null;
-  mes < 10 ? (mes = `${0}${mes}`) : null;
-
-  const fechaFinalFormateada = `${año}-${mes}-${dia}T${hora}-05:00`;
-  return fechaFinalFormateada;
-}
-
-
 app.post("/requestEvent", upload.single('inputImage'), async (req, res) => {
 
   let { inputTitle, inputAddress, inputDate, inputTime, inputImage, inputLink, inputTicketLink, inputEventBy, inputCategories, inputDescription, inputEmail } = req.body;
 
 
+  // Date Object
   let date = inputDate.split("-");
   let time = inputTime.split(":");
   // dateObject = new Date(date[0], date[1] - 1, date[2], time[0], time[1], 0, 0);
   dateObject = new Date(Date.UTC(date[0], date[1] - 1, date[2], time[0], time[1], 0, 0));
-  let newDate = utcConverterToLocalTimezone(dateObject);
   dateObject = new Date(dateObject.getTime() + offset*60*1000);
+  let dateString = dateObject.toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: "full", timeStyle: "long" })
+  dateString = dateString.toLowerCase();
+  if (dateString.includes("edt")) 
+    dateObject.setHours( dateObject.setHours() - 1 );
+
+  // Organization
   let organization = [
     {
       name: inputEventBy,
@@ -541,7 +531,7 @@ async function scrapeAndUpdate() {
       let today = new Date();
       let date = today.getFullYear() + "-" + (today.getMonth()+1) + "-" + today.getDate();
       let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-      lastUpdate = "" + date + "  " + time;
+      lastUpdate = "" + date + "  " + time + " UTC";
 
       let errorMessages = getErrorMessages();
 
