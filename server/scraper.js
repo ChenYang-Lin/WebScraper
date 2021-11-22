@@ -107,7 +107,7 @@ async function scrapeFacebookEvents(browser, page) {
       console.log(e);
     }
 // for test only ------------------------------------
-page.on('console', consoleObj => console.log(consoleObj.text()));
+// page.on('console', consoleObj => console.log(consoleObj.text()));
 // for test only ------------------------------------
 
     let basicInfosFromOneGroup;
@@ -226,7 +226,7 @@ async function scrapeIndividaulEvents(basicInfosFromOneGroup, browser) {
         waitUntil: "networkidle0"
       });
 // for test only ------------------------------------
-pageForOriginalPost.on('console', consoleObj => console.log(consoleObj.text()));
+// pageForOriginalPost.on('console', consoleObj => console.log(consoleObj.text()));
 // for test only ------------------------------------
 
       // screenshot
