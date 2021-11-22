@@ -108,6 +108,10 @@ async function scrapeFacebookEvents(browser, page) {
     }
 // for test only ------------------------------------
 // page.on('console', consoleObj => console.log(consoleObj.text()));
+page.on('console', msg => {
+for (let i = 0; i < msg._args.length; ++i)
+  console.log(`${i}: ${msg._args[i]}`);
+});
 // for test only ------------------------------------
 
     let basicInfosFromOneGroup;
@@ -227,6 +231,10 @@ async function scrapeIndividaulEvents(basicInfosFromOneGroup, browser) {
       });
 // for test only ------------------------------------
 // pageForOriginalPost.on('console', consoleObj => console.log(consoleObj.text()));
+pageForOriginalPost.on('console', msg => {
+for (let i = 0; i < msg._args.length; ++i)
+  console.log(`${i}: ${msg._args[i]}`);
+});
 // for test only ------------------------------------
 
       // screenshot
