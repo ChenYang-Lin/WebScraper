@@ -526,7 +526,7 @@ app.post("/admin/progress", (req, res) => {
 async function scrapeAndUpdate() {
   await Subscription.find().then(async (result) => {
     let newList = await scrapEvents(result);
-    
+    console.log(newList.length);
     if (newList.length !== 0) {
       listOfEvents = newList;
       
