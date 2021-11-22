@@ -225,7 +225,7 @@ app.post("/admin/manuallyAddEvent", upload.single('inputImage'), async (req, res
   dateString = dateString.toLowerCase();
   dateObject;
   if (dateString.includes("edt")) 
-    dateObject.setHours( dateObject.setHours() - 1 );
+    dateObject.setHours( dateObject.getHours() - 1 );
   console.log(dateObject)
 
   
