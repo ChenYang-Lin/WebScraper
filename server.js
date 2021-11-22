@@ -361,6 +361,28 @@ app.get("/requestEvent", (req, res) => {
   res.render("userRequestForm");
 });
 
+function utcConverterToLocalTimezone(dateUTC) {
+  const localTimezone = dateUTC
+    .toLocaleString({ timeZone: "America/New_York" })
+    .split(" ");
+
+  const diamesaño = localTimezone[0].split("/");
+  let dia = diamesaño[0];
+  let mes = diamesaño[1];
+  const año = diamesaño[2];
+  const hora = localTimezone[1];
+  console.log(dia)
+  console.log(mes)
+  console.log(año)
+  console.log(hora)
+
+  dia < 10 ? (dia = `${0}${dia}`) : null;
+  mes < 10 ? (mes = `${0}${mes}`) : null;
+
+  const fechaFinalFormateada = `${año}-${mes}-${dia}T${hora}-05:00`;
+  return fechaFinalFormateada;
+}
+
 
 app.post("/requestEvent", upload.single('inputImage'), async (req, res) => {
 
@@ -371,6 +393,7 @@ app.post("/requestEvent", upload.single('inputImage'), async (req, res) => {
   let time = inputTime.split(":");
   // dateObject = new Date(date[0], date[1] - 1, date[2], time[0], time[1], 0, 0);
   dateObject = new Date(Date.UTC(date[0], date[1] - 1, date[2], time[0], time[1], 0, 0));
+  let newDate = utcConverterToLocalTimezone(dateObject);
   dateObject = new Date(dateObject.getTime() + offset*60*1000);
   let organization = [
     {
