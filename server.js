@@ -33,6 +33,7 @@ let scrapingList = [
   "https://www.facebook.com/liberationprograms",
 ];
 let lastUpdate = "";
+const offset = 300;
 
 // Register view engine
 app.set("view engine", "ejs");
@@ -217,6 +218,7 @@ app.post("/admin/manuallyAddEvent", upload.single('inputImage'), async (req, res
   let date = inputDate.split("-");
   let time = inputTime.split(":");
   dateObject = new Date(date[0], date[1] - 1, date[2], time[0], time[1], 0, 0);
+  dateObject = new Date(dateObject.getTime() + offset*60*1000);
   let organization = [
     {
       name: inputEventBy,
@@ -367,6 +369,7 @@ app.post("/requestEvent", upload.single('inputImage'), async (req, res) => {
   let date = inputDate.split("-");
   let time = inputTime.split(":");
   dateObject = new Date(date[0], date[1] - 1, date[2], time[0], time[1], 0, 0);
+  dateObject = new Date(dateObject.getTime() + offset*60*1000);
   let organization = [
     {
       name: inputEventBy,
