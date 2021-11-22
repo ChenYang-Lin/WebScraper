@@ -223,10 +223,8 @@ app.post("/admin/manuallyAddEvent", upload.single('inputImage'), async (req, res
     dateObject = new Date(dateObject.getTime() + offset*60*1000);
   let dateString = dateObject.toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: "full", timeStyle: "long" })
   dateString = dateString.toLowerCase();
-  dateObject;
   if (dateString.includes("edt")) 
     dateObject.setHours( dateObject.getHours() - 1 );
-  console.log(dateObject)
 
   
   let organization = [
@@ -384,7 +382,7 @@ app.post("/requestEvent", upload.single('inputImage'), async (req, res) => {
   let dateString = dateObject.toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: "full", timeStyle: "long" })
   dateString = dateString.toLowerCase();
   if (dateString.includes("edt")) 
-    dateObject.setHours( dateObject.setHours() - 1 );
+    dateObject.setHours( dateObject.getHours() - 1 );
 
   // Organization
   let organization = [
