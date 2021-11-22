@@ -75,7 +75,7 @@ mongoose.connect(dbURI)
     })
     app.listen(process.env.PORT || 3000, async () => {
       console.log("app is running on port 3000");
-      await scrapeAndUpdate();
+      // await scrapeAndUpdate();
     }) // End app.listen
   })
   .catch((err) => console.log(err));
@@ -464,30 +464,6 @@ app.post("/requestEvent", upload.single('inputImage'), async (req, res) => {
 
   res.redirect('/');
 });
-
-
-app.post("/admin/scrape", (req, res) => {
-  let scraping = getScraping();
-  if (scraping) return;
-
-  if (req.body.scrapeBtnVal === "scrape") {
-    // console.log(req.body);
-    Subscription.find().then(async (result) => {
-      result = chronologicalOrder(result);
-      listOfEvents = await scrapEvents(result);
-      listOfEvents = removeDuplicates(listOfEvents);
-    })
-  } 
-})
-
-app.post("/admin/progress", (req, res) => {
-  // console.log(req.body);=
-  let scraping = getScraping();
-  let scrapeProgress = getScrapeProgress();
-  res.send({ scrapeProgress, scraping })
-  
-  // res.redirect('/admin');
-})
 
 // Update list of events repeatly by doing new scrapes
 let second = Math.floor(Math.random() * (59 - 0 + 1)) + 0;
