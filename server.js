@@ -75,7 +75,7 @@ mongoose.connect(dbURI)
     })
     app.listen(process.env.PORT || 3000, async () => {
       console.log("app is running on port 3000");
-      // await scrapeAndUpdate();
+      await scrapeAndUpdate();
     }) // End app.listen
   })
   .catch((err) => console.log(err));
@@ -217,9 +217,9 @@ app.post("/admin/manuallyAddEvent", upload.single('inputImage'), async (req, res
 
   let date = inputDate.split("-");
   let time = inputTime.split(":");
-  dateObject = new Date(date[0], date[1] - 1, date[2], time[0], time[1], 0, 0);
-  // dateObject = new Date(dateObject.getTime() + offset*60*1000);
+  // dateObject = new Date(date[0], date[1] - 1, date[2], time[0], time[1], 0, 0);
   dateObject = new Date(Date.UTC(date[0], date[1] - 1, date[2], time[0], time[1], 0, 0));
+  dateObject = new Date(dateObject.getTime() + offset*60*1000);
   let organization = [
     {
       name: inputEventBy,
@@ -369,7 +369,8 @@ app.post("/requestEvent", upload.single('inputImage'), async (req, res) => {
 
   let date = inputDate.split("-");
   let time = inputTime.split(":");
-  dateObject = new Date(date[0], date[1] - 1, date[2], time[0], time[1], 0, 0);
+  // dateObject = new Date(date[0], date[1] - 1, date[2], time[0], time[1], 0, 0);
+  dateObject = new Date(Date.UTC(date[0], date[1] - 1, date[2], time[0], time[1], 0, 0));
   dateObject = new Date(dateObject.getTime() + offset*60*1000);
   let organization = [
     {
