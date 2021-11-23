@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="/style.css" type="text/css">
+    
+    <title>Login</title>
+</head>
+<body>
+    <!-- <form action="/login" method="POST">
+        <div>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit">Login</button>
+    </form> -->
+    <h1 class="text-center">Login</h1>
+    <% if (messages.error) { %>
+        <h3 class="text-center bg-danger text-white"><%= messages.error %></h3>
+    <% } %>
+    <form action="/login" method="POST" class="container bg-white shadow p-3 rounded my-3 col-12 col-md-8 col-lg-6">
+        <div class="mb-3">
+            <label for="email" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="email" name="email"  required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password"  name="password" required>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <button type="submit" class="btn btn-primary"><h3 class="text-center">Login</h3></button>   
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- <a href="/register">Register</a> -->
+</body>
+</html>

@@ -4,6 +4,18 @@ const cron = require("node-cron");
 const path = require("path");
 const mongoose = require("mongoose");
 const { v4: uuidv4 } = require('uuid');
+const bcrypt = require('bcrypt')
+const passport = require("passport")
+const flash = require('express-flash');
+const session = require('express-session')
+const methodOverride = require('method-override')
+
+const initializePassport = require('./passport-config');
+initializePassport(passport, 
+    email => users.find(user => user.email === email),
+    id => users.find(user => user.id === id)
+);
+
 
 const fs = require('fs');
 require('dotenv/config');
@@ -13,11 +25,13 @@ const Event = require("./server/models/event");
 const Manually = require("./server/models/manually"); 
 const Request = require("./server/models/request"); 
 const Log = require("./server/models/log"); 
+const Admin = require("./server/models/admin"); 
 
 let { scrapEvents, getScraping, getScrapeProgress, getErrorMessages } = require("./server/scraper.js");
 let { removeDuplicates } = require("./server/removeDuplicates.js");
 let { chronologicalOrder } = require("./server/chronologicalOrder.js");
 
+let users = [];
 let listOfEvents = [];
 let scrapedList = [];
 let listOfManuallyAddedEvents = [];
@@ -41,7 +55,15 @@ app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
-
+app.use(flash());
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+}))
+app.use(passport.initialize())
+app.use(passport.session());
+app.use(methodOverride('_method'))
 
 // Mongoose and Mongo sandbox routes
 // Initialize subscription database
@@ -72,6 +94,9 @@ mongoose.connect(dbURI)
     })
     await Log.find().then((result) => {
       logMessages = result;
+    })
+    await Admin.find().then((result) => {
+      users = result;
     })
     app.listen(process.env.PORT || 3000, async () => {
       console.log("app is running on port 3000");
@@ -120,7 +145,7 @@ app.get("/", async (req, res) => {
 });
 
 // Admin and list of subscription routes
-app.get("/admin", async (req, res) => {
+app.get("/admin", checkAuthenticated, async (req, res) => {
   Subscription.find().sort({ createdAt: 1 })
     .then((result) => {
       // console.log(result);
@@ -139,7 +164,7 @@ app.get("/admin", async (req, res) => {
     })
 });
 
-app.post("/edit-remove", (req, res) => {
+app.post("/edit-remove", checkAuthenticated, (req, res) => {
   const { url, id, name } = req.body;
   if (name === "edit") {
     Subscription.findByIdAndUpdate(id, { groupURL: url }, (err, result) => {
@@ -166,7 +191,7 @@ app.post("/edit-remove", (req, res) => {
   }
 });
 
-app.post("/add", (req, res) => {
+app.post("/add", checkAuthenticated, (req, res) => {
   const { newUrl, name } = req.body;
   if (name === "add") {
     let subscription = new Subscription({
@@ -198,7 +223,7 @@ let storage = multer.diskStorage({
 })
 let upload = multer({ storage: storage })
 
-app.get("/admin/manuallyAddEvent", (req, res) => {
+app.get("/admin/manuallyAddEvent", checkAuthenticated, (req, res) => {
   Manually.find()
     .then((result) => {
       listOfManuallyAddedEvents = result;
@@ -209,7 +234,7 @@ app.get("/admin/manuallyAddEvent", (req, res) => {
     })
 });
 
-app.post("/admin/manuallyAddEvent", upload.single('inputImage'), async (req, res) => {
+app.post("/admin/manuallyAddEvent", checkAuthenticated, upload.single('inputImage'), async (req, res) => {
 
   let event = {};
   let { inputTitle, inputAddress, inputDate, inputTime, inputImage, inputLink, inputTicketLink, inputEventBy, inputCategories, inputDescription } = req.body;
@@ -294,7 +319,7 @@ app.post("/admin/manuallyAddEvent", upload.single('inputImage'), async (req, res
   res.redirect('/admin/manuallyAddEvent');
 });
 
-app.post("/admin/manuallyAddEvent-remove", async (req, res) => {
+app.post("/admin/manuallyAddEvent-remove", checkAuthenticated, async (req, res) => {
   // console.log(req.body);
   const { manuallyId, btnName } = req.body;
   if (btnName === "remove") {
@@ -311,13 +336,13 @@ app.post("/admin/manuallyAddEvent-remove", async (req, res) => {
 });
 
 // Manage Requests
-app.get("/admin/manageRequests", (req, res) => {
+app.get("/admin/manageRequests", checkAuthenticated, (req, res) => {
   res.render("manageRequests", {
     listOfRequestedEvents,
   });
 });
 
-app.post("/admin/manageRequests", async(req, res) => {
+app.post("/admin/manageRequests", checkAuthenticated, async(req, res) => {
   // console.log(req.body);
   const { btnName, requestId } = req.body;
   if (btnName === "accept") {
@@ -495,7 +520,7 @@ async function getManuallyAndScrapedList() {
   // console.log(listOfEvents);
 }
 
-app.post("/admin/scrape", async (req, res) => {
+app.post("/admin/scrape", checkAuthenticated, async (req, res) => {
   let scraping = getScraping();
   if (scraping) return;
 
@@ -504,7 +529,7 @@ app.post("/admin/scrape", async (req, res) => {
   } 
 })
 
-app.post("/admin/progress", (req, res) => {
+app.post("/admin/progress", checkAuthenticated, (req, res) => {
   // console.log(req.body);=
   let scraping = getScraping();
   let scrapeProgress = getScrapeProgress();
@@ -557,4 +582,64 @@ async function scrapeAndUpdate() {
   await Log.find().then((result) => {
     logMessages = result;
   })
+}
+
+
+app.get('/login', checkNotAuthenticated, (req, res) => {
+    res.render("login.ejs");
+})
+
+app.get("/register", checkNotAuthenticated, (req, res) => {
+    res.render("register.ejs")
+})
+
+app.post("/login", checkNotAuthenticated, passport.authenticate('local', {
+    successRedirect: '/admin',
+    failureRedirect: '/login',
+    failureFlash: true,
+}))
+
+app.post("/register", checkNotAuthenticated, async (req,res) => {
+    try {
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        let user = new Admin({
+          name: req.body.name,
+          email: req.body.email,
+          password: hashedPassword,
+        });
+        await user.save()
+        .then((result) => {
+          users = result;
+          // console.log(result);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        await Admin.find().then((result) => {
+          users = result;
+        })
+        res.redirect('/login');
+    } catch {
+        res.redirect('/register')
+    }
+    console.log(users);
+})
+
+app.delete('/logout', (req, res) => {
+    req.logout();
+    res.redirect('/login');
+})
+
+function checkAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next()
+    }
+    res.redirect('/login');
+}
+
+function checkNotAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return res.redirect('/admin')
+    }
+    next();
 }

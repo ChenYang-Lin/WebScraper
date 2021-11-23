@@ -4,7 +4,7 @@ const { splitTime } = require("./scraperFunctions/splitTime");
 const { dateObject } = require("./scraperFunctions/dateObject");
 
 let scrapingList = [];
-let errorMessages = ["hello",];
+let errorMessages = ["Errors: ",];
 let scrapeProgress = 0;
 let scrapeIndex = 0;
 let scraping = false;
