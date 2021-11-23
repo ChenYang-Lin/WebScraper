@@ -133,6 +133,11 @@ for (let i = 0; i < msg._args.length; ++i)
             await seeMoreBtn.click();    
             await new Promise(resolve => setTimeout(resolve, 3000));
         }
+        seeMoreBtn = document.querySelector('.dati1w0a.ihqw7lf3.hv4rvrfc.discj3wi > [aria-label="see more"]')
+        if (seeMoreBtn) {
+            await seeMoreBtn.click();    
+            await new Promise(resolve => setTimeout(resolve, 3000));
+        }
         // if there is no upcoming events, just return
         let text;
         try {
