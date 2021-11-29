@@ -315,11 +315,14 @@ for (let i = 0; i < msg._args.length; ++i)
         try {
           // document.querySelectorAll(".d2edcug0.hpfvmrgz.qv66sw1b.c1et5uql.lr9zc1uh.a8c37x1j.keod5gw0.nxhoafnm.aigsh9s9.ns63r2gh.fe6kdd0r.mau55g9w.c8b282yb.iv3no6db.o3w64lxj.b2s5l15y.hnhda86s.oo9gr5id.hzawbc8m").forEach((element) => {
           document.querySelectorAll(".d2edcug0.hpfvmrgz").forEach((element) => {
-            if (element.textContent == "Tickets") {
+            if (element.textContent == "Tickets" || element.textContent == "tickets") {
               ticket = true;
-              // let ticketDiv = element.parentNode.parentNode.parentNode.parentNode.parentNode;
-              // ticketLink = ticketDiv.children[1].children[0].getAttribute("href");
-              // console.log(ticketLink);
+              try {
+                let ticketDiv = element.parentNode.parentNode;
+                ticketLink = ticketDiv.children[1].children[0].textContent;
+              } catch (e) {
+                ticketLink = basicInfosFromOneGroup[i].linkToOriginalPost;
+              }
             }
           })
         } catch (e) {

@@ -127,13 +127,7 @@ async function eventDB(list) {
       isManuallyAdded: false,
       dateObject: list[i].dateObject,
     });
-    event.save()
-    .then((result) => {
-      // console.log(result);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
+    await event.save();
   }
 }
 
@@ -565,14 +559,7 @@ async function scrapeAndUpdate() {
         lastUpdate: lastUpdate,
         errorMessages: errorMessages,
       });
-      log.save()
-      .then((result) => {
-        logMessages = result;
-        // console.log(result);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
+      await log.save();
     }
   })
   await getManuallyAndScrapedList();
