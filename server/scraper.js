@@ -277,7 +277,7 @@ for (let i = 0; i < msg._args.length; ++i)
         let description;
         try {
           description = detailsElement.lastChild.children[0].children[0].innerText;
-          description.substring(0, str.length - 9);
+          description.substring(0, description.length - 9);
         } catch (e) {
           description = "";
         }
@@ -287,12 +287,12 @@ for (let i = 0; i < msg._args.length; ++i)
         let organizationsStrongDiv = document.querySelectorAll(".qzhwtbm6.knvmm38d > .d2edcug0 > strong")
         try {
           organizationsStrongDiv.forEach((element) => {
-          let currOrganizationInfo = {};
-          currOrganizationInfo.name = element.innerText;
-          currOrganizationInfo.link = element.children[0].getAttribute("href");
-          // console.log(currOrganizationInfo.link)
-          organizationInfo.push(currOrganizationInfo);
-        })
+            let currOrganizationInfo = {};
+            currOrganizationInfo.name = element.innerText;
+            currOrganizationInfo.link = element.children[0].getAttribute("href");
+            // console.log(currOrganizationInfo.link)
+            organizationInfo.push(currOrganizationInfo);
+          })
         } catch (e) {
           organizationInfo = [];
         }
