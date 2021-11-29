@@ -274,22 +274,29 @@ for (let i = 0; i < msg._args.length; ++i)
         } catch (e) {
           console.log(e);
         }
-
-        
-        // await new Promise(resolve => setTimeout(resolve, 14000));
-
-        let description = detailsElement.lastChild.children[0].children[0].innerText;
+        let description;
+        try {
+          description = detailsElement.lastChild.children[0].children[0].innerText;
+          description.substring(0, str.length - 9);
+        } catch (e) {
+          description = "";
+        }
 
         // organization 
         let organizationInfo = []
         let organizationsStrongDiv = document.querySelectorAll(".qzhwtbm6.knvmm38d > .d2edcug0 > strong")
-        organizationsStrongDiv.forEach((element) => {
+        try {
+          organizationsStrongDiv.forEach((element) => {
           let currOrganizationInfo = {};
           currOrganizationInfo.name = element.innerText;
           currOrganizationInfo.link = element.children[0].getAttribute("href");
           // console.log(currOrganizationInfo.link)
           organizationInfo.push(currOrganizationInfo);
         })
+        } catch (e) {
+          organizationInfo = [];
+        }
+
 
         // Map Town State
         let mapUrl;
