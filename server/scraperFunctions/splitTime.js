@@ -39,7 +39,7 @@ const DAY = [
 ]
 
 let splitTime = (detailDateTime) => {
-    let dayOfTheWeek, month, dayOfTheMonth, year, startTime, am_pm, isUTC;
+    let dayOfTheWeek, month, dayOfTheMonth, year, startTime, endTime, am_pm, isUTC;
     
     if (detailDateTime.indexOf('TODAY') > -1) {
         // console.log("today");

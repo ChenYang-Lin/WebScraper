@@ -342,6 +342,16 @@ for (let i = 0; i < msg._args.length; ++i)
           eventBy = document.querySelectorAll(".d2edcug0.hpfvmrgz strong")[0].textContent;
         } catch (e) {
           // 
+          eventBy = " ";
+        }
+
+        // location
+        let location = "";
+        try {
+          location = document.querySelectorAll(".d2edcug0.hpfvmrgz.qv66sw1b > .oajrlxb2.g5ia77u1.qu0x051f")[0].textContent;
+        } catch(e) {
+          // 
+          location = "Online";
         }
 
 
@@ -366,7 +376,7 @@ for (let i = 0; i < msg._args.length; ++i)
 
         let keywords = "" + detailDateTime + " " + address + " " + description + " " + basicInfosFromOneGroup[i].dateTime + " " + basicInfosFromOneGroup[i].title;
 
-        return { detailDateTime, address, description, organizationInfo, splitTime: splittedTime, mapUrl, ticket, ticketLink, eventBy, category, keywords };
+        return { detailDateTime, address, description, organizationInfo, splitTime: splittedTime, mapUrl, ticket, ticketLink, eventBy, location, category, keywords };
       }, basicInfosFromOneGroup, i);
       await pageForOriginalPost.close();
     }

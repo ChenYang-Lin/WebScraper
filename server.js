@@ -123,6 +123,7 @@ async function eventDB(list) {
       splitTime: list[i].splitTime,
       ticket: list[i].ticket,
       eventBy: list[i].eventBy,
+      location: list[i].location,
       category: list[i].category,
       keywords: list[i].keywords,
       isManuallyAdded: false,
