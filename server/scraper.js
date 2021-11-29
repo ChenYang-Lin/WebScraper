@@ -337,7 +337,12 @@ for (let i = 0; i < msg._args.length; ++i)
         }
 
         // event by 
-        let eventBy = document.querySelectorAll(".d2edcug0.hpfvmrgz strong")[0].textContent;
+        let eventBy = "";
+        try {
+          eventBy = document.querySelectorAll(".d2edcug0.hpfvmrgz strong")[0].textContent;
+        } catch (e) {
+          // 
+        }
 
 
         // Split detailDateTime
