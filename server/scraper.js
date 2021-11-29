@@ -336,6 +336,9 @@ for (let i = 0; i < msg._args.length; ++i)
           console.log("Catch Error (ticket): " + e);
         }
 
+        // event by 
+        let eventBy = document.querySelectorAll(".d2edcug0.hpfvmrgz strong")[0].textContent;
+
 
         // Split detailDateTime
         let splittedTime = await splitTime(detailDateTime);
@@ -358,7 +361,7 @@ for (let i = 0; i < msg._args.length; ++i)
 
         let keywords = "" + detailDateTime + " " + address + " " + description + " " + basicInfosFromOneGroup[i].dateTime + " " + basicInfosFromOneGroup[i].title;
 
-        return { detailDateTime, address, description, organizationInfo, splitTime: splittedTime, mapUrl, ticket, ticketLink, category, keywords };
+        return { detailDateTime, address, description, organizationInfo, splitTime: splittedTime, mapUrl, ticket, ticketLink, eventBy, category, keywords };
       }, basicInfosFromOneGroup, i);
       await pageForOriginalPost.close();
     }

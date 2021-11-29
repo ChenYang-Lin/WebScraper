@@ -76,6 +76,9 @@ const eventSchema = new Schema({
         type: Boolean,
         required: true
     },
+    eventBy: {
+        type: String,
+    },
     category: [
         {
             type: String,
