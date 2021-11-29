@@ -342,13 +342,18 @@ for (let i = 0; i < msg._args.length; ++i)
 
         // Category
         let category = [];
-        if (detailsElement.lastChild.children[0].children.length > 1) {
-          let categoryDiv = detailsElement.lastChild.children[0].children[1];
-          for (let e = 0; e < categoryDiv.children.length; e++) {
-            let tag = categoryDiv.children[e].children[0].children[0].children[0].innerText;
-            category.push(tag);
+        try {
+          if (detailsElement.lastChild.children[0].children.length > 1) {
+            let categoryDiv = detailsElement.lastChild.children[0].children[1];
+            for (let e = 0; e < categoryDiv.children.length; e++) {
+              let tag = categoryDiv.children[e].children[0].children[0].children[0].innerText;
+              category.push(tag);
+            }
           }
+        } catch (e) {
+          // 
         }
+
 
 
         let keywords = "" + detailDateTime + " " + address + " " + description + " " + basicInfosFromOneGroup[i].dateTime + " " + basicInfosFromOneGroup[i].title;
