@@ -13,7 +13,7 @@ img {
 }
 
 /* Form required */
-.form-group.required .control-label:after {
+.form-group.required .form-label:after {
   content: "*";
   color: red;
 }

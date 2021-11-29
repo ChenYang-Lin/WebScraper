@@ -269,7 +269,7 @@ app.post("/admin/manuallyAddEvent", checkAuthenticated, upload.single('inputImag
   let manually = new Manually({
     title: inputTitle,
     image: inputImage,
-    dateTime: dateObject.toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: "full", timeStyle: "short" }),
+    dateTime: dateObject.toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: "long", timeStyle: "short" }),
     linkToOriginalPost: inputLink,
     detailDateTime: dateObject.toString(),
     address: inputAddress,
@@ -430,7 +430,7 @@ app.post("/requestEvent", upload.single('inputImage'), async (req, res) => {
     title: inputTitle,
     image: inputImage,
     email: inputEmail,
-    dateTime: dateObject.toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: "full", timeStyle: "short" }),
+    dateTime: dateObject.toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: "long", timeStyle: "short" }),
     linkToOriginalPost: inputLink,
     detailDateTime: dateObject.toString(),
     address: inputAddress,

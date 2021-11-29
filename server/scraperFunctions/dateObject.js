@@ -39,7 +39,7 @@ let dateObject = (scrapingResults) => {
         // dateObject = JSON.stringify(dateObject);
         // console.log(dateObject);
 
-        let dateTime = dateObject.toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: "full", timeStyle: "short" });
+        let dateTime = dateObject.toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: "long", timeStyle: "short" });
 
         
         scrapingResults[i] = {...scrapingResults[i], dateObject, dateTime} ;
