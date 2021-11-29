@@ -240,7 +240,7 @@ app.post("/admin/manuallyAddEvent", checkAuthenticated, upload.single('inputImag
   // dateObject = new Date(date[0], date[1] - 1, date[2], time[0], time[1], 0, 0);
   dateObject = new Date(Date.UTC(date[0], date[1] - 1, date[2], time[0], time[1], 0, 0));
     dateObject = new Date(dateObject.getTime() + offset*60*1000);
-  let dateString = dateObject.toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: "full", timeStyle: "long" })
+  let dateString = dateObject.toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: "full", timeStyle: "short" })
   dateString = dateString.toLowerCase();
   if (dateString.includes("edt")) 
     dateObject.setHours( dateObject.getHours() - 1 );
@@ -269,7 +269,7 @@ app.post("/admin/manuallyAddEvent", checkAuthenticated, upload.single('inputImag
   let manually = new Manually({
     title: inputTitle,
     image: inputImage,
-    dateTime: dateObject.toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: "full", timeStyle: "long" }),
+    dateTime: dateObject.toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: "full", timeStyle: "short" }),
     linkToOriginalPost: inputLink,
     detailDateTime: dateObject.toString(),
     address: inputAddress,
@@ -398,10 +398,12 @@ app.post("/requestEvent", upload.single('inputImage'), async (req, res) => {
   // dateObject = new Date(date[0], date[1] - 1, date[2], time[0], time[1], 0, 0);
   dateObject = new Date(Date.UTC(date[0], date[1] - 1, date[2], time[0], time[1], 0, 0));
     dateObject = new Date(dateObject.getTime() + offset*60*1000);
-  let dateString = dateObject.toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: "full", timeStyle: "long" })
+  let dateString = dateObject.toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: "full", timeStyle: "short" })
   dateString = dateString.toLowerCase();
   if (dateString.includes("edt")) 
     dateObject.setHours( dateObject.getHours() - 1 );
+
+  
 
   // Organization
   let organization = [
@@ -428,7 +430,7 @@ app.post("/requestEvent", upload.single('inputImage'), async (req, res) => {
     title: inputTitle,
     image: inputImage,
     email: inputEmail,
-    dateTime: dateObject.toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: "full", timeStyle: "long" }),
+    dateTime: dateObject.toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: "full", timeStyle: "short" }),
     linkToOriginalPost: inputLink,
     detailDateTime: dateObject.toString(),
     address: inputAddress,
