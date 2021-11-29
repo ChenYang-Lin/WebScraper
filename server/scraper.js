@@ -277,7 +277,7 @@ for (let i = 0; i < msg._args.length; ++i)
         let description;
         try {
           description = detailsElement.lastChild.children[0].children[0].innerText;
-          description.substring(0, description.length - 9);
+          description = description.substring(0, description.length - 9);
         } catch (e) {
           description = "";
         }
