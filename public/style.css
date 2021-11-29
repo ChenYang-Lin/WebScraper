@@ -12,6 +12,12 @@ img {
   width: auto;
 }
 
+/* Form required */
+.form-group.required .control-label:after {
+  content: "*";
+  color: red;
+}
+
 /* Admin page url styles */
 .url {
   border: none;
