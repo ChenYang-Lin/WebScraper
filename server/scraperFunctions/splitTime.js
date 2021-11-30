@@ -127,8 +127,8 @@ let splitTime = (detailDateTime) => {
     }
 
     // Figure out endtime
-    if (detailDateTime.includes("-")) {
-        let endTimeStrArr = detailDateTime.split("-")[1].split(" ");
+    if (detailDateTime.includes("–")) {
+        let endTimeStrArr = detailDateTime.split("–")[1].split(" ");
         endTimeStrArr.forEach((element, index) => {
             if (element === "AM" || element === "PM") {
                 endTime = "found";
