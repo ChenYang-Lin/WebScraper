@@ -131,11 +131,11 @@ let splitTime = (detailDateTime) => {
         let endTimeStrArr = detailDateTime.split("-")[1].split(" ");
         endTimeStrArr.forEach((element, index) => {
             if (element === "AM" || element === "PM") {
-                endTime = endTimeStrArr[index - 1];
+                endTime = "found";
             }
         })
     } else {
-        endTime = "";
+        endTime = "noo";
     }
 
     let splitTime = { dayOfTheWeek, month, dayOfTheMonth, year, startTime, endTime, am_pm, isUTC };
