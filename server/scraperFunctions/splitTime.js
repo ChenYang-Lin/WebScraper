@@ -132,6 +132,7 @@ let splitTime = (detailDateTime) => {
         endTimeStrArr.forEach((element, index) => {
             if (element === "AM" || element === "PM") {
                 endTimeStr = endTimeStrArr[index - 1];
+                endTimeStr = (endTimeStr + 12 - 5) % 12;
                 endTime = endTimeStr;
                 if (!endTimeStr.includes(":")) {
                     endTime = endTime + ":00" + " " + element;
