@@ -135,10 +135,14 @@ let splitTime = (detailDateTime) => {
                 endTime = endTimeStr;
                 if (endTimeStr.includes(":")) {
                     endTimeStrArr = endTimeStr.split(":");
-                    endTimieStrHour = endTimeStrArr[0];
-                    endTimieStrMin = endTimeStrArr[1];
-                    endTimieStrHour = (endTimieStrHour + 12 - 5) % 12;
-                    endTime = endTimieStrHour + ":" + endTimieStrMin + " " + element;
+                    endTimeStrHour = endTimeStrArr[0];
+                    endTimeStrMin = endTimeStrArr[1];
+                    endTimeStrHour = endTimeStrHour + 5;
+                    if (endTimeStrHour > 12) {
+                        endTimeStrHour %= 12;
+                        element = "PM";
+                    }
+                    endTime = endTimeStrHour + ":" + endTimeStrMin + " " + element;
                 } else {
                     endTimeStr = (endTimeStr + 12 - 5) % 12;
                     endTime = endTime + ":00" + " " + element;
