@@ -134,7 +134,7 @@ let splitTime = (detailDateTime) => {
                 endTimeStr = endTimeStrArr[index - 1];
                 endTime = endTimeStr;
                 if (!endTimeStr.includes(":")) {
-                    endTime = endTime + ":00" + am_pm;
+                    endTime = endTime + ":00" + " " + element;
                 }
                 return;
             }
