@@ -138,6 +138,13 @@ let splitTime = (detailDateTime) => {
                     endTimeStrHour = endTimeStrArr[0];
                     endTimeStrMin = endTimeStrArr[1];
                     endTimeStrHour = (endTimeStrHour + 12) - 5;
+                    if (endTimeStrHour < 12) {
+                        if (element === "AM") {
+                            element = "PM";
+                        } else {
+                            element = "AM";
+                        }
+                    }
                     endTimeStrHour %= 12;
                     endTime = endTimeStrHour + ":" + endTimeStrMin + " " + element;
                 } else {
