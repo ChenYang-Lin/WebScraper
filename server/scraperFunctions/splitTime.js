@@ -135,7 +135,7 @@ let splitTime = (detailDateTime) => {
                 endTime = endTimeStr;
                 if (endTimeStr.includes(":")) {
                     endTimeStrArr = endTimeStr.split(":");
-                    endTimeStrHour = endTimeStrArr[0];
+                    endTimeStrHour = parseInt(endTimeStrArr[0]);
                     endTimeStrMin = endTimeStrArr[1];
                     endTimeStrHour = (endTimeStrHour + 12) - 5;
                     if (endTimeStrHour < 12) {
