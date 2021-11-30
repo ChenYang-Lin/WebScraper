@@ -277,7 +277,9 @@ for (let i = 0; i < msg._args.length; ++i)
         let description;
         try {
           description = detailsElement.lastChild.children[0].children[0].innerText;
-          description = description.substring(0, description.length - 9);
+          if (description.includes("ee less")) {
+            description = description.substring(0, description.length - 9);
+          }
         } catch (e) {
           description = "";
         }

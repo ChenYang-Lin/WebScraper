@@ -47,6 +47,12 @@ const manuallySchema = new Schema({
     ticketLink: {
         type: String
     },
+    eventBy: {
+        type: String,
+    },
+    location: {
+        type: String,
+    },
     category: [
         {
             type: String,
