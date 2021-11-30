@@ -80,7 +80,11 @@
                             </a>
                             <% } %>
                             <!-- Time -->
-                            <h4 class="text-danger"><%= listOfManuallyAddedEvents[i].dateTime %></h4>
+                            <h4 class="text-danger"><%= listOfManuallyAddedEvents[i].dateTime %>
+                                <% if (listOfManuallyAddedEvents[i].endTime) { %>
+                                    – <%= listOfManuallyAddedEvents[i].endTime %>
+                                <% } %>
+                            </h4>
                             <!-- Title -->
                             <h3 class="fw-bold">
                             <a href="<%= listOfManuallyAddedEvents[i].linkToOriginalPost %>" class="link-to-original-post" >

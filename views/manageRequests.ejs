@@ -74,7 +74,11 @@
                       </a>
                       <% } %>
                       <!-- Time -->
-                      <h4 class="text-danger"><%= listOfRequestedEvents[i].dateTime %></h4>
+                      <h4 class="text-danger"><%= listOfRequestedEvents[i].dateTime %>
+                        <% if (listOfRequestedEvents[i].endTime) { %>
+                            – <%= listOfRequestedEvents[i].endTime %>
+                        <% } %>
+                      </h4>
                       <!-- Title -->
                       <h3 class="fw-bold">
                       <a href="<%= listOfRequestedEvents[i].linkToOriginalPost %>" class="link-to-original-post" >
