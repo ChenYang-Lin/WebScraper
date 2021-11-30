@@ -233,7 +233,7 @@ app.get("/admin/manuallyAddEvent", checkAuthenticated, (req, res) => {
 app.post("/admin/manuallyAddEvent", checkAuthenticated, upload.single('inputImage'), async (req, res) => {
 
   let event = {};
-  let { inputTitle, inputAddress, inputDate, inputTime, inputImage, inputLink, inputTicketLink, inputEventBy, inputCategories, inputDescription } = req.body;
+  let { inputTitle, inputAddress, inputDate, inputTime, inputEndTime, inputImage, inputLink, inputTicketLink, inputEventBy, inputCategories, inputDescription } = req.body;
 
 
   // Date Object
@@ -247,6 +247,21 @@ app.post("/admin/manuallyAddEvent", checkAuthenticated, upload.single('inputImag
   if (dateString.includes("edt")) 
     dateObject.setHours( dateObject.getHours() - 1 );
 
+  // End Time
+  let endTime;
+  let meridian = "AM";
+  if (inputEndTime) {
+    let endTimeStrArr;
+    endTimeStrArr = inputEndTime.split(":");
+    hour = endTimeStrArr[0];
+    minute = endTimeStrArr[1];
+    if (hour >= 12) {
+      meridian = "PM";
+      if (hour > 12)
+        hour %= 12;
+    } 
+    endTime = "" + hour + ":" + minute + " " + meridian;
+  }
   
   let organization = [
     {
@@ -271,6 +286,7 @@ app.post("/admin/manuallyAddEvent", checkAuthenticated, upload.single('inputImag
   let manually = new Manually({
     title: inputTitle,
     image: inputImage,
+    endTime: endTime,
     dateTime: dateObject.toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: "long", timeStyle: "short" }),
     linkToOriginalPost: inputLink,
     detailDateTime: dateObject.toString(),
@@ -352,6 +368,7 @@ app.post("/admin/manageRequests", checkAuthenticated, async(req, res) => {
       let manually = new Manually({
         title: result.title,
         image: result.image,
+        endTime: result.endTime,
         dateTime: result.dateTime,
         linkToOriginalPost: result.linkToOriginalPost,
         detailDateTime: result.detailDateTime,
@@ -395,7 +412,7 @@ app.get("/requestEvent", (req, res) => {
 
 app.post("/requestEvent", upload.single('inputImage'), async (req, res) => {
 
-  let { inputTitle, inputAddress, inputDate, inputTime, inputImage, inputLink, inputTicketLink, inputEventBy, inputCategories, inputDescription, inputEmail } = req.body;
+  let { inputTitle, inputAddress, inputDate, inputTime, inputEndTime, inputImage, inputLink, inputTicketLink, inputEventBy, inputCategories, inputDescription, inputEmail } = req.body;
 
 
   // Date Object
@@ -409,7 +426,21 @@ app.post("/requestEvent", upload.single('inputImage'), async (req, res) => {
   if (dateString.includes("edt")) 
     dateObject.setHours( dateObject.getHours() - 1 );
 
-  
+  // End Time
+  let endTime;
+  let endTimeStrArr;
+  let meridian = "AM";
+  if (inputEndTime) {
+    endTimeStrArr = inputEndTime.split(":");
+    hour = endTimeStrArr[0];
+    minute = endTimeStrArr[1];
+    if (hour >= 12) {
+      meridian = "PM";
+      if (hour > 12)
+        hour %= 12;
+    } 
+    endTime = "" + hour + ":" + minute + " " + meridian;
+  }
 
   // Organization
   let organization = [
@@ -436,6 +467,7 @@ app.post("/requestEvent", upload.single('inputImage'), async (req, res) => {
     title: inputTitle,
     image: inputImage,
     email: inputEmail,
+    endTime: endTime,
     dateTime: dateObject.toLocaleString('en-US', { timeZone: 'America/New_York', dateStyle: "long", timeStyle: "short" }),
     linkToOriginalPost: inputLink,
     detailDateTime: dateObject.toString(),
@@ -505,9 +537,9 @@ cron.schedule(`${second} ${minute} ${hour} * * *`, async () => {
 const https = require('https');
 setInterval(function () {
   https.get("https://cs410-web-scraper.herokuapp.com", (res) => {
-    console.log("ping every 20 min. to prevent heroku sleep")
+    console.log("ping every 15 min. to prevent heroku sleep")
   });
-}, 20 * 60 * 1000); // every 20 minutes
+}, 15 * 60 * 1000); // every 15 minutes
 
 
 async function getManuallyAndScrapedList() {

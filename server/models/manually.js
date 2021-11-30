@@ -14,6 +14,9 @@ const manuallySchema = new Schema({
         type: String,
         required: true
     },
+    endTime: {
+        type: String,
+    },
     linkToOriginalPost: {
         type: String
     },

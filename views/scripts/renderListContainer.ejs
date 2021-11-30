@@ -70,6 +70,20 @@
             return outerImageDiv.innerHTML;
           }
 
+          function getTime() {
+            let outerTimeDiv = document.createElement('div');
+            let timeContainer = document.createElement('h4');
+            timeContainer.classList.add("text-danger");
+            
+            timeContainer.innerText = listOfEvents[i].dateTime;
+            if (listOfEvents[i].endTime) {
+              timeContainer.innerText += " – " + listOfEvents[i].endTime;
+            }
+
+            outerTimeDiv.appendChild(timeContainer);
+            return outerTimeDiv.innerHTML;
+          }
+
           newList.innerHTML += 
           `
             <div class="container card shadow my-3">
@@ -84,7 +98,7 @@
                   <!-- Tickets -->
                   ${getTicketContainer()}
                   <!-- Time -->
-                  <h4 class="text-danger">${listOfEvents[i].dateTime}</h4>
+                  <h4 class="text-danger">${getTime()}</h4>
                   <!-- Title -->
                   <h3 class="fw-bold">
                     <a href="${listOfEvents[i].linkToOriginalPost}" class="link-to-original-post" >
