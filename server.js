@@ -121,6 +121,7 @@ async function eventDB(list) {
 
       organizationInfo: list[i].organizationInfo,
       splitTime: list[i].splitTime,
+      endTime: list[i].endTime,
       ticket: list[i].ticket,
       eventBy: list[i].eventBy,
       location: list[i].location,

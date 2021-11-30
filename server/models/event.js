@@ -75,6 +75,9 @@ const eventSchema = new Schema({
             required: true
         },
     },
+    endTime: {
+        type: String,
+    },
     ticket: {
         type: Boolean,
         required: true
