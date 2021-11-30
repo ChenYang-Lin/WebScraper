@@ -63,6 +63,9 @@ const eventSchema = new Schema({
             type: String,
             required: true
         },
+        endTime: {
+            type: String,
+        },
         am_pm: {
             type: String,
             required: true

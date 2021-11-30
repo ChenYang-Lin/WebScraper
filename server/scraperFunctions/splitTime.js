@@ -118,16 +118,27 @@ let splitTime = (detailDateTime) => {
         }
     }
 
+    // check if time is UTC
     let s = detailDateTime.split(" ");
 	if (s[s.length - 1] === "UTC") {
         isUTC = true;
     } else {
         isUTC = false;
     }
-    // console.log("UTC--------------------------------------------------")
-    // console.log(detailDateTime);
-    // console.log(isUTC);
-    let splitTime = { dayOfTheWeek, month, dayOfTheMonth, year, startTime, am_pm, isUTC };
+
+    // Figure out endtime
+    if (detailDateTime.includes("-")) {
+        let endTimeStrArr = detailDateTime.split("-")[1].split(" ");
+        endTimeStrArr.forEach((element, index) => {
+            if (element === "AM" || element === "PM") {
+                endTime = endTimeStrArr[index - 1];
+            }
+        })
+    } else {
+        endTime = "";
+    }
+
+    let splitTime = { dayOfTheWeek, month, dayOfTheMonth, year, startTime, endTime, am_pm, isUTC };
     return splitTime;
 }
 
