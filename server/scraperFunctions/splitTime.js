@@ -134,10 +134,15 @@ let splitTime = (detailDateTime) => {
                 endTimeStr = endTimeStrArr[index - 1];
                 endTime = endTimeStr;
                 if (endTimeStr.includes(":")) {
-                    endTimeStr = endTimeStr.split(":")[0];
-                } 
-                endTimeStr = (endTimeStr + 12 - 5) % 12;
-                endTime = endTime + ":00" + " " + element;
+                    endTimeStrArr = endTimeStr.split(":");
+                    endTimieStrHour = endTimeStrArr[0];
+                    endTimieStrMin = endTimeStrArr[1];
+                    endTimieStrHour = (endTimieStrHour + 12 - 5) % 12;
+                    endTime = endTimieStrHour + ":" + endTimieStrMin + " " + element;
+                } else {
+                    endTimeStr = (endTimeStr + 12 - 5) % 12;
+                    endTime = endTime + ":00" + " " + element;
+                }
                 return;
             }
         })
