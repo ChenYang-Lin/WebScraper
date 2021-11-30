@@ -135,7 +135,7 @@ let splitTime = (detailDateTime) => {
             }
         })
     } else {
-        endTime = "noo";
+        endTime = endTimeStrArr[0];
     }
 
     let splitTime = { dayOfTheWeek, month, dayOfTheMonth, year, startTime, endTime, am_pm, isUTC };
