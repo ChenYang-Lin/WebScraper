@@ -379,11 +379,7 @@ for (let i = 0; i < msg._args.length; ++i)
           // 
         }
 
-
-
-        let keywords = "" + detailDateTime + " " + address + " " + description + " " + basicInfosFromOneGroup[i].dateTime + " " + basicInfosFromOneGroup[i].title;
-
-        return { detailDateTime, address, description, organizationInfo, splitTime: splittedTime, endTime, mapUrl, ticket, ticketLink, eventBy, location, category, keywords };
+        return { detailDateTime, address, description, organizationInfo, splitTime: splittedTime, endTime, mapUrl, ticket, ticketLink, eventBy, location, category };
       }, basicInfosFromOneGroup, i);
       await pageForOriginalPost.close();
     }

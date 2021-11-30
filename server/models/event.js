@@ -93,10 +93,6 @@ const eventSchema = new Schema({
             type: String,
         }
     ],
-    keywords: {
-        type: String,
-        required: true
-    },
     dateObject: {
         type: String,
         required: true

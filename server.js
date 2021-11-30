@@ -126,7 +126,6 @@ async function eventDB(list) {
       eventBy: list[i].eventBy,
       location: list[i].location,
       category: list[i].category,
-      keywords: list[i].keywords,
       isManuallyAdded: false,
       dateObject: list[i].dateObject,
     });
