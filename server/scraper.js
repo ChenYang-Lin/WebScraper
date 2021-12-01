@@ -138,7 +138,7 @@ for (let i = 0; i < msg._args.length; ++i)
             await seeMoreBtn.click();    
             await new Promise(resolve => setTimeout(resolve, 3000));
         }
-        seeMoreBtn = document.querySelector('.oajrlxb2.g5ia77u1.qu0x051f.esr5mh6w.e9989ue4')[0];
+        seeMoreBtn = document.querySelectorAll("div.o9v6fnle.cxmmr5t8.oygrvhab.hcukyx3x.c1et5uql > div")[0];
         if (seeMoreBtn) {
             await seeMoreBtn.click();    
             await new Promise(resolve => setTimeout(resolve, 3000));
