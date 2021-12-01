@@ -22,20 +22,28 @@ let dateObject = (scrapingResults) => {
         let dateObject;
         
         let objectMonth = splitTime.month.charAt(0).toUpperCase() + splitTime.month.slice(1).toLowerCase();
-        
-        let startTime24 = parseInt(splitTime.startTime);
-        if (splitTime.am_pm === "PM") {
-            startTime24 += 12;
+        let timeHour, timeMin;
+        if (splitTime.startTime.includes(":")) {
+            let timeStrArr = splitTime.startTime.split(":");
+            timeHour = parseInt(timeStrArr[0]);
+            timeMin = parseInt(timeStrArr[1]);
+        } else {
+            timeHour = parseInt(splitTime.startTime);
+            timeMin = 0;
         }
-        startTime24 %= 12;
+        if (splitTime.am_pm === "PM") {
+            timeHour += 12;
+        }
+        timeHour %= 12;
         let year = splitTime.year;
         let month = months.indexOf(objectMonth);
         let day = splitTime.dayOfTheMonth;
-        let hour = startTime24;
+        let hour = timeHour;
+        let minute = timeMin;
         
-        dateObject = new Date(year, month, day, hour, 0, 0, 0);
+        dateObject = new Date(year, month, day, hour, minute, 0, 0);
         if (splitTime.isUTC) {
-            dateObject = new Date(Date.UTC(year, month, day, hour, 0, 0, 0));
+            dateObject = new Date(Date.UTC(year, month, day, hour, minute, 0, 0));
         }
         
         // dateObject = JSON.stringify(dateObject);
