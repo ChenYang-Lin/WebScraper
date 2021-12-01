@@ -31,10 +31,11 @@ let dateObject = (scrapingResults) => {
             timeHour = parseInt(splitTime.startTime);
             timeMin = 0;
         }
+        timeHour %= 12;
         if (splitTime.am_pm === "PM") {
             timeHour += 12;
         }
-        timeHour %= 12;
+        timeHour %= 24;
         let year = splitTime.year;
         let month = months.indexOf(objectMonth);
         let day = splitTime.dayOfTheMonth;
