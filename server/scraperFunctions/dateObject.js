@@ -22,10 +22,12 @@ let dateObject = (scrapingResults) => {
         let dateObject;
         
         let objectMonth = splitTime.month.charAt(0).toUpperCase() + splitTime.month.slice(1).toLowerCase();
+        
         let startTime24 = parseInt(splitTime.startTime);
         if (splitTime.am_pm === "PM") {
             startTime24 += 12;
         }
+        startTime24 %= 12;
         let year = splitTime.year;
         let month = months.indexOf(objectMonth);
         let day = splitTime.dayOfTheMonth;
