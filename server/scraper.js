@@ -138,11 +138,6 @@ for (let i = 0; i < msg._args.length; ++i)
             await seeMoreBtn.click();    
             await new Promise(resolve => setTimeout(resolve, 3000));
         }
-        seeMoreBtn = document.querySelectorAll("div.o9v6fnle.cxmmr5t8.oygrvhab.hcukyx3x.c1et5uql > div")[0];
-        if (seeMoreBtn) {
-            await seeMoreBtn.click();    
-            await new Promise(resolve => setTimeout(resolve, 3000));
-        }
         // if there is no upcoming events, just return
         let text;
         try {
@@ -271,10 +266,11 @@ for (let i = 0; i < msg._args.length; ++i)
         // See more button for description
         try {
           if (document.querySelectorAll(".discj3wi.ihqw7lf3 > .dwo3fsh8")[0].parentNode.lastChild.children[0].children[0].children.length > 1) {
-            document.querySelectorAll(".discj3wi.ihqw7lf3 > .dwo3fsh8")[0].parentNode.lastChild.children[0].children[0].children[1].children[0].click();
+            document.querySelectorAll(".discj3wi.ihqw7lf3 > .dwo3fsh8")[0].parentNode.lastChild.children[0].children[0].children[1].lastChild.click();
           } else {
             document.querySelectorAll(".discj3wi.ihqw7lf3 > .dwo3fsh8")[0].parentNode.lastChild.children[0].children[0].children[0].lastElementChild.click();
           }
+          // document.querySelectorAll("div.o9v6fnle.cxmmr5t8.oygrvhab.hcukyx3x.c1et5uql > div")[0]
           await new Promise(resolve => setTimeout(resolve, 4000));
         } catch (e) {
           console.log(e);
