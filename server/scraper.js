@@ -242,9 +242,6 @@ for (let i = 0; i < msg._args.length; ++i)
 });
 // for test only ------------------------------------
 
-      // screenshot
-      // screenshot = await pageForOriginalPost.screenshot({ encoding: 'base64' });
-
       // Scrape - ineract with the page directly in the page DOM environment
       await pageForOriginalPost.exposeFunction("splitTime", splitTime);
       resultsFromOneEvent = await pageForOriginalPost.evaluate(async (basicInfosFromOneGroup, i) => {
@@ -255,14 +252,6 @@ for (let i = 0; i < msg._args.length; ++i)
         // description element - if some descriptions are hidden, scraper will click the "see more button" to expand the description
         const detailsElement = document.querySelectorAll(".discj3wi.ihqw7lf3 > .dwo3fsh8")[0].parentNode;
 
-        // document.querySelectorAll(".oajrlxb2.g5ia77u1.qu0x051f.esr5mh6w div[role=button]").forEach(async (seeMoreBtn) => {
-        // document.querySelectorAll(".oajrlxb2.g5ia77u1.qu0x051f.esr5mh6w").forEach(async (seeMoreBtn) => {
-        //   if (seeMoreBtn.textContent == "See More") {
-        //     console.log("see more")
-        //     await pageForOriginalPost.click(seeMoreBtn);
-        //     await new Promise(resolve => setTimeout(resolve, 2000));
-        //   }
-        // })
         // See more button for description
         try {
           if (document.querySelectorAll(".discj3wi.ihqw7lf3 > .dwo3fsh8")[0].parentNode.lastChild.children[0].children[0].children.length > 1) {
