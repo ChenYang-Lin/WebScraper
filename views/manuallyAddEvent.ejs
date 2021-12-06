@@ -30,7 +30,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a href="/admin" class="nav-link">Subscriptions</a>
+              <a href="/admin/subscription" class="nav-link">Subscriptions</a>
             </li>
             <li class="nav-item">
               <a href="/admin/manuallyAddEvent" class="nav-link active">Update</a>
@@ -114,7 +114,7 @@
                     <!-- End Extra Info -->
                     <!-- removeManuallyAddedEvent Button -->
                     <div class="event-btn m-3 text-center">
-                        <form method="POST" action="/admin/manuallyAddEvent-remove">
+                        <form method="POST" action="/admin/manuallyAddEvent/remove">
                             <input class="d-none" type="text" name="manuallyId" value="<%= listOfManuallyAddedEvents[i]._id %>"></input>
                             <button class="btn btn-danger" name="btnName" value="remove">Remove</button>
                         </form>

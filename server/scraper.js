@@ -20,7 +20,6 @@ let scrapEvents = async (list) => {
     console.log("running scapEvents function");
 
     const browser = await puppeteer.launch({
-      // headless: false,
       headless: true,
       args: [
         "--no-sandbox",
@@ -32,16 +31,11 @@ let scrapEvents = async (list) => {
     // Configure the navigation timeout
     await page.setDefaultNavigationTimeout(0);
 
-    // const version = await page.browser().version();
-    // console.log("browser version: " + version)
-
-
     // Login
     await loginFacebook(page);
     // Scrapping
     let scrapingResults = await scrapeFacebookEvents(browser, page);
-    
-    // console.log(scrapingResults);
+ 
     // Create and add Date object to each event
     scrapingResults = dateObject(scrapingResults);
     // close browser
@@ -59,10 +53,6 @@ let scrapEvents = async (list) => {
 };
 
 async function loginFacebook(page) {
-  // Go to the login page
-  // await page.goto("https://google.com", {
-  //   waitUntil: "networkidle0",
-  // });
   await page.goto("https://www.facebook.com/login/", {
     waitUntil: "networkidle0",
   });
@@ -106,13 +96,6 @@ async function scrapeFacebookEvents(browser, page) {
       console.log("Error: " + scrapingList[i].groupURL);
       console.log(e);
     }
-// for test only ------------------------------------
-// page.on('console', consoleObj => console.log(consoleObj.text()));
-page.on('console', msg => {
-for (let i = 0; i < msg._args.length; ++i)
-  console.log(`${i}: ${msg._args[i]}`);
-});
-// for test only ------------------------------------
 
     let basicInfosFromOneGroup;
     // Ineract with the page directly in the page DOM environment
@@ -153,8 +136,6 @@ for (let i = 0; i < msg._args.length; ++i)
             return basicResults;
           }
         }
-        // console.log(UpcomingEventsElement);
-        // console.log(UpcomingEventsElement.children.length);
         let numberOfEvents;
         try {
           numberOfEvents = UpcomingEventsElement.children.length;
@@ -203,15 +184,11 @@ for (let i = 0; i < msg._args.length; ++i)
      // End page.evaluate
 
     let resultsFromOneGroup = await scrapeIndividaulEvents(basicInfosFromOneGroup, browser);
-    // console.log(basicInfosFromOneGroup);
-    // console.log(resultsFromOneGroup);
-    // console.log(scrapingResults);
     scrapingResults = scrapingResults.concat(resultsFromOneGroup);
 
     // Progress bar update
     scrapeProgress = Math.floor(((i + 1) / scrapingList.length) * 90);
     scrapeIndex = i + 1;
-    // console.log("progress: " + scrapeProgress);
   } // End for loop for scrapingList
   return scrapingResults;
 }
@@ -234,13 +211,6 @@ async function scrapeIndividaulEvents(basicInfosFromOneGroup, browser) {
       await pageForOriginalPost.goto(basicInfosFromOneGroup[i].linkToOriginalPost, {
         waitUntil: "networkidle0"
       });
-// for test only ------------------------------------
-// pageForOriginalPost.on('console', consoleObj => console.log(consoleObj.text()));
-pageForOriginalPost.on('console', msg => {
-for (let i = 0; i < msg._args.length; ++i)
-  console.log(`${i}: ${msg._args[i]}`);
-});
-// for test only ------------------------------------
 
       // Scrape - ineract with the page directly in the page DOM environment
       await pageForOriginalPost.exposeFunction("splitTime", splitTime);

@@ -24,7 +24,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a href="/admin" class="nav-link active">Subscriptions</a>
+              <a href="/admin/subscription" class="nav-link active">Subscriptions</a>
             </li>
             <li class="nav-item">
               <a href="/admin/manuallyAddEvent" class="nav-link">Update</a>
@@ -45,7 +45,7 @@
     <!-- Content -->
     <div class="container bg-white shadow p-3 rounded my-3">
       <% for (let i = 0; i < result.length; i++) { %>
-          <form class="row justify-content-center" method="POST" action="/edit-remove">
+          <form class="row justify-content-center" method="POST" action="/admin/subscription/update">
               <!-- URL -->
               <div class="col-12">
                   <input class="url-id d-none" type="text" name="id" value="<%= result[i]._id %>" readonly></input>
@@ -69,7 +69,7 @@
             <br>
             
       <% } %>
-      <form class="container text-center" method="POST" action="/add">
+      <form class="container text-center" method="POST" action="/admin/subscription/add">
         <input class="new-url" name="newUrl"></input>
         <button class="btn btn-dark" name="name" value="add">Add new</button>
       </form>

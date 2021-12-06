@@ -177,9 +177,10 @@
                 }
 
                 let eventTitle = $(`<a href="${events[i].linkToOriginalPost}"><h4>${events[i].title}</h4></a>`);
+                let eventLocation = $(`<h5>Location: ${events[i].location}</h5>`);
                 
                 // $(eventCard).append(eventImage).append(eventTitle);
-                $(eventCard).append(eventImage).append(eventTicket).append(eventTitle);
+                $(eventCard).append(eventImage).append(eventTicket).append(eventTitle).append(eventLocation);
                 $(".events-container").append(eventCard);
             }
         }
@@ -235,6 +236,7 @@
             object.linkToOriginalPost = listOfEvents[i].linkToOriginalPost;
             object.organizationInfo = listOfEvents[i].organizationInfo;
             object.isManuallyAdded = listOfEvents[i].isManuallyAdded;
+            object.location = listOfEvents[i].location;
         }
         selectedEvent = check_events(selectedDay, selectedMonth, selectedYear);
         show_events(selectedEvent, selectedMonthStr, selectedDay);
