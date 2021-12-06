@@ -286,17 +286,18 @@ async function scrapeIndividaulEvents(basicInfosFromOneGroup, browser) {
           document.querySelectorAll(".d2edcug0.hpfvmrgz").forEach((element) => {
             if (element.textContent == "Tickets" || element.textContent == "tickets") {
               ticket = true;
-              ticketLinkDiv.querySelectorAll(".d2edcug0.hpfvmrgz > [aria-label='Find Tickets']");
-              try {
-                ticketLink = ticketLinkDiv.getAttribute("href");
-              } catch (e) {
-                ticketLink = basicInfosFromOneGroup[i].linkToOriginalPost;
-              }
               return;
             }
           })
         } catch (e) {
-          console.log("Catch Error (ticket): " + e);
+          // console.log("Catch Error (ticket): " + e);
+        }
+
+        let ticketLinkDiv = document.querySelectorAll("[aria-label='Find Tickets']")[0];
+        try {
+          ticketLink = ticketLinkDiv.getAttribute("href");
+        } catch (e) {
+          ticketLink = basicInfosFromOneGroup[i].linkToOriginalPost;
         }
 
         // event by 
