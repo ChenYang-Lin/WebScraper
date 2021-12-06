@@ -84,6 +84,7 @@ async function eventDB(list) {
       splitTime: list[i].splitTime,
       endTime: list[i].endTime,
       ticket: list[i].ticket,
+      ticketLink: list[i].ticketLink,
       eventBy: list[i].eventBy,
       location: list[i].location,
       category: list[i].category,

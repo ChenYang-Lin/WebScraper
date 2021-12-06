@@ -82,6 +82,9 @@ const eventSchema = new Schema({
         type: Boolean,
         required: true
     },
+    ticketLink: {
+        type: String
+    },
     eventBy: {
         type: String,
     },
