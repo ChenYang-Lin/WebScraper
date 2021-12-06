@@ -20,8 +20,22 @@
             uniqueCategory[name] = name;
         }
     }
-    // console.log(uniqueOrganization);
-    // console.log(uniqueCategory);
+    
+    // sort organization list alphabetically
+    let sortedOrganization = [];
+    for (let i in uniqueOrganization) {
+        let name = uniqueOrganization[i];
+        sortedOrganization.push(name);
+    }
+    sortedOrganization = sortedOrganization.sort();
+
+    // sort category list alphabetically
+    let sortedCategory = [];
+    for (let i in uniqueCategory) {
+        let name = uniqueCategory[i];
+        sortedCategory.push(name);
+    }
+    sortedCategory = sortedCategory.sort();
 
     // Filter organization selection
     let filterOrganizationContent;
@@ -30,10 +44,11 @@
     allOrganization.setAttribute("value", "all");
     allOrganization.innerHTML = "All Organization";
     outerOrganizationDiv.appendChild(allOrganization);
-    for (let i in uniqueOrganization) {
+
+    for (let i = 0; i < sortedOrganization.length; i++) {
         let element = document.createElement('option');
-        element.setAttribute("value", uniqueOrganization[i]);
-        element.innerHTML = uniqueOrganization[i];
+        element.setAttribute("value", sortedOrganization[i]);
+        element.innerHTML = sortedOrganization[i];
         outerOrganizationDiv.appendChild(element);
     }
     filterOrganizationContent = outerOrganizationDiv.innerHTML;
@@ -46,10 +61,11 @@
     allCategory.setAttribute("value", "all");
     allCategory.innerHTML = "All Category";
     outerCategoryDiv.appendChild(allCategory);
-    for (let i in uniqueCategory) {
+
+    for (let i = 0; i < sortedCategory.length; i++) {
         let element = document.createElement('option');
-        element.setAttribute("value", uniqueCategory[i]);
-        element.innerHTML = uniqueCategory[i];
+        element.setAttribute("value", sortedCategory[i]);
+        element.innerHTML = sortedCategory[i];
         outerCategoryDiv.appendChild(element);
     }
     filterCategoryContent = outerCategoryDiv.innerHTML;
