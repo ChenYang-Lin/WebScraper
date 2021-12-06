@@ -178,9 +178,17 @@
 
                 let eventTitle = $(`<a href="${events[i].linkToOriginalPost}"><h4>${events[i].title}</h4></a>`);
                 let eventLocation = $(`<h5>Location: ${events[i].location}</h5>`);
+
+                // Date Time
+                let timeContainer = document.createElement('h7');
+                timeContainer.classList.add("text-danger");
+                timeContainer.innerText = events[i].dateTime;
+                if (events[i].endTime) {
+                    timeContainer.innerText += " – " + events[i].endTime;
+                }
                 
                 // $(eventCard).append(eventImage).append(eventTitle);
-                $(eventCard).append(eventImage).append(eventTicket).append(eventTitle).append(eventLocation);
+                $(eventCard).append(eventImage).append(eventTicket).append(timeContainer).append(eventTitle).append(eventLocation);
                 $(".events-container").append(eventCard);
             }
         }
@@ -237,6 +245,8 @@
             object.organizationInfo = listOfEvents[i].organizationInfo;
             object.isManuallyAdded = listOfEvents[i].isManuallyAdded;
             object.location = listOfEvents[i].location;
+            object.dateTime = listOfEvents[i].dateTime;
+            object.endTime = listOfEvents[i].endTime;
         }
         selectedEvent = check_events(selectedDay, selectedMonth, selectedYear);
         show_events(selectedEvent, selectedMonthStr, selectedDay);
