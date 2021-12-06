@@ -1,74 +1,88 @@
 <script>
-    let listOfEvents = <%- JSON.stringify(listOfEvents) %>;
-    const listOfEventsCopy = listOfEvents;
-    let featuredListOfEvents = [];
-    let featuredList;
-    console.log(listOfEvents);
+  let listOfEvents = <%- JSON.stringify(listOfEvents) %>;
+  const listOfEventsCopy = listOfEvents;
+  let featuredListOfEvents = [];
+  let featuredList;
+  console.log(listOfEvents);
 
-    // Get unique organization and category ----------------------------------------------
-    let uniqueOrganization = {};
-    let uniqueCategory = {};
-    let listOrganization = [];
-    let listCategory = [];
-    for (let i = 0; i < listOfEventsCopy.length; i++) {
-        for (let j = 0; j < listOfEventsCopy[i].organizationInfo.length; j++) {
-            let name = listOfEventsCopy[i].organizationInfo[j].name;
-            uniqueOrganization[name] = name;
-        }
-        for (let j = 0; j < listOfEventsCopy[i].category.length; j++) {
-            let name = listOfEventsCopy[i].category[j];
-            uniqueCategory[name] = name;
-        }
-    }
-    
-    // sort organization list alphabetically
-    let sortedOrganization = [];
-    for (let i in uniqueOrganization) {
-        let name = uniqueOrganization[i];
-        sortedOrganization.push(name);
-    }
-    sortedOrganization = sortedOrganization.sort();
+  // Get unique organization and category ----------------------------------------------
+  let uniqueOrganization = {};
+  let uniqueCategory = {};
+  let listOrganization = [];
+  let listCategory = [];
+  for (let i = 0; i < listOfEventsCopy.length; i++) {
+      for (let j = 0; j < listOfEventsCopy[i].organizationInfo.length; j++) {
+          let name = listOfEventsCopy[i].organizationInfo[j].name;
+          uniqueOrganization[name] = name;
+      }
+      for (let j = 0; j < listOfEventsCopy[i].category.length; j++) {
+          let name = listOfEventsCopy[i].category[j];
+          uniqueCategory[name] = name;
+      }
+  }
 
-    // sort category list alphabetically
-    let sortedCategory = [];
-    for (let i in uniqueCategory) {
-        let name = uniqueCategory[i];
-        sortedCategory.push(name);
-    }
-    sortedCategory = sortedCategory.sort();
+  // sort organization list alphabetically
+  let sortedOrganization = [];
+  for (let i in uniqueOrganization) {
+      let name = uniqueOrganization[i];
+      sortedOrganization.push(name);
+  }
+  sortedOrganization.sort(function(a, b){
+      var nameA=a.toLowerCase(), nameB=b.toLowerCase();
+      if (nameA < nameB) //sort string ascending
+          return -1;
+      if (nameA > nameB)
+          return 1;
+      return 0; //default return value (no sorting)
+  });
 
-    // Filter organization selection
-    let filterOrganizationContent;
-    let outerOrganizationDiv = document.createElement('div');
-    let allOrganization = document.createElement('option');
-    allOrganization.setAttribute("value", "all");
-    allOrganization.innerHTML = "All Organization";
-    outerOrganizationDiv.appendChild(allOrganization);
+  // sort category list alphabetically
+  let sortedCategory = [];
+  for (let i in uniqueCategory) {
+      let name = uniqueCategory[i];
+      sortedCategory.push(name);
+  }
+  sortedCategory.sort(function(a, b){
+      var nameA=a.toLowerCase(), nameB=b.toLowerCase();
+      if (nameA < nameB) //sort string ascending
+          return -1;
+      if (nameA > nameB)
+          return 1;
+      return 0; //default return value (no sorting)
+  });
 
-    for (let i = 0; i < sortedOrganization.length; i++) {
-        let element = document.createElement('option');
-        element.setAttribute("value", sortedOrganization[i]);
-        element.innerHTML = sortedOrganization[i];
-        outerOrganizationDiv.appendChild(element);
-    }
-    filterOrganizationContent = outerOrganizationDiv.innerHTML;
-    $("#filter-organization-name").html(filterOrganizationContent);
+  // Filter organization selection
+  let filterOrganizationContent;
+  let outerOrganizationDiv = document.createElement('div');
+  let allOrganization = document.createElement('option');
+  allOrganization.setAttribute("value", "all");
+  allOrganization.innerHTML = "All Organization";
+  outerOrganizationDiv.appendChild(allOrganization);
 
-    // Filter catory selection
-    let filterCategoryContent;
-    let outerCategoryDiv = document.createElement('div');
-    let allCategory = document.createElement('option');
-    allCategory.setAttribute("value", "all");
-    allCategory.innerHTML = "All Category";
-    outerCategoryDiv.appendChild(allCategory);
+  for (let i = 0; i < sortedOrganization.length; i++) {
+      let element = document.createElement('option');
+      element.setAttribute("value", sortedOrganization[i]);
+      element.innerHTML = sortedOrganization[i];
+      outerOrganizationDiv.appendChild(element);
+  }
+  filterOrganizationContent = outerOrganizationDiv.innerHTML;
+  $("#filter-organization-name").html(filterOrganizationContent);
 
-    for (let i = 0; i < sortedCategory.length; i++) {
-        let element = document.createElement('option');
-        element.setAttribute("value", sortedCategory[i]);
-        element.innerHTML = sortedCategory[i];
-        outerCategoryDiv.appendChild(element);
-    }
-    filterCategoryContent = outerCategoryDiv.innerHTML;
-    $("#filter-category-name").html(filterCategoryContent);
-    // End unique organization and category ----------------------------------------------
+  // Filter catory selection
+  let filterCategoryContent;
+  let outerCategoryDiv = document.createElement('div');
+  let allCategory = document.createElement('option');
+  allCategory.setAttribute("value", "all");
+  allCategory.innerHTML = "All Category";
+  outerCategoryDiv.appendChild(allCategory);
+
+  for (let i = 0; i < sortedCategory.length; i++) {
+      let element = document.createElement('option');
+      element.setAttribute("value", sortedCategory[i]);
+      element.innerHTML = sortedCategory[i];
+      outerCategoryDiv.appendChild(element);
+  }
+  filterCategoryContent = outerCategoryDiv.innerHTML;
+  $("#filter-category-name").html(filterCategoryContent);
+  // End unique organization and category ----------------------------------------------
 </script>
